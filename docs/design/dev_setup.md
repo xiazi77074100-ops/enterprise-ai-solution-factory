@@ -41,6 +41,26 @@ uv run bandit -q -r app && uv run pip-audit
 uv run pytest -q
 ```
 
-## 4. LLM の API キー（D-015）
+## 4. 画面（frontend）
+
+```sh
+cd frontend
+npm ci
+npm run dev                      # http://localhost:5173（/api はバックエンド :8000 へ中継。Cookie は同一オリジン）
+npm run lint && npm run typecheck && npm test && npm run build
+npm run gen:api                  # contracts/openapi.yaml から src/api/schema.d.ts を作り直す（契約を変えたとき）
+```
+
+画面の確認（`ui-design` §9。1440px と 390px、横スクロールなし、コンソールエラーなし）：
+
+```sh
+npx playwright install chromium              # 初回だけ
+# バックエンドと npm run dev を起動しておく。E2E 用の利用者は CLI で作る
+E2E_LOGIN_ID=... E2E_PASSWORD=... npx playwright test
+```
+
+Node.js は 22 系（jsdom 29 は 22.13 以上）。
+
+## 5. LLM の API キー（D-015）
 
 `.env` の `EASF_LLM_GEMINI_API_KEY` に入れる。値をコミット・ログに出さない。Gemini のプロファイルを有効にするのは、ADR-002 の確認（無料枠のデータの扱い・制限）を済ませてから（Phase 2 以降）。

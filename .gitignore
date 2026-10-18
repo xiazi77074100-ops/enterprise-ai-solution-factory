@@ -18,3 +18,7 @@ fixtures/holdout_labels/
 # 診断・画面確認の一時ファイル
 reports/security/**/dast/*.html
 .playwright-mcp/
+
+# Playwright
+frontend/test-results/
+frontend/playwright-report/

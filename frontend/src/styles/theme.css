@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+/* EASF design tokens (ui-design §6). Neutral, one primary hue, status colors split into
+   fill (surfaces/lines/icons) and ink (text on white, >= 4.5:1). No gradients or decoration. */
+:root {
+  color-scheme: light;
+  --background: oklch(0.965 0.004 250);
+  --card: oklch(1 0 0);
+  --foreground: oklch(0.2 0.015 255);
+  --muted: oklch(0.955 0.005 250);
+  --muted-foreground: oklch(0.45 0.015 255);
+  --border: oklch(0.88 0.008 250);
+  --input: oklch(0.82 0.01 250);
+  --primary: oklch(0.47 0.13 258);
+  --primary-foreground: oklch(0.99 0 0);
+  --primary-ink: oklch(0.42 0.13 258);
+  --primary-soft: oklch(0.95 0.025 258);
+  --ring: oklch(0.55 0.15 258);
+  --success: oklch(0.62 0.13 155);
+  --success-ink: oklch(0.43 0.11 155);
+  --success-soft: oklch(0.96 0.03 155);
+  --warning: oklch(0.75 0.14 75);
+  --warning-ink: oklch(0.47 0.11 60);
+  --warning-soft: oklch(0.97 0.04 85);
+  --danger: oklch(0.6 0.19 25);
+  --danger-ink: oklch(0.47 0.17 25);
+  --danger-soft: oklch(0.96 0.025 25);
+  --mock: oklch(0.55 0.12 300);
+  --mock-ink: oklch(0.45 0.12 300);
+  --mock-soft: oklch(0.96 0.03 300);
+  --sidebar: oklch(0.25 0.02 255);
+  --sidebar-foreground: oklch(0.93 0.01 255);
+  --shadow-card: 0 1px 2px oklch(0.2 0.02 255 / 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: oklch(0.18 0.01 255);
+    --card: oklch(0.22 0.012 255);
+    --foreground: oklch(0.94 0.005 255);
+    --muted: oklch(0.25 0.012 255);
+    --muted-foreground: oklch(0.72 0.012 255);
+    --border: oklch(0.33 0.012 255);
+    --input: oklch(0.4 0.012 255);
+    --primary: oklch(0.62 0.14 258);
+    --primary-ink: oklch(0.78 0.11 258);
+    --primary-soft: oklch(0.3 0.05 258);
+    --success-ink: oklch(0.8 0.12 155);
+    --success-soft: oklch(0.28 0.04 155);
+    --warning-ink: oklch(0.85 0.12 85);
+    --warning-soft: oklch(0.3 0.05 85);
+    --danger-ink: oklch(0.8 0.13 25);
+    --danger-soft: oklch(0.3 0.06 25);
+    --mock-ink: oklch(0.8 0.1 300);
+    --mock-soft: oklch(0.3 0.05 300);
+    --sidebar: oklch(0.15 0.01 255);
+    --shadow-card: none;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-ink: var(--primary-ink);
+  --color-primary-soft: var(--primary-soft);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-ink: var(--success-ink);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-ink: var(--warning-ink);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-ink: var(--danger-ink);
+  --color-danger-soft: var(--danger-soft);
+  --color-mock: var(--mock);
+  --color-mock-ink: var(--mock-ink);
+  --color-mock-soft: var(--mock-soft);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  thead th {
+    white-space: nowrap; /* ui-design §4: headers never wrap */
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+@layer components {
+  .page-title {
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-title {
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .section-title {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: var(--shadow-card);
+  }
+  .zebra > tbody > tr:nth-child(even) {
+    background: var(--muted);
+  }
+  .field-control {
+    height: 36px;
+    width: 100%;
+    border: 1px solid var(--input);
+    border-radius: 6px;
+    background: var(--card);
+    padding: 0 10px;
+    font-size: 13px;
+  }
+  textarea.field-control {
+    height: auto;
+    min-height: 96px;
+    padding: 8px 10px;
+  }
+  .field-control[aria-invalid="true"] {
+    border-color: var(--danger);
+  }
+  .api-line {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--primary);
+    z-index: 200;
+  }
+}

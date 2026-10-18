@@ -24,3 +24,4 @@
 | D-018 | 2026-10-18 | バックエンドの依存を `backend/uv.lock` で固定（Python 3.12.3、FastAPI 0.143.3、SQLAlchemy 2.1.5、Alembic 1.20.0、Pydantic 2.14.1、psycopg 3.3.6）。PostgreSQL は `postgres:17-alpine`（ダイジェストの固定は G1a の診断時に行う） | P1-01 で `uv lock` した結果。pip-audit で既知の脆弱性なし | CC | ADR-001・ADR-004 |
 | D-019 | 2026-10-18 | Phase 1 に P1-05（認証・セッション・案件・メンバー・要件の版）を追加し、Catalog（P1-02）より先に行う | Catalog の登録 API が認証とロールを前提にするため。PHASE_PLAN の Phase 1（auth skeleton・project CRUD）の範囲内 | CC | PHASE_PLAN |
 | D-020 | 2026-10-18 | 実装の許可リスト（`backend/app/catalog/registry.py`）に D-015 の規則ベースの抽出 `rule_based_extractor.v1`（kind=local）を宣言。全キーは `available=False`（コードは Phase 2・3）で、登録はできるが実行はできない | 契約を先に Catalog で確かめられるようにするため。実行可否は Executor が判定 | CC | ADR-001、easf-capability-contract §2 |
+| D-021 | 2026-10-18 | フロントエンドの依存を `frontend/package-lock.json` で固定（版は ADR-009 の追記）。jsdom は 29.1.1（30 系は Node 22.22.2 以上が必要で、この環境は 22.14） | 実行環境に合わせるため。npm audit で既知の脆弱性なし | CC | ADR-009 |

@@ -25,3 +25,5 @@
 
 ## 決定
 B。共通部品は Phase 1 で `frontend/src/components/` に作る。表は TanStack Table（MIT）、選択肢は Radix Popover ＋ cmdk（MIT）を候補とし、Phase 1 の依存追加時に版・ライセンスを確認して追記する。
+
+2026-10-18 追記（P1-03）：React 19.3.1、React Router 7.18.4、Vite 8.3.4、Tailwind CSS 4.3.3、Radix Dialog 1.3.1、lucide-react 1.59.0、clsx 2.1.1（いずれも MIT または ISC）。表は現時点で単純な `<table>` で足りるため TanStack Table は入れていない（必要になった時点で追加）。TypeScript は 5.9.3（typescript-eslint と openapi-typescript が 6.1 未満・5 系を要求するため）。
