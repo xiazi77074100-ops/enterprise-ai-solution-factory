@@ -25,7 +25,7 @@
 | G1b 前の脆弱性の再診断 | CC | 完了 | `cc/G1b-gate` | 新しい指摘は高・中・低 0 件、情報 3 件。SAST・SCA・trivy・gitleaks（誤検知を除外）0 件、ZAP（未ログイン・認証付き、45 操作）失敗 0・500 なし。`reports/security/2026-10-18-g1b/report.md` | 2026-10-19 |
 | G1b ゲート報告 | CC | 完了・**承認済み**（D-027） | `cc/G1b-gate` | `reports/gate_G1b.md`。pytest 137・vitest 6・Playwright 4 passed、静的検査・SCA 問題なし | 2026-10-19 |
 | P3-00 Phase 3 計画 | CC | 完了 | `cc/P3-00-plan` | `docs/phase3/PHASE3_PLAN.md`、D-027・D-028 | 2026-10-19 |
-| P3-02a 請求書の生成器・dev・manifest | CC | 未着手 | `cc/P3-02a-fixtures` | — | — |
+| P3-02a 請求書の生成器・dev・manifest | CC | 完了（ホールドアウトは人の作業待ち） | `cc/P3-02a-fixtures` | `fixtures/generator/`、dev 28 件、`fixtures/manifest.json`、Rule pack `invoice@1.1.0`、生成器のテスト 7 件（Windows・Linux とも成功）。ホールドアウト 12 件は `fixtures/HOLDOUT.md` の手順で人が生成 | 2026-10-19 |
 | P3-01a 文書の API | CC | 未着手 | `cc/P3-01a-documents` | — | — |
 | P3-01b 解析・抽出・検証の Capability | CC | 未着手 | — | — | — |
 | P3-01c 根拠（MCP）・出力 | CC | 未着手 | — | — | — |

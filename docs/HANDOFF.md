@@ -4,21 +4,24 @@
 |---|---|
 | 更新日 | 2026-10-19 |
 | 書いた人 | Claude Code（統合責任者） |
-| main の最新 | `3053b88`（G1b の報告まで。CI 成功） |
+| main の最新 | P3-02a まで（`e80e8be` の次の台帳更新。CI 成功） |
 
 新しいセッションは、まずこの文書、`AGENTS.md`、`TASK_STATUS.md`、`DECISIONS.md` の最後の数行を読む。
 
 ## 1. 現在地
 
-- **Phase 2 は完了し、G1b の承認を待っている。** 報告は `reports/gate_G1b.md`（自己判定 PASS）。人の go / no-go の前に Phase 3 のコードを書かない（`easf-phase-gate`）。
-- 承認されたら Phase 3（P3-01 請求書の業務の Capability、P3-02 合成データと正解ラベル）。どちらも CC が行う（D-024。Codex には渡さない）。
-- 人に返事をもらっていない事項：G1b の承認、Phase 3 の承認、`HUMAN_TIME_LOG.csv`（人の作業時間）の記入（G1a §10-3・G1b §10-3。任意）。
+- **Phase 3（G2、請求書の POC）の途中。** 計画は `docs/phase3/PHASE3_PLAN.md`（タスクは §4）。G1b は承認済み（D-027）。
+- 完了：P3-00（計画、D-027・D-028）、P3-02a（請求書の合成データの生成器・dev 28 件・manifest・Rule pack `invoice@1.1.0`、D-029）。
+- **次にやること：P3-01a 文書の API**（アップロード・一覧・ダウンロード。`contracts/openapi.yaml` の `uploadDocument`・`listDocuments`・`downloadDocument`、`jp-secure-coding` の upload-and-files.md）。そのあと P3-01b〜d、P3-03（§5）。
+- **人の作業待ち**：ホールドアウト 12 件の生成と凍結（`fixtures/HOLDOUT.md`。AI は実行しない・見ない）。**凍結は抽出・ルールの調整（P3-01b 以降で dev の結果を見て直すこと）より前**に行う（fixture_plan §7-5）。P3-01a は調整を含まないので、凍結の前に進めてよい。P3-01b で dev の結果を見て抽出を直す前に、凍結が済んでいるか人に確かめる。
+- 人に返事をもらっていない事項：`HUMAN_TIME_LOG.csv`（人の作業時間）の記入（任意）。
 
 | ゲート | 状態 | 報告 |
 |---|---|---|
 | G0 | 承認（D-014） | `reports/gate_G0.md` |
 | G1a | 承認（D-024） | `reports/gate_G1a.md` |
-| G1b | **承認待ち** | `reports/gate_G1b.md` |
+| G1b | 承認（D-027） | `reports/gate_G1b.md` |
+| G2 | Phase 3 の途中 | — |
 
 ## 2. できているもの
 
@@ -31,8 +34,9 @@
 | 画面 | ログイン・案件・要件・解決策・実行モニター・確認タスク・確認・能力カタログ。見た目は sales-assistant の UI に合わせ、配色は EASF の青緑系（D-026） | `frontend/src/` |
 | 契約 | v1 を凍結、現在 1.0.2（D-022・D-025）。変えるときは版を上げ、DECISIONS に書く | `contracts/` |
 | 診断 | G1a 前・G1b 前の自己診断（指摘はすべて対応済み） | `reports/security/` |
+| 合成データ（請求書） | 生成器（計画 → レコード → PDF・スキャン PNG・正解ラベル）、dev 28 件、manifest、Rule pack `invoice@1.1.0`。根拠の位置は `backend/app/capabilities/pdf_text.py`（解析と同じ関数）の文字の番号。ホールドアウトは人が生成（`fixtures/HOLDOUT.md`） | `fixtures/`、`backend/tests/fixtures/` |
 
-**まだないもの（Phase 3 以降）**：文書のアップロード・解析・抽出・ルール・根拠・出力（`exportRunResult`）、評価、再利用、実 LLM（D-004 で保留）。本番の許可リストで実行できる業務の Capability はまだない（`backend/app/executor/handlers.py` は空。人の確認だけ Executor が扱う）。
+**まだないもの**：文書のアップロード・解析・抽出・ルール・根拠・出力（`exportRunResult`）、評価、再利用、実 LLM（D-004 で保留）、契約書の業務（Phase 4）。本番の許可リストで実行できる業務の Capability はまだない（`backend/app/executor/handlers.py` は空。人の確認だけ Executor が扱う）。
 
 ## 3. 環境（Windows 11・Git Bash・Docker Desktop）
 
@@ -47,6 +51,9 @@
 - Docker Desktop が応答しなくなることがある（`docker info` が返らない）。ほかのプロジェクトのコンテナもあるので、勝手に再起動せず人に頼む。
 - **Bash からヒアドキュメントで Python を書くと、`\\` が `\` 1 つになる**。`D:\aidd` が BEL 文字に、`\u0000` が NUL バイトになった実例がある。反斜線を含む編集は Write / Edit ツールで行い、編集後に制御文字（`\x00-\x08\x0b\x0c\x0e-\x1f`）がないか確かめる。
 - Bash 上の curl で日本語の JSON を送ると Shift-JIS になり 400 になる。手動の確認では ASCII を使う。
+- **合成データは Windows と Linux（CI）で同じバイト列になる必要がある**（manifest のハッシュ）。生成器を変えたら `PYTHONPATH=backend uv run --project backend python -m fixtures.generator dev` で作り直し、生成器のテストを両方で通す。Linux での確認は Docker で行える（`ghcr.io/astral-sh/uv:python3.12-bookworm-slim` に `backend`・`fixtures`・`contracts` だけを tar でコピーし、`uv sync --locked` → `uv run pytest tests/fixtures`。`node_modules` を含めると遅い）。字体を埋め込まない・PNG を zlib で圧縮すると環境でずれる（D-029）。
+- ホールドアウトの文書・ラベルを開かない・生成しない（`easf-eval-integrity`）。リポジトリには `fixtures/manifest.holdout.json`（ハッシュだけ）が人の手で入る。
+- Bash の命令で、標準入力を待つもの（例：引数なしの `cat >`）を書くと、終わらずに何時間も止まる。後ろで動かす命令は最初に `timeout` を付ける。
 
 ## 4. 進め方（このプロジェクトの約束）
 
@@ -56,12 +63,15 @@
 - 実行していないものは「未実行」と書く。測っていない数値を書かない。模擬は模擬と書く。
 - 契約（`contracts/`）を変える必要が出たら止まるのが原則。エラー応答の追記のような後方互換の修正は、版を上げて DECISIONS に書き、報告で知らせた前例がある（D-022・D-025）。
 
-## 5. 次にやること（G1b 承認後）
+## 5. 次にやること（Phase 3 の残り。順に）
 
-1. P3-01 の前に計画を書く（`docs/phase3/PHASE3_PLAN.md`）：文書のアップロード（サイズ・形式・保存・ダウンロードの安全、`jp-secure-coding` upload-and-files.md）、`document_parser.v1`・`rule_based_extractor.v1`（D-015）・`structured_extractor.v1`（mock）・`rule_validator.v1`・`easf_local_mcp:locate_evidence`（ADR-005）・`result_exporter.v1` と `exportRunResult`。
-2. 実装を `backend/app/executor/handlers.py` に結び付け、`backend/app/catalog/registry.py` の `available` を合わせる（`tests/unit/test_handlers.py` が一致を確かめる）。業務名をエンジン（composer・executor・adapters）に書かない（`scripts/validate_contracts.py` が検出する）。
-3. 合成データ・正解ラベルは `easf-eval-integrity`・`fixture-data` に従う（ホールドアウトのラベルを見ない）。
-4. G2 前の診断ではアップロードの項目（checklist E-01〜E-04）を必須にする。
+1. **P3-01a 文書の API**：PDF・PNG・JPEG だけ（拡張子・宣言の型・先頭のバイトが一致）、10 MB・30 ページまで、サーバが作る UUID の名前で保存（公開しない場所、`EASF_STORAGE_DIR` などを設定に追加）、ダウンロードは `Content-Disposition: attachment`（RFC 5987）・`nosniff`・`no-store`。`documents` の表のマイグレーション（0006）、契約テストの PENDING から外し認可の全件表に追加、否定テスト（形式の偽装・サイズ・ページ数・ファイル名・他案件）。`startRun` の `document_ref` の入力を受け付けるようにする（同じ案件の文書だけ。今は 422 で拒否している）。
+2. **P3-01b** `document_parser.v1`（`app/capabilities/pdf_text.py` を使う。子プロセスで時間とメモリに上限、ADR-003）・`rule_based_extractor.v1`（D-015）・`structured_extractor.v1`（mock、D-004）・`rule_validator.v1`（Rule pack の式。`eval` しない、3 値）。実装は `backend/app/capabilities/` に置き、`backend/app/executor/handlers.py` に結び付け、`backend/app/catalog/registry.py` の `available` を合わせる（`tests/unit/test_handlers.py` が一致を確かめる）。**dev の結果を見て抽出を直す前に、ホールドアウトの凍結が済んでいるか人に確かめる。**
+3. **P3-01c** 根拠の照合（`easf_local_mcp:locate_evidence`、ADR-005 の自作ローカル MCP サーバ）・`result_exporter.v1`・`exportRunResult`（CSV の先頭文字の無害化）。
+4. **P3-01d** 請求書の Workflow を端から端まで（`contracts/examples/workflows/invoice.json` の Rule pack を `1.1.0` にした版）、画面（文書のアップロード・出力）。
+5. **P3-03** dev での評価、G2 前の診断（アップロードの E-01〜E-04 は必須）、`reports/gate_G2.md`。
+
+業務名（請求書・契約書など）をエンジン（composer・executor・adapters）に書かない（`scripts/validate_contracts.py` が検出する）。業務の違いは設定・Rule pack・抽出の項目の指定（`field_spec`）で表す。
 
 ## 6. 既知の問題
 
