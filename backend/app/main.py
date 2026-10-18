@@ -1,13 +1,15 @@
 from fastapi import FastAPI
 
-from app.api import catalog, projects, session, solutions, system
+from app.api import catalog, projects, runs, session, solutions, system
 from app.core.config import Settings, get_settings
 from app.core.db import make_session_factory
 from app.core.errors import install_error_handlers
 from app.core.middleware import SecurityMiddleware
+from app.executor.engine import HandlerTable
+from app.executor.handlers import production_handlers
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(settings: Settings | None = None, handlers: HandlerTable | None = None) -> FastAPI:
     settings = settings or get_settings()
     docs = settings.expose_docs
     app = FastAPI(
@@ -20,6 +22,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         redirect_slashes=False,
     )
     app.state.settings = settings
+    # Implementation keys the API may start runs for; the worker uses the same table (app/executor/handlers.py).
+    app.state.handlers = production_handlers() if handlers is None else handlers
     app.state.session_factory = make_session_factory(settings)  # engine connects lazily
     install_error_handlers(app)
     app.add_middleware(SecurityMiddleware, settings=settings)
@@ -29,4 +33,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(projects.router)
     app.include_router(catalog.router)
     app.include_router(solutions.router)
+    app.include_router(runs.router)
     return app

@@ -34,7 +34,7 @@ def _validator(name: str) -> Draft202012Validator:
     return Draft202012Validator(schema)
 
 
-def content_sha256(document: dict[str, Any]) -> str:
+def content_sha256(document: Any) -> str:
     """SHA-256 of the RFC 8785 canonical JSON (ADR-004): key order and whitespace do not matter."""
     return hashlib.sha256(rfc8785.dumps(document)).hexdigest()
 

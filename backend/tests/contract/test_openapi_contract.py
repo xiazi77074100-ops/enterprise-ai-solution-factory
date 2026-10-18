@@ -9,6 +9,7 @@
 
 import copy
 import json
+import uuid
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
@@ -21,7 +22,11 @@ from httpx import Response
 from jsonschema import Draft202012Validator, FormatChecker
 from sqlalchemy.orm import Session
 
+from app import main as main_module
+from app.core.db import make_session_factory
+from app.executor.engine import Executor
 from app.main import create_app
+from tests import executor_testkit as kit
 from tests.conftest import make_settings
 from tests.integration.test_auth_projects import (  # noqa: F401  # shared fixtures
     ORIGIN,
@@ -41,8 +46,7 @@ METHODS = ("get", "post", "put", "delete", "patch")
 # evaluations, reuse, llm). Removing an entry here is part of implementing it.
 PENDING = {
     "listDocuments", "uploadDocument", "downloadDocument",
-    "startRun", "listRuns", "getRun", "listNodeRuns", "getRunTrace", "exportRunResult",
-    "listReviewTasks", "getReviewTask", "decideReviewTask",
+    "exportRunResult",
     "listDatasetVersions", "startEvaluation", "getEvaluation", "listEvaluations",
     "getProjectReuseEvidence", "getReuseSummary", "createReuseRecord",
     "listLlmProfiles",
@@ -116,6 +120,9 @@ class World:
     approved_revision_id: str = ""
     solution_id: str = ""  # validated, created by the architect
     solution_etag: str = ""
+    runnable_solution_id: str = ""  # approved testkit workflow
+    run_id: str = ""  # waiting for review
+    review_id: str = ""  # assigned to "reviewer"
 
 
 @dataclass
@@ -208,12 +215,39 @@ CALLS: dict[str, Call] = {
     "validateSolution": Call("POST", "/api/v1/solutions/{solution}/validate", project_scoped=True),
     "approveSolution": Call("POST", "/api/v1/solutions/{solution}/approve", project_scoped=True),
     "listSolutions": Call("GET", "/api/v1/projects/{project}/solutions", project_scoped=True),
+    "startRun": Call(
+        "POST",
+        "/api/v1/solutions/{runnable}/runs",
+        lambda w: {"inputs": {"text": "契約テスト"}},
+        project_scoped=True,
+        headers=lambda w: {"Idempotency-Key": str(uuid.uuid4())},
+    ),
+    "listRuns": Call("GET", "/api/v1/runs?project_id={project}", project_scoped=True),
+    "getRun": Call("GET", "/api/v1/runs/{run}", project_scoped=True),
+    "listNodeRuns": Call("GET", "/api/v1/runs/{run}/nodes", project_scoped=True),
+    "getRunTrace": Call("GET", "/api/v1/runs/{run}/trace", project_scoped=True),
+    "listReviewTasks": Call("GET", "/api/v1/reviews"),
+    "getReviewTask": Call("GET", "/api/v1/runs/{run}/reviews/{review}", project_scoped=True),
+    "decideReviewTask": Call(
+        "POST",
+        "/api/v1/runs/{run}/reviews/{review}/decision",
+        lambda w: {"decision": "approved"},
+        project_scoped=True,
+        headers=lambda w: {"Idempotency-Key": str(uuid.uuid4())},
+    ),
 }
 SPECIAL = {"login", "logout"}  # covered by test_session_operations_match_contract
 
 
 def _send(client: TestClient, call: Call, w: World, headers: dict[str, str]) -> Response:
-    path = call.path.format(project=w.project_id, revision=w.revision_id, solution=w.solution_id)
+    path = call.path.format(
+        project=w.project_id,
+        revision=w.revision_id,
+        solution=w.solution_id,
+        runnable=w.runnable_solution_id,
+        run=w.run_id,
+        review=w.review_id,
+    )
     body = call.body(w) if call.body else None
     extra = call.headers(w) if call.headers else {}
     res: Response = client.request(call.method, path, json=body, headers={**headers, **extra})
@@ -230,7 +264,10 @@ def _session(db_url: str, login_id: str | None) -> tuple[TestClient, dict[str, s
 
 
 @pytest.fixture
-def world(db: Session, db_url: str) -> World:  # noqa: F811
+def world(db: Session, db_url: str, monkeypatch: pytest.MonkeyPatch) -> World:  # noqa: F811
+    # Test-only capabilities so run and review operations can be exercised (PHASE2_PLAN §3).
+    kit.allow_testkit(monkeypatch)
+    monkeypatch.setattr(main_module, "production_handlers", kit.handlers)
     users = {name: make_user(db, name) for name in ("lead", "arch", "reviewer", "outsider")}
     admin = make_user(db, "admin", admin=True)
     client, headers = _session(db_url, "admin")
@@ -266,6 +303,27 @@ def world(db: Session, db_url: str) -> World:  # noqa: F811
     w.solution_id, w.solution_etag = created.json()["id"], created.headers["etag"]
     report = arch_client.post(f"/api/v1/solutions/{w.solution_id}/validate", headers=arch_headers).json()
     assert report["valid"], report
+
+    for contract in [*kit.CONTRACTS.values(), kit.human_review()]:
+        assert arch_client.post("/api/v1/capabilities", json=contract, headers=arch_headers).status_code == 201
+    body = {"project_id": project_id, "requirement_revision_id": approved, "workflow": kit.workflow()}
+    w.runnable_solution_id = arch_client.post("/api/v1/solutions", json=body, headers=arch_headers).json()["id"]
+    assert arch_client.post(f"/api/v1/solutions/{w.runnable_solution_id}/validate", headers=arch_headers).json()[
+        "valid"
+    ]
+    approved_solution = client.post(f"/api/v1/solutions/{w.runnable_solution_id}/approve", headers=headers)
+    assert approved_solution.status_code == 200, approved_solution.text
+    started = client.post(
+        f"/api/v1/solutions/{w.runnable_solution_id}/runs",
+        json={"inputs": {"text": "確認待ち"}},
+        headers={**headers, "Idempotency-Key": str(uuid.uuid4())},
+    )
+    assert started.status_code == 202, started.text
+    w.run_id = started.json()["id"]
+    Executor(make_session_factory(make_settings(database_url=db_url)), kit.handlers()).run_until_idle()
+    reviewer_client, _ = _session(db_url, "reviewer")
+    tasks = reviewer_client.get("/api/v1/reviews").json()["items"]
+    w.review_id = next(t["id"] for t in tasks if t["run_id"] == w.run_id)
     return w
 
 

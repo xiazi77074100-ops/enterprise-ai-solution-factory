@@ -4,6 +4,7 @@
 |---|---|---|---|
 | 0.1 | 2026-10-18 | 初版（P2-00） | Claude Code |
 | 0.2 | 2026-10-18 | P2-01 の実装に合わせる：検査結果の項目名、実装がない Capability の扱い、承認の条件 | Claude Code |
+| 0.3 | 2026-10-18 | P2-02 の実装に合わせる：再試行の回数、予算の時間、確認の項目、実行の方式の判定、出力の保存 | Claude Code |
 
 前提：ADR-001（自前の型付き DAG、DB をキュー、1 プロセスのワーカー）、ADR-002（LlmPort、mock のみ）、ADR-005（MCP）、契約 v1.0.1。API の形は `contracts/openapi.yaml` が正で、ここは内部の動きを書く。
 
@@ -78,9 +79,10 @@ NodeRun: pending ─▶ running ─▶ succeeded
 5. **アダプタの呼び出し**：`timeout = min(ノードの timeout_ms, 版の timeout_ms, 予算の残り時間)`。
 6. **出力の検証**：**出力スキーマで検証**（2 か所目。3 か所目は Composer での設定の検証）。違えば `invalid_output`。出力の大きさの上限は 1 MiB。
 7. **記録**：NodeRun に入力・出力の SHA-256（JCS）、所要時間、`execution_mode`、使用量。出力そのものは DB の NodeRun にだけ保存し、トレースにはハッシュと件数だけ。
-8. **再試行**：時間切れ・アダプタの一時的な失敗で、版の `retry.idempotent` が真なら `retry.max_attempts` まで（NodeRun の `attempt` を増やす）。不正な出力は再試行しない。
-9. **予算**：ノードの前後で、経過時間・LLM のトークン・円を Workflow の `budget` と比べ、超えたら Run を `failed`（`budget_exceeded`）。
-10. **終了**：全ノード成功で `succeeded`。失敗したら残りを `skipped` にして `failed`。`outputs` は `succeeded` のときだけ組み立てる。
+8. **再試行**：時間切れ・アダプタの一時的な失敗（例外・子プロセスの異常終了）で、版の `retry.idempotent` が真なら再試行する。契約の `retry.max_attempts`（0〜2）は**再試行の回数**で、試行は最大 `1 + max_attempts` 回（NodeRun の `attempt` は 1〜3）。不正な出力・出力の上限超えは再試行しない。
+9. **予算**：`max_duration_ms` は**処理時間**（各ノードの実行時間の合計。人の確認を待つ時間は含めない）と比べ、ノードの時間切れも残りの処理時間で短くする。LLM のトークン・円は呼び出しごとに Run の `usage` に足し、上限を超えたらそのノードを失敗にして Run を `failed`（`budget_exceeded`）。
+10. **終了**：全ノード成功で `succeeded`。失敗したら残りを `skipped` にして `failed`。`outputs` は `succeeded` のときだけ組み立て、Run の内部の列に保存する（契約の `Run` には含めない。出力の取り出しは Phase 3 の `exportRunResult`）。
+11. **実行の方式**：ノードの `execution_mode` はアダプタが返す（人の確認は `real`）。Run は、実行したノードがすべて `real` なら `real`、すべて `mock` なら `mock`、混在なら `mixed`。
 
 ### 異常終了からの回復
 
@@ -100,7 +102,7 @@ NodeRun: pending ─▶ running ─▶ succeeded
 ## 6. 人の確認
 
 - **割り当て**：その案件で `business_reviewer` のロールを持つメンバーのうち、未完了の確認タスクが最も少ない人（同数なら利用者 ID の順）。いなければ Run を `failed`（`no_reviewer`）。
-- **確認の項目**：入力の `fields`・`findings`・`evidence` から作る（`ReviewItem`）。
+- **確認の項目**：入力の `fields`・`findings`・`evidence` から、業務を知らない一定の規則で作る（`ReviewItem`）。項目ごとに 1 件（`/fields/<名前>`、根拠は `evidence[<名前>]` のうち形式の正しいもの 10 件まで、`origin` は `fields` を渡したノードが `llm` なら `ai_draft`、それ以外は `parser`）と、ルールの結果ごとに 1 件（`/findings/<番号>`、`origin: rule`、`flags` にその結果）。
 - **決定（decideReviewTask）**：割り当てられた本人だけ（他は 403、案件外は 404）。`pending` のときだけ（完了済みは 409）。`Idempotency-Key` が同じなら元の結果を返す。
   - `approved`：出力は `reviewed_fields = fields`、`corrections = []`。
   - `approved_with_corrections`：修正の `path` は `/fields/<名前>` の形だけ受け付け、`reviewed_fields` に反映する。修正前後の値のハッシュ・修正者・時刻をトレースに残す（AC-07）。
