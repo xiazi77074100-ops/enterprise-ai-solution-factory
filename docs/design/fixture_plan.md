@@ -3,6 +3,7 @@
 | 版 | 日付 | 変更内容 | 作成者 |
 |---|---|---|---|
 | 0.1 | 2026-10-18 | 初版（P0-04。D-011 により CC が作成） | Claude Code |
+| 0.2 | 2026-10-19 | 請求書の生成器を実装（P3-02a）：層ごとの dev / holdout の件数、生成の道具、根拠の決め方、Rule pack 1.1.0 | Claude Code |
 
 根拠：`easf_package/docs/07_DATA_AND_EVAL.md`、ADR-003・ADR-007、D-005、skill `easf-eval-integrity`・`fixture-data`。
 **生成器・文書・ラベルは Phase 3 で作る。** ここは作り方と凍結の手順を G0 で決めるための計画。
@@ -17,6 +18,7 @@
 - 分割は「内容の層」ごとに層別で行う（各層の約 30% を holdout、端数は重大ルールの層を優先して holdout に寄せる）。
 - 重複の組（INV-006）は、組の 2 件を同じ分割に入れる。
 - 件数が少ないため、結果は「POC の健全性確認」であって統計的な主張ではない（ADR-007）。
+- 請求書の層ごとの件数（dev / holdout）：normal 8 / 2、missing_registration 3 / 1、bad_registration_format 2 / 1、total_mismatch 3 / 2、payee_changed 3 / 2、missing_due_date 3 / 1、duplicate_invoice_no 2 / 1、ambiguous 2 / 1、injected_instruction 2 / 1（`fixtures/generator/invoice.py` の `STRATA`）。どの文書をどの層・分割・体裁にするかは公開の種（`PLAN_SEED`）で決め、内容は分割ごとの種（dev は公開、holdout は人だけ）で作る。
 
 ## 2. 層（2 つの軸）
 
@@ -73,7 +75,10 @@
                  └─ gold_evidence：描画した PDF からテキストを抽出し、値の文字範囲を照合して決める
 ```
 
-- 生成器：Python。PDF の描画ライブラリと日本語フォントは Phase 3 の着手時に決める（候補：ReportLab〔BSD〕＋ Noto Sans JP〔SIL OFL〕。フォントの LICENSE を同梱）。
+- 生成器：Python（`fixtures/generator/`）。PDF は ReportLab 5.0.1（BSD）＋組み込みの日本語 CID フォント（フォントのファイルは同梱しない、D-028）。不変モード（`invariant=1`）で同じレコードから同じバイト列を作る。スキャンは pypdfium2 で画像化し、Pillow で回転（±3°）・ぼかし・点の雑音を加えた PNG。
+- 根拠の位置：描画したときの「見出し＋値」を、`backend/app/capabilities/pdf_text.py`（解析と同じ関数）で抜き出したページのテキストの中で探し、文字の番号と SHA-256 を記録する。値があいまい（`uncertain`）な項目は、候補の位置をすべて根拠にする。スキャンはテキスト層がないので根拠は空（OCR で取れても `unverified`）。
+- 乱数は文書ごとに「分割の種:sample_id」で起こす。ある文書を変えても他の文書は変わらない。使わない値も引いて捨てる（`fixture-data` §5）。
+- 振込先の照合（INV-004）は、生成器の取引先（公開の一覧）の登録口座を表にした Rule pack `invoice@1.1.0`（`fixtures/rule_packs/`）を使う。1.0.0 から設定（参照表）だけを変えた版。
 - 生成器のテスト（`fixture-data` §6）：レコード → 文書 → 抽出 → 根拠の範囲が一致、層の件数が計画どおり、日付の順序、TEST ONLY の印、実在名の突き合わせ。
 
 ## 4. 架空であることの担保

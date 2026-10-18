@@ -2,3 +2,7 @@
 *.png binary
 *.jpg binary
 *.pdf binary
+# Synthetic data is hashed (manifest, DECISIONS): git must never rewrite its bytes (line endings) on any OS.
+fixtures/dev/** -text
+fixtures/manifest*.json -text
+fixtures/rule_packs/** -text

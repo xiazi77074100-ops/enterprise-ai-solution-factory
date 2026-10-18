@@ -1,0 +1,186 @@
+{
+  "sample_id": "inv-0020",
+  "scenario": "invoice",
+  "split": "dev",
+  "stratum": "total_mismatch",
+  "layout": [
+    "multi_page"
+  ],
+  "planted": [
+    "total_mismatch"
+  ],
+  "injection": null,
+  "duplicate_of": null,
+  "source_file": "inv-0020.pdf",
+  "media_type": "application/pdf",
+  "source_file_sha256": "275cef49670af07d116a530829925fc1b0c3c71b41b90483bcb0638a1fedd56a",
+  "page_count": 2,
+  "gold_fields": {
+    "vendor_name": "株式会社つむぎ印刷",
+    "invoice_no": "2025-2295",
+    "issue_date": "2025-07-25",
+    "due_date": "2025-08-24",
+    "subtotal": "13980",
+    "tax": "1398",
+    "total": "15368",
+    "registration_no": "T6001056049371",
+    "payee_bank": "ほしぞら銀行",
+    "payee_branch": "青葉台支店",
+    "payee_account": "3580237",
+    "line_items": [
+      {
+        "description": "ポスター B2",
+        "quantity": "5",
+        "unit_price": "2400",
+        "amount": "12000"
+      },
+      {
+        "description": "会社案内パンフレット A4",
+        "quantity": "11",
+        "unit_price": "180",
+        "amount": "1980"
+      }
+    ]
+  },
+  "gold_field_status": {
+    "vendor_name": "found",
+    "invoice_no": "found",
+    "issue_date": "found",
+    "due_date": "found",
+    "subtotal": "found",
+    "tax": "found",
+    "total": "found",
+    "registration_no": "found",
+    "payee_bank": "found",
+    "payee_branch": "found",
+    "payee_account": "found",
+    "line_items": "found"
+  },
+  "gold_findings": [
+    {
+      "rule_id": "INV-001",
+      "result": "fail",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-002",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-003",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-004",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-005",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-006",
+      "result": "pass",
+      "severity": "major"
+    }
+  ],
+  "gold_evidence": {
+    "invoice_no": [
+      {
+        "page": 1,
+        "start": 71,
+        "end": 80,
+        "text_sha256": "f0d49151d27ca4ca3f683ea01d17ace0e01f58cbf4fe0472cb315a57948fc8d5"
+      }
+    ],
+    "issue_date": [
+      {
+        "page": 1,
+        "start": 86,
+        "end": 96,
+        "text_sha256": "bf6f62301de4c6f037f3b3b67887a4fb113e5b02f480a229f6c72e1417b17718"
+      }
+    ],
+    "vendor_name": [
+      {
+        "page": 1,
+        "start": 102,
+        "end": 111,
+        "text_sha256": "ff3b37b6e7905cc0a1236de12d5a20ca874317da0d14ca7c412f848ee0bdaa97"
+      }
+    ],
+    "registration_no": [
+      {
+        "page": 1,
+        "start": 172,
+        "end": 186,
+        "text_sha256": "9c533bc9f639f05973f43cc3f7e4a4222da8f7d30714b6ce2338d075f2c93bce"
+      }
+    ],
+    "subtotal": [
+      {
+        "page": 2,
+        "start": 62,
+        "end": 69,
+        "text_sha256": "d58054834bf4d34e58ae0cc4c7a1dea7572ca345809f2ad7f2c086baaf40e090"
+      }
+    ],
+    "tax": [
+      {
+        "page": 2,
+        "start": 80,
+        "end": 86,
+        "text_sha256": "934a6298e1dc2e0b85a4fa64e662cdfcbb4e5cea159cc85c280f210fe59f00a6"
+      }
+    ],
+    "total": [
+      {
+        "page": 2,
+        "start": 93,
+        "end": 100,
+        "text_sha256": "207a8ca521b9bc5e8dadd8d41300e2c49cf00e9ceb961996ac7eac10bff0e958"
+      }
+    ],
+    "due_date": [
+      {
+        "page": 2,
+        "start": 108,
+        "end": 118,
+        "text_sha256": "027ed2a0b02d8f1227e539a9038195edf6680fd9509772164038bf4816c67346"
+      }
+    ],
+    "payee_bank": [
+      {
+        "page": 2,
+        "start": 124,
+        "end": 130,
+        "text_sha256": "f992ad48a3f922a8d5c6611f92c56ef5b47e0751004b14f8dc91231048471160"
+      }
+    ],
+    "payee_branch": [
+      {
+        "page": 2,
+        "start": 135,
+        "end": 140,
+        "text_sha256": "3bffdded4eea177aa47f32bce0702499ab4e1a37a3a1e078fb115fa4818765c2"
+      }
+    ],
+    "payee_account": [
+      {
+        "page": 2,
+        "start": 149,
+        "end": 156,
+        "text_sha256": "d94cd933df20455ae903ffa5517db679acf1da630adcca418cd6cafb5f18ff16"
+      }
+    ]
+  },
+  "policy_version": "invoice@1.1.0",
+  "generator_version": "0.1.0",
+  "annotator": "generator",
+  "reviewed_by": null,
+  "data_origin": "synthetic"
+}

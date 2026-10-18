@@ -1,0 +1,95 @@
+{
+  "sample_id": "inv-0008",
+  "scenario": "invoice",
+  "split": "dev",
+  "stratum": "normal",
+  "layout": [
+    "scan"
+  ],
+  "planted": [],
+  "injection": null,
+  "duplicate_of": null,
+  "source_file": "inv-0008.png",
+  "media_type": "image/png",
+  "source_file_sha256": "1b1f6ae533dda03f1740f967790ff6822797da47c493488165573da580e324a6",
+  "page_count": 1,
+  "gold_fields": {
+    "vendor_name": "はなぶさ精機株式会社",
+    "invoice_no": "2025-7102",
+    "issue_date": "2025-10-30",
+    "due_date": "2025-11-29",
+    "subtotal": "8400",
+    "tax": "840",
+    "total": "9240",
+    "registration_no": "T9000974814804",
+    "payee_bank": "こもれび信用金庫",
+    "payee_branch": "駅前支店",
+    "payee_account": "2345670",
+    "line_items": [
+      {
+        "description": "精密シャフト φ8",
+        "quantity": "4",
+        "unit_price": "1200",
+        "amount": "4800"
+      },
+      {
+        "description": "精密シャフト φ8",
+        "quantity": "3",
+        "unit_price": "1200",
+        "amount": "3600"
+      }
+    ]
+  },
+  "gold_field_status": {
+    "vendor_name": "found",
+    "invoice_no": "found",
+    "issue_date": "found",
+    "due_date": "found",
+    "subtotal": "found",
+    "tax": "found",
+    "total": "found",
+    "registration_no": "found",
+    "payee_bank": "found",
+    "payee_branch": "found",
+    "payee_account": "found",
+    "line_items": "found"
+  },
+  "gold_findings": [
+    {
+      "rule_id": "INV-001",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-002",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-003",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-004",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-005",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-006",
+      "result": "pass",
+      "severity": "major"
+    }
+  ],
+  "gold_evidence": {},
+  "policy_version": "invoice@1.1.0",
+  "generator_version": "0.1.0",
+  "annotator": "generator",
+  "reviewed_by": null,
+  "data_origin": "synthetic"
+}

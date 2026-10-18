@@ -1,0 +1,182 @@
+{
+  "sample_id": "inv-0028",
+  "scenario": "invoice",
+  "split": "dev",
+  "stratum": "missing_due_date",
+  "layout": [],
+  "planted": [
+    "missing_due_date"
+  ],
+  "injection": null,
+  "duplicate_of": null,
+  "source_file": "inv-0028.pdf",
+  "media_type": "application/pdf",
+  "source_file_sha256": "6d79e5ababd939550edfceecaf133f2b03a3a31ab0c40c2ada531618185c1c7f",
+  "page_count": 1,
+  "gold_fields": {
+    "vendor_name": "株式会社かざみ建材",
+    "invoice_no": "2025-5003",
+    "issue_date": "2025-11-08",
+    "due_date": null,
+    "subtotal": "83400",
+    "tax": "8340",
+    "total": "91740",
+    "registration_no": "T5000731111103",
+    "payee_bank": "ほしぞら銀行",
+    "payee_branch": "青葉台支店",
+    "payee_account": "8641969",
+    "line_items": [
+      {
+        "description": "運搬費",
+        "quantity": "10",
+        "unit_price": "6000",
+        "amount": "60000"
+      },
+      {
+        "description": "断熱材 50mm",
+        "quantity": "4",
+        "unit_price": "2600",
+        "amount": "10400"
+      },
+      {
+        "description": "断熱材 50mm",
+        "quantity": "5",
+        "unit_price": "2600",
+        "amount": "13000"
+      }
+    ]
+  },
+  "gold_field_status": {
+    "vendor_name": "found",
+    "invoice_no": "found",
+    "issue_date": "found",
+    "due_date": "missing",
+    "subtotal": "found",
+    "tax": "found",
+    "total": "found",
+    "registration_no": "found",
+    "payee_bank": "found",
+    "payee_branch": "found",
+    "payee_account": "found",
+    "line_items": "found"
+  },
+  "gold_findings": [
+    {
+      "rule_id": "INV-001",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-002",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-003",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-004",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-005",
+      "result": "fail",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-006",
+      "result": "pass",
+      "severity": "major"
+    }
+  ],
+  "gold_evidence": {
+    "invoice_no": [
+      {
+        "page": 1,
+        "start": 72,
+        "end": 81,
+        "text_sha256": "2ca976531e4a6bae28c4bc4073781af848aabe8c9ef1b7337fd08e876f6380ab"
+      }
+    ],
+    "issue_date": [
+      {
+        "page": 1,
+        "start": 87,
+        "end": 97,
+        "text_sha256": "bde9c14d2c7b6675c3d83945f84c9aa997c2c4e9c6862291b96c305adec9fe95"
+      }
+    ],
+    "vendor_name": [
+      {
+        "page": 1,
+        "start": 103,
+        "end": 112,
+        "text_sha256": "ef13259b5922a9016b329137a85cac210acb9bced78e8a1ca28a9e1ee42623dd"
+      }
+    ],
+    "registration_no": [
+      {
+        "page": 1,
+        "start": 171,
+        "end": 185,
+        "text_sha256": "d421bbf5fa02e70734548e01126060728ecc16c401a5a3883b4b4213993d3006"
+      }
+    ],
+    "subtotal": [
+      {
+        "page": 1,
+        "start": 298,
+        "end": 305,
+        "text_sha256": "08d31a465dd94196e0c9d0dacd3f1a7be15b56e2dedd352d0156452318cb09d3"
+      }
+    ],
+    "tax": [
+      {
+        "page": 1,
+        "start": 316,
+        "end": 322,
+        "text_sha256": "2948ae2dfb0868cf080faa88d598f3cea976fb3bfae538025085dc9e91b86ef3"
+      }
+    ],
+    "total": [
+      {
+        "page": 1,
+        "start": 329,
+        "end": 336,
+        "text_sha256": "48010e25565b38a14681fe5354fc4a65f511413a7ef7282a639ae012a0b89ed9"
+      }
+    ],
+    "payee_bank": [
+      {
+        "page": 1,
+        "start": 342,
+        "end": 348,
+        "text_sha256": "f992ad48a3f922a8d5c6611f92c56ef5b47e0751004b14f8dc91231048471160"
+      }
+    ],
+    "payee_branch": [
+      {
+        "page": 1,
+        "start": 353,
+        "end": 358,
+        "text_sha256": "3bffdded4eea177aa47f32bce0702499ab4e1a37a3a1e078fb115fa4818765c2"
+      }
+    ],
+    "payee_account": [
+      {
+        "page": 1,
+        "start": 367,
+        "end": 374,
+        "text_sha256": "fef67a542acd36076a01627b1a630157dc0f75941937358b3b8eb1a154e9394a"
+      }
+    ]
+  },
+  "policy_version": "invoice@1.1.0",
+  "generator_version": "0.1.0",
+  "annotator": "generator",
+  "reviewed_by": null,
+  "data_origin": "synthetic"
+}

@@ -1,0 +1,233 @@
+{
+  "sample_id": "inv-0029",
+  "scenario": "invoice",
+  "split": "dev",
+  "stratum": "missing_due_date",
+  "layout": [
+    "table_heavy",
+    "wareki"
+  ],
+  "planted": [
+    "missing_due_date"
+  ],
+  "injection": null,
+  "duplicate_of": null,
+  "source_file": "inv-0029.pdf",
+  "media_type": "application/pdf",
+  "source_file_sha256": "d357a1fba44489cbce07bd365a18997304eaf0ab687c39c1397cb6b0ccf7db18",
+  "page_count": 1,
+  "gold_fields": {
+    "vendor_name": "株式会社かざみ建材",
+    "invoice_no": "2025-6859",
+    "issue_date": "2026-01-13",
+    "due_date": null,
+    "subtotal": "162580",
+    "tax": "16258",
+    "total": "178838",
+    "registration_no": "T5000731111103",
+    "payee_bank": "ほしぞら銀行",
+    "payee_branch": "青葉台支店",
+    "payee_account": "8641969",
+    "line_items": [
+      {
+        "description": "断熱材 50mm",
+        "quantity": "12",
+        "unit_price": "2600",
+        "amount": "31200"
+      },
+      {
+        "description": "木製巾木",
+        "quantity": "12",
+        "unit_price": "740",
+        "amount": "8880"
+      },
+      {
+        "description": "断熱材 50mm",
+        "quantity": "4",
+        "unit_price": "2600",
+        "amount": "10400"
+      },
+      {
+        "description": "木製巾木",
+        "quantity": "8",
+        "unit_price": "740",
+        "amount": "5920"
+      },
+      {
+        "description": "断熱材 50mm",
+        "quantity": "6",
+        "unit_price": "2600",
+        "amount": "15600"
+      },
+      {
+        "description": "木製巾木",
+        "quantity": "12",
+        "unit_price": "740",
+        "amount": "8880"
+      },
+      {
+        "description": "断熱材 50mm",
+        "quantity": "4",
+        "unit_price": "2600",
+        "amount": "10400"
+      },
+      {
+        "description": "断熱材 50mm",
+        "quantity": "11",
+        "unit_price": "2600",
+        "amount": "28600"
+      },
+      {
+        "description": "断熱材 50mm",
+        "quantity": "5",
+        "unit_price": "2600",
+        "amount": "13000"
+      },
+      {
+        "description": "木製巾木",
+        "quantity": "5",
+        "unit_price": "740",
+        "amount": "3700"
+      },
+      {
+        "description": "断熱材 50mm",
+        "quantity": "10",
+        "unit_price": "2600",
+        "amount": "26000"
+      }
+    ]
+  },
+  "gold_field_status": {
+    "vendor_name": "found",
+    "invoice_no": "found",
+    "issue_date": "found",
+    "due_date": "missing",
+    "subtotal": "found",
+    "tax": "found",
+    "total": "found",
+    "registration_no": "found",
+    "payee_bank": "found",
+    "payee_branch": "found",
+    "payee_account": "found",
+    "line_items": "found"
+  },
+  "gold_findings": [
+    {
+      "rule_id": "INV-001",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-002",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-003",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-004",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-005",
+      "result": "fail",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-006",
+      "result": "pass",
+      "severity": "major"
+    }
+  ],
+  "gold_evidence": {
+    "invoice_no": [
+      {
+        "page": 1,
+        "start": 71,
+        "end": 80,
+        "text_sha256": "839e719eb941d45b61796ed6661f8a710501fe35d5a9681ae4c9d3d7eac42050"
+      }
+    ],
+    "issue_date": [
+      {
+        "page": 1,
+        "start": 86,
+        "end": 95,
+        "text_sha256": "8c5595076182af86613373f0073713bee64199b4e074f5163a1892c5dc3f960a"
+      }
+    ],
+    "vendor_name": [
+      {
+        "page": 1,
+        "start": 101,
+        "end": 110,
+        "text_sha256": "ef13259b5922a9016b329137a85cac210acb9bced78e8a1ca28a9e1ee42623dd"
+      }
+    ],
+    "registration_no": [
+      {
+        "page": 1,
+        "start": 169,
+        "end": 183,
+        "text_sha256": "d421bbf5fa02e70734548e01126060728ecc16c401a5a3883b4b4213993d3006"
+      }
+    ],
+    "subtotal": [
+      {
+        "page": 1,
+        "start": 493,
+        "end": 501,
+        "text_sha256": "edfea0a4457d2bbc0b8bc110639aae71f90194ef9bb8d1844e79682aa55bc2d5"
+      }
+    ],
+    "tax": [
+      {
+        "page": 1,
+        "start": 512,
+        "end": 519,
+        "text_sha256": "a7c7dc6d9db726e24e3d47c1bf10c0c3f768901d6ad6385739e37c0e0d7e0a96"
+      }
+    ],
+    "total": [
+      {
+        "page": 1,
+        "start": 526,
+        "end": 534,
+        "text_sha256": "4cf089f23724e3e60499c75566addb4058cc40a629bf60efe463d7175f7811bf"
+      }
+    ],
+    "payee_bank": [
+      {
+        "page": 1,
+        "start": 540,
+        "end": 546,
+        "text_sha256": "f992ad48a3f922a8d5c6611f92c56ef5b47e0751004b14f8dc91231048471160"
+      }
+    ],
+    "payee_branch": [
+      {
+        "page": 1,
+        "start": 551,
+        "end": 556,
+        "text_sha256": "3bffdded4eea177aa47f32bce0702499ab4e1a37a3a1e078fb115fa4818765c2"
+      }
+    ],
+    "payee_account": [
+      {
+        "page": 1,
+        "start": 565,
+        "end": 572,
+        "text_sha256": "fef67a542acd36076a01627b1a630157dc0f75941937358b3b8eb1a154e9394a"
+      }
+    ]
+  },
+  "policy_version": "invoice@1.1.0",
+  "generator_version": "0.1.0",
+  "annotator": "generator",
+  "reviewed_by": null,
+  "data_origin": "synthetic"
+}

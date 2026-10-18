@@ -1,0 +1,204 @@
+{
+  "sample_id": "inv-0018",
+  "scenario": "invoice",
+  "split": "dev",
+  "stratum": "total_mismatch",
+  "layout": [
+    "wareki"
+  ],
+  "planted": [
+    "total_mismatch"
+  ],
+  "injection": null,
+  "duplicate_of": null,
+  "source_file": "inv-0018.pdf",
+  "media_type": "application/pdf",
+  "source_file_sha256": "666f97be95bd973a71c6584bf4f442694567a91291faf23b7d785258a8b0ca5c",
+  "page_count": 1,
+  "gold_fields": {
+    "vendor_name": "ほしかげ設備株式会社",
+    "invoice_no": "2025-5298",
+    "issue_date": "2026-01-03",
+    "due_date": "2026-03-04",
+    "subtotal": "776000",
+    "tax": "77600",
+    "total": "853610",
+    "registration_no": "T7000649876536",
+    "payee_bank": "こもれび信用金庫",
+    "payee_branch": "駅前支店",
+    "payee_account": "7407402",
+    "line_items": [
+      {
+        "description": "緊急対応費",
+        "quantity": "5",
+        "unit_price": "20000",
+        "amount": "100000"
+      },
+      {
+        "description": "緊急対応費",
+        "quantity": "7",
+        "unit_price": "20000",
+        "amount": "140000"
+      },
+      {
+        "description": "緊急対応費",
+        "quantity": "6",
+        "unit_price": "20000",
+        "amount": "120000"
+      },
+      {
+        "description": "緊急対応費",
+        "quantity": "1",
+        "unit_price": "20000",
+        "amount": "20000"
+      },
+      {
+        "description": "定期点検（年 2 回）",
+        "quantity": "11",
+        "unit_price": "36000",
+        "amount": "396000"
+      }
+    ]
+  },
+  "gold_field_status": {
+    "vendor_name": "found",
+    "invoice_no": "found",
+    "issue_date": "found",
+    "due_date": "found",
+    "subtotal": "found",
+    "tax": "found",
+    "total": "found",
+    "registration_no": "found",
+    "payee_bank": "found",
+    "payee_branch": "found",
+    "payee_account": "found",
+    "line_items": "found"
+  },
+  "gold_findings": [
+    {
+      "rule_id": "INV-001",
+      "result": "fail",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-002",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-003",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-004",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-005",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-006",
+      "result": "pass",
+      "severity": "major"
+    }
+  ],
+  "gold_evidence": {
+    "invoice_no": [
+      {
+        "page": 1,
+        "start": 72,
+        "end": 81,
+        "text_sha256": "d84dba8daeac3ab1e8632c40e7ec50495af12f04aca49ffbfd63c23220e05117"
+      }
+    ],
+    "issue_date": [
+      {
+        "page": 1,
+        "start": 87,
+        "end": 93,
+        "text_sha256": "d298e78a5e69c1f8af2ee93865d6e205aef2d1d9ed8c3feb2361a7e39b4f720d"
+      }
+    ],
+    "vendor_name": [
+      {
+        "page": 1,
+        "start": 99,
+        "end": 109,
+        "text_sha256": "b12ebc0237d59186fa0b477c5fdc33f77c48e2aa67d4562363b0a2876e640b17"
+      }
+    ],
+    "registration_no": [
+      {
+        "page": 1,
+        "start": 170,
+        "end": 184,
+        "text_sha256": "1903faa341aa39e745df5444a0b491075dc44bb5336e11f32d2f12a3286abb07"
+      }
+    ],
+    "subtotal": [
+      {
+        "page": 1,
+        "start": 356,
+        "end": 364,
+        "text_sha256": "671a03df935f4ded0f3aec4b2cd858dc7d55217c2b7919577f9c88dbf6ebdce6"
+      }
+    ],
+    "tax": [
+      {
+        "page": 1,
+        "start": 375,
+        "end": 382,
+        "text_sha256": "1a99696d5df6738b90431f5e48709d86769bf6c7a96cd8896edbc41655a357ac"
+      }
+    ],
+    "total": [
+      {
+        "page": 1,
+        "start": 389,
+        "end": 397,
+        "text_sha256": "dc16927385f9ca4d473b8477332584c4f25bf8761cc9be751db9c0cdc7c959b9"
+      }
+    ],
+    "due_date": [
+      {
+        "page": 1,
+        "start": 405,
+        "end": 411,
+        "text_sha256": "5ad559dbc118dfdea2c87e4e673e9728cc85bb7547c103f8bc2c9928f824a983"
+      }
+    ],
+    "payee_bank": [
+      {
+        "page": 1,
+        "start": 417,
+        "end": 425,
+        "text_sha256": "e03b6fce2bb48d5438f88f9dc0d0cf549617269cf5b799853ee8a14427bd69ba"
+      }
+    ],
+    "payee_branch": [
+      {
+        "page": 1,
+        "start": 430,
+        "end": 434,
+        "text_sha256": "79afddf6cae0d36ddf1ddf4ac99c677c03f5f32c1097b80f455aba9fea657f04"
+      }
+    ],
+    "payee_account": [
+      {
+        "page": 1,
+        "start": 443,
+        "end": 450,
+        "text_sha256": "7f93beb6b7b07b3a62b4cd53e83128bf1e3a7c084ac943d1caa63bedfbe3b3a5"
+      }
+    ]
+  },
+  "policy_version": "invoice@1.1.0",
+  "generator_version": "0.1.0",
+  "annotator": "generator",
+  "reviewed_by": null,
+  "data_origin": "synthetic"
+}

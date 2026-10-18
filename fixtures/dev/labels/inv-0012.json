@@ -1,0 +1,226 @@
+{
+  "sample_id": "inv-0012",
+  "scenario": "invoice",
+  "split": "dev",
+  "stratum": "missing_registration",
+  "layout": [
+    "table_heavy"
+  ],
+  "planted": [
+    "missing_registration"
+  ],
+  "injection": null,
+  "duplicate_of": null,
+  "source_file": "inv-0012.pdf",
+  "media_type": "application/pdf",
+  "source_file_sha256": "755b5d7eaaa6596726fa5efb69995dc53e693d455eafa09848d6247f22b02bb2",
+  "page_count": 1,
+  "gold_fields": {
+    "vendor_name": "株式会社しろたえ食品",
+    "invoice_no": "2025-5965",
+    "issue_date": "2025-07-26",
+    "due_date": "2025-08-25",
+    "subtotal": "133200",
+    "tax": "13320",
+    "total": "146520",
+    "registration_no": null,
+    "payee_bank": "ゆうなぎ銀行",
+    "payee_branch": "中央支店",
+    "payee_account": "6172835",
+    "line_items": [
+      {
+        "description": "配送料",
+        "quantity": "7",
+        "unit_price": "1000",
+        "amount": "7000"
+      },
+      {
+        "description": "冷凍惣菜セット",
+        "quantity": "7",
+        "unit_price": "3600",
+        "amount": "25200"
+      },
+      {
+        "description": "冷凍惣菜セット",
+        "quantity": "4",
+        "unit_price": "3600",
+        "amount": "14400"
+      },
+      {
+        "description": "冷凍惣菜セット",
+        "quantity": "6",
+        "unit_price": "3600",
+        "amount": "21600"
+      },
+      {
+        "description": "配送料",
+        "quantity": "9",
+        "unit_price": "1000",
+        "amount": "9000"
+      },
+      {
+        "description": "業務用だし（1kg）",
+        "quantity": "3",
+        "unit_price": "2200",
+        "amount": "6600"
+      },
+      {
+        "description": "業務用だし（1kg）",
+        "quantity": "1",
+        "unit_price": "2200",
+        "amount": "2200"
+      },
+      {
+        "description": "調味料詰合せ",
+        "quantity": "5",
+        "unit_price": "1800",
+        "amount": "9000"
+      },
+      {
+        "description": "業務用だし（1kg）",
+        "quantity": "10",
+        "unit_price": "2200",
+        "amount": "22000"
+      },
+      {
+        "description": "調味料詰合せ",
+        "quantity": "9",
+        "unit_price": "1800",
+        "amount": "16200"
+      }
+    ]
+  },
+  "gold_field_status": {
+    "vendor_name": "found",
+    "invoice_no": "found",
+    "issue_date": "found",
+    "due_date": "found",
+    "subtotal": "found",
+    "tax": "found",
+    "total": "found",
+    "registration_no": "missing",
+    "payee_bank": "found",
+    "payee_branch": "found",
+    "payee_account": "found",
+    "line_items": "found"
+  },
+  "gold_findings": [
+    {
+      "rule_id": "INV-001",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-002",
+      "result": "fail",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-003",
+      "result": "uncertain",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-004",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-005",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-006",
+      "result": "pass",
+      "severity": "major"
+    }
+  ],
+  "gold_evidence": {
+    "invoice_no": [
+      {
+        "page": 1,
+        "start": 72,
+        "end": 81,
+        "text_sha256": "10d64db398acae657b4cbe3b6d05eb43fec051a1838cb46437eafeeaeacfcadd"
+      }
+    ],
+    "issue_date": [
+      {
+        "page": 1,
+        "start": 87,
+        "end": 97,
+        "text_sha256": "f13359c7061496433bd0e3cb02d4ecf655cfefd5ee78d8fa1d6e2b77d57aca86"
+      }
+    ],
+    "vendor_name": [
+      {
+        "page": 1,
+        "start": 103,
+        "end": 113,
+        "text_sha256": "1723069678b58990477173b5e5027945ce9d7ef24db9cbeda31b9585ecf3ac21"
+      }
+    ],
+    "subtotal": [
+      {
+        "page": 1,
+        "start": 459,
+        "end": 467,
+        "text_sha256": "28cce0065748225c160245d34e9e1c4149871c34fc6a50568353551b0a6f4270"
+      }
+    ],
+    "tax": [
+      {
+        "page": 1,
+        "start": 478,
+        "end": 485,
+        "text_sha256": "58bc21b1ed88b3a2530a98ed90f653cc2465f94459307b9186462a475cd79d95"
+      }
+    ],
+    "total": [
+      {
+        "page": 1,
+        "start": 492,
+        "end": 500,
+        "text_sha256": "4d4fb6e9dd2a8b0475fb09e31410528e3637205c189ec2b3a37318db206b2e0b"
+      }
+    ],
+    "due_date": [
+      {
+        "page": 1,
+        "start": 508,
+        "end": 518,
+        "text_sha256": "7171a70f542f9d05b188eb1aaa2b5b8ea3b515cc51876d1e147b8e10a21acc4a"
+      }
+    ],
+    "payee_bank": [
+      {
+        "page": 1,
+        "start": 524,
+        "end": 530,
+        "text_sha256": "e81d995db570f70b51765808427b81304ad4a365a6f92d1d1d5e19d0d14d6ae4"
+      }
+    ],
+    "payee_branch": [
+      {
+        "page": 1,
+        "start": 535,
+        "end": 539,
+        "text_sha256": "ec68f6f5d135a484dbfaa7ae06d50bc9d74bd7b961fc41618775451f8e534d4e"
+      }
+    ],
+    "payee_account": [
+      {
+        "page": 1,
+        "start": 548,
+        "end": 555,
+        "text_sha256": "0cee9ae77374b381cfc249d65bfb510fb865b5226f200ed0395b61e07dd7657f"
+      }
+    ]
+  },
+  "policy_version": "invoice@1.1.0",
+  "generator_version": "0.1.0",
+  "annotator": "generator",
+  "reviewed_by": null,
+  "data_origin": "synthetic"
+}

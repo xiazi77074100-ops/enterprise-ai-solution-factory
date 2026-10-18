@@ -1,0 +1,252 @@
+{
+  "sample_id": "inv-0025",
+  "scenario": "invoice",
+  "split": "dev",
+  "stratum": "payee_changed",
+  "layout": [
+    "table_heavy"
+  ],
+  "planted": [
+    "payee_changed"
+  ],
+  "injection": null,
+  "duplicate_of": null,
+  "source_file": "inv-0025.pdf",
+  "media_type": "application/pdf",
+  "source_file_sha256": "31f7747ee8a9eefe6a44a5d8e255c197a0e99c7151340a85aa41ba217a119e1d",
+  "page_count": 1,
+  "gold_fields": {
+    "vendor_name": "株式会社あさなぎ精工",
+    "invoice_no": "2025-2258",
+    "issue_date": "2025-07-12",
+    "due_date": "2025-09-10",
+    "subtotal": "442500",
+    "tax": "44250",
+    "total": "486750",
+    "registration_no": "T5000243703701",
+    "payee_bank": "ゆうなぎ銀行",
+    "payee_branch": "中央支店",
+    "payee_account": "6832505",
+    "line_items": [
+      {
+        "description": "取付ブラケット",
+        "quantity": "10",
+        "unit_price": "650",
+        "amount": "6500"
+      },
+      {
+        "description": "取付ブラケット",
+        "quantity": "7",
+        "unit_price": "650",
+        "amount": "4550"
+      },
+      {
+        "description": "加工費",
+        "quantity": "11",
+        "unit_price": "15000",
+        "amount": "165000"
+      },
+      {
+        "description": "ベアリングユニット",
+        "quantity": "5",
+        "unit_price": "3800",
+        "amount": "19000"
+      },
+      {
+        "description": "取付ブラケット",
+        "quantity": "6",
+        "unit_price": "650",
+        "amount": "3900"
+      },
+      {
+        "description": "ベアリングユニット",
+        "quantity": "3",
+        "unit_price": "3800",
+        "amount": "11400"
+      },
+      {
+        "description": "ベアリングユニット",
+        "quantity": "7",
+        "unit_price": "3800",
+        "amount": "26600"
+      },
+      {
+        "description": "加工費",
+        "quantity": "7",
+        "unit_price": "15000",
+        "amount": "105000"
+      },
+      {
+        "description": "取付ブラケット",
+        "quantity": "5",
+        "unit_price": "650",
+        "amount": "3250"
+      },
+      {
+        "description": "取付ブラケット",
+        "quantity": "11",
+        "unit_price": "650",
+        "amount": "7150"
+      },
+      {
+        "description": "加工費",
+        "quantity": "5",
+        "unit_price": "15000",
+        "amount": "75000"
+      },
+      {
+        "description": "精密シャフト φ8",
+        "quantity": "11",
+        "unit_price": "1200",
+        "amount": "13200"
+      },
+      {
+        "description": "取付ブラケット",
+        "quantity": "3",
+        "unit_price": "650",
+        "amount": "1950"
+      }
+    ]
+  },
+  "gold_field_status": {
+    "vendor_name": "found",
+    "invoice_no": "found",
+    "issue_date": "found",
+    "due_date": "found",
+    "subtotal": "found",
+    "tax": "found",
+    "total": "found",
+    "registration_no": "found",
+    "payee_bank": "found",
+    "payee_branch": "found",
+    "payee_account": "found",
+    "line_items": "found"
+  },
+  "gold_findings": [
+    {
+      "rule_id": "INV-001",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-002",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-003",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-004",
+      "result": "fail",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-005",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-006",
+      "result": "pass",
+      "severity": "major"
+    }
+  ],
+  "gold_evidence": {
+    "invoice_no": [
+      {
+        "page": 1,
+        "start": 73,
+        "end": 82,
+        "text_sha256": "8a8b8bb29420758311544f4c4ada205fb9e4a61e066642a1cab3b14f9a81b4bf"
+      }
+    ],
+    "issue_date": [
+      {
+        "page": 1,
+        "start": 88,
+        "end": 98,
+        "text_sha256": "a44b7e3b99ea1eb10a691ca9db7e52863496aa6847220a3c02fbaf904ea94b57"
+      }
+    ],
+    "vendor_name": [
+      {
+        "page": 1,
+        "start": 104,
+        "end": 114,
+        "text_sha256": "f609af070574de5d66ba373dc0cf3ac50ddec9f8bb400941fb9c1139fb885a89"
+      }
+    ],
+    "registration_no": [
+      {
+        "page": 1,
+        "start": 175,
+        "end": 189,
+        "text_sha256": "f2fb4b30c36762938ad32656a704d4b8ac8063687b3f4fd50077550373567929"
+      }
+    ],
+    "subtotal": [
+      {
+        "page": 1,
+        "start": 550,
+        "end": 558,
+        "text_sha256": "beff4599c88c118a0811f869aee082d98370f4c5c617aa15f1a80843b4b9cad4"
+      }
+    ],
+    "tax": [
+      {
+        "page": 1,
+        "start": 569,
+        "end": 576,
+        "text_sha256": "90e3144fde1bb05568096614e3c1b20ba8da502023896784bd7ed382951d8ad7"
+      }
+    ],
+    "total": [
+      {
+        "page": 1,
+        "start": 583,
+        "end": 591,
+        "text_sha256": "c7d687ac4741d1de1911b46914120580ec2cf9e346eabb38523d8189af59aa2c"
+      }
+    ],
+    "due_date": [
+      {
+        "page": 1,
+        "start": 599,
+        "end": 609,
+        "text_sha256": "34c6043b5cc6a6af819b569a48fdf3a5ce1f220e21ce3e9a8b07a78e62121760"
+      }
+    ],
+    "payee_bank": [
+      {
+        "page": 1,
+        "start": 615,
+        "end": 621,
+        "text_sha256": "e81d995db570f70b51765808427b81304ad4a365a6f92d1d1d5e19d0d14d6ae4"
+      }
+    ],
+    "payee_branch": [
+      {
+        "page": 1,
+        "start": 626,
+        "end": 630,
+        "text_sha256": "ec68f6f5d135a484dbfaa7ae06d50bc9d74bd7b961fc41618775451f8e534d4e"
+      }
+    ],
+    "payee_account": [
+      {
+        "page": 1,
+        "start": 639,
+        "end": 646,
+        "text_sha256": "31d98e40a5a869f59472fb892a26aa95edbf937a86c57429935f1c9c7e19c269"
+      }
+    ]
+  },
+  "policy_version": "invoice@1.1.0",
+  "generator_version": "0.1.0",
+  "annotator": "generator",
+  "reviewed_by": null,
+  "data_origin": "synthetic"
+}

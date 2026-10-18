@@ -1,0 +1,160 @@
+{
+  "schema_version": "1",
+  "rule_pack_id": "invoice",
+  "version": "1.1.0",
+  "name": "請求書の確認ルール（合成）",
+  "notice": "合成データ用の検証ルールです。実際の会計・税務の判断には使えません。",
+  "reference_tables": {
+    "registered_payees": [
+      {
+        "vendor_name": "株式会社あさなぎ精工",
+        "payee_account": "1234567"
+      },
+      {
+        "vendor_name": "こもれび印刷株式会社",
+        "payee_account": "2469134"
+      },
+      {
+        "vendor_name": "株式会社ひなた物流",
+        "payee_account": "3703701"
+      },
+      {
+        "vendor_name": "あおばね電設株式会社",
+        "payee_account": "4938268"
+      },
+      {
+        "vendor_name": "株式会社しろたえ食品",
+        "payee_account": "6172835"
+      },
+      {
+        "vendor_name": "ほしかげ設備株式会社",
+        "payee_account": "7407402"
+      },
+      {
+        "vendor_name": "株式会社かざみ建材",
+        "payee_account": "8641969"
+      },
+      {
+        "vendor_name": "ことのは企画株式会社",
+        "payee_account": "9876536"
+      },
+      {
+        "vendor_name": "株式会社やまびこ運輸",
+        "payee_account": "1111103"
+      },
+      {
+        "vendor_name": "はなぶさ精機株式会社",
+        "payee_account": "2345670"
+      },
+      {
+        "vendor_name": "株式会社つむぎ印刷",
+        "payee_account": "3580237"
+      },
+      {
+        "vendor_name": "せせらぎ食品株式会社",
+        "payee_account": "4814804"
+      }
+    ]
+  },
+  "rules": [
+    {
+      "rule_id": "INV-001",
+      "title": "合計が小計＋消費税と一致する",
+      "severity": "critical",
+      "check": {
+        "op": "abs_diff_le",
+        "left": {
+          "field": "/total"
+        },
+        "right": {
+          "add": [
+            {
+              "field": "/subtotal"
+            },
+            {
+              "field": "/tax"
+            }
+          ]
+        },
+        "tolerance": 0
+      },
+      "on_missing": "uncertain",
+      "evidence_fields": [
+        "/total",
+        "/subtotal",
+        "/tax"
+      ]
+    },
+    {
+      "rule_id": "INV-002",
+      "title": "登録番号が記載されている",
+      "severity": "major",
+      "check": {
+        "op": "present",
+        "field": "/registration_no"
+      },
+      "on_missing": "fail",
+      "evidence_fields": [
+        "/registration_no"
+      ]
+    },
+    {
+      "rule_id": "INV-003",
+      "title": "登録番号の形式が正しい（T＋13 桁）",
+      "severity": "major",
+      "check": {
+        "op": "format",
+        "field": "/registration_no",
+        "format": "jp_invoice_registration_no"
+      },
+      "on_missing": "uncertain",
+      "evidence_fields": [
+        "/registration_no"
+      ]
+    },
+    {
+      "rule_id": "INV-004",
+      "title": "振込先が登録済みの振込先と一致する",
+      "severity": "critical",
+      "check": {
+        "op": "matches_reference",
+        "field": "/payee_account",
+        "table": "registered_payees",
+        "key_field": "/vendor_name",
+        "match_field": "vendor_name",
+        "value_field": "payee_account"
+      },
+      "on_missing": "uncertain",
+      "evidence_fields": [
+        "/payee_account",
+        "/vendor_name"
+      ]
+    },
+    {
+      "rule_id": "INV-005",
+      "title": "支払期日が記載されている",
+      "severity": "major",
+      "check": {
+        "op": "present",
+        "field": "/due_date"
+      },
+      "on_missing": "fail",
+      "evidence_fields": [
+        "/due_date"
+      ]
+    },
+    {
+      "rule_id": "INV-006",
+      "title": "請求書番号が案件内で重複していない",
+      "severity": "major",
+      "check": {
+        "op": "unique_in_project",
+        "field": "/invoice_no"
+      },
+      "on_missing": "uncertain",
+      "evidence_fields": [
+        "/invoice_no"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,315 @@
+{
+  "dataset": "invoice",
+  "generator_version": "0.1.0",
+  "base_date": "2025-04-01",
+  "plan_seed": 20261019,
+  "dev_seed": 1101,
+  "policy_version": "invoice@1.1.0",
+  "samples": [
+    {
+      "sample_id": "inv-0001",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [
+        "wareki"
+      ],
+      "source_file": "dev/documents/inv-0001.pdf",
+      "source_file_sha256": "56d5cdbaa380918296e3456d926c9503903dd879a6be96db0d73fb8321723ed3",
+      "label_sha256": "27d1f4cef3c457f3dc96bf68d471c96d70353546ce30886306c025cd4953dbb0"
+    },
+    {
+      "sample_id": "inv-0002",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [
+        "duplicate_label",
+        "multi_page"
+      ],
+      "source_file": "dev/documents/inv-0002.pdf",
+      "source_file_sha256": "a6a65907a01df349f7fa10f4323de8f3a3ea8f96e077ace996418021f3c3b09d",
+      "label_sha256": "f810fc5e16de7ef4507f105ca93b2bef46825752ea6246e32ef7245f2197c65d"
+    },
+    {
+      "sample_id": "inv-0003",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [],
+      "source_file": "dev/documents/inv-0003.pdf",
+      "source_file_sha256": "55e1adf9e0bb8230d023cc8c9c8b1456869e57a37892d19a703442b8399ae1ed",
+      "label_sha256": "1bf812f693154518cc2badc9d7f10402ca360bbc1caaa7f11c504957b2d84cd8"
+    },
+    {
+      "sample_id": "inv-0004",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [],
+      "source_file": "dev/documents/inv-0004.pdf",
+      "source_file_sha256": "bdfce2854217cbba841a2820b0eb9ea0aac68587df9cb8d6441373bc7cc5231e",
+      "label_sha256": "9ac557dcc65c4aa330c5fe4a6e8242fb0f1800ccf4ce07793d0e2dfdb7079767"
+    },
+    {
+      "sample_id": "inv-0005",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [
+        "multi_page",
+        "wareki"
+      ],
+      "source_file": "dev/documents/inv-0005.pdf",
+      "source_file_sha256": "0f8acebe81f5ca7808401df2a264b512dfe7fed75ca0aae4e13856927a52e9c3",
+      "label_sha256": "715a39fdee6af7e9ee46a1ee1c6f537503d2a34ecdc1a2bfe9f5570150d6f665"
+    },
+    {
+      "sample_id": "inv-0006",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [
+        "table_heavy",
+        "wareki"
+      ],
+      "source_file": "dev/documents/inv-0006.pdf",
+      "source_file_sha256": "7122ce2999a0bd2f357c52c836a48c0b76720787a0afb9ef60e1cd04f1cc9ade",
+      "label_sha256": "96fd1148d41f8655479ab2692e99e613b2e0799c1fdde3b01528c6fdd3e2b8d5"
+    },
+    {
+      "sample_id": "inv-0007",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [],
+      "source_file": "dev/documents/inv-0007.pdf",
+      "source_file_sha256": "b8d85421bdc6d175ce7d80a8d29911909c85f0458a09e30a3c397e8d15ce2b8a",
+      "label_sha256": "536394870077976c6dec17393f35ce5d9e7b9ae2ba2087103d7680179b77bbcc"
+    },
+    {
+      "sample_id": "inv-0008",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [
+        "scan"
+      ],
+      "source_file": "dev/documents/inv-0008.png",
+      "source_file_sha256": "1b1f6ae533dda03f1740f967790ff6822797da47c493488165573da580e324a6",
+      "label_sha256": "ecbdb4c0bc8082a54093afcad26cb60b982c484862b00d215c3eede8e243aae9"
+    },
+    {
+      "sample_id": "inv-0011",
+      "split": "dev",
+      "stratum": "missing_registration",
+      "layout": [],
+      "source_file": "dev/documents/inv-0011.pdf",
+      "source_file_sha256": "212cac714491310dfca872c5af8980b949ee6f22e6ed14044f313d462485cddb",
+      "label_sha256": "88c7c7fde8eb8c2eeeeeed34e1897124044fae3140962a23cf0a314d23497723"
+    },
+    {
+      "sample_id": "inv-0012",
+      "split": "dev",
+      "stratum": "missing_registration",
+      "layout": [
+        "table_heavy"
+      ],
+      "source_file": "dev/documents/inv-0012.pdf",
+      "source_file_sha256": "755b5d7eaaa6596726fa5efb69995dc53e693d455eafa09848d6247f22b02bb2",
+      "label_sha256": "2f03cb0093b59a36f276d408725e76a3d234bf23cd177d8568bc29631d6448f7"
+    },
+    {
+      "sample_id": "inv-0013",
+      "split": "dev",
+      "stratum": "missing_registration",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/inv-0013.pdf",
+      "source_file_sha256": "702840b4118e0210e30856045411fce53df19958a07635ac126cea07ccb3885c",
+      "label_sha256": "372613d979b0a148d68e68f1a634a03bb1f8ba74466abdbba0944bdf0b4a6748"
+    },
+    {
+      "sample_id": "inv-0015",
+      "split": "dev",
+      "stratum": "bad_registration_format",
+      "layout": [
+        "table_heavy"
+      ],
+      "source_file": "dev/documents/inv-0015.pdf",
+      "source_file_sha256": "442c412d30a583c782ae854e1b5b7aee314c364ecef8f31825697c53d41662d1",
+      "label_sha256": "2d932158e0b08db35c91eeb0b5703fb0824db5c9241f72baea637a09d1611e2c"
+    },
+    {
+      "sample_id": "inv-0016",
+      "split": "dev",
+      "stratum": "bad_registration_format",
+      "layout": [],
+      "source_file": "dev/documents/inv-0016.pdf",
+      "source_file_sha256": "628a4159682f34761e259e6deaace670842324555cee03a338f5ec19492b0226",
+      "label_sha256": "fe3cbac2bc4e8b04b0208dc165b034b068e8ed1a28785708963e2438a1f92a19"
+    },
+    {
+      "sample_id": "inv-0018",
+      "split": "dev",
+      "stratum": "total_mismatch",
+      "layout": [
+        "wareki"
+      ],
+      "source_file": "dev/documents/inv-0018.pdf",
+      "source_file_sha256": "666f97be95bd973a71c6584bf4f442694567a91291faf23b7d785258a8b0ca5c",
+      "label_sha256": "207c70d93a0d89b0add6ff7f9c550b67180d668ba1b8a771b2fb5bbb7b5c01ce"
+    },
+    {
+      "sample_id": "inv-0019",
+      "split": "dev",
+      "stratum": "total_mismatch",
+      "layout": [
+        "wareki"
+      ],
+      "source_file": "dev/documents/inv-0019.pdf",
+      "source_file_sha256": "8ddb4527e05dee4731bd035dfce082ad03641a39aa883901e84f98dd8e57b9fb",
+      "label_sha256": "283fdb9cf91eff22a99ac8349fd1c005e035b372d6f5284e4b0772ac04712eb7"
+    },
+    {
+      "sample_id": "inv-0020",
+      "split": "dev",
+      "stratum": "total_mismatch",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/inv-0020.pdf",
+      "source_file_sha256": "275cef49670af07d116a530829925fc1b0c3c71b41b90483bcb0638a1fedd56a",
+      "label_sha256": "6f2def1e36ecf18fff99d5f9d8824bb903a34d567e1380bbb51924b8951c4d38"
+    },
+    {
+      "sample_id": "inv-0023",
+      "split": "dev",
+      "stratum": "payee_changed",
+      "layout": [],
+      "source_file": "dev/documents/inv-0023.pdf",
+      "source_file_sha256": "1545c8c4e6ca5b712f3765bca125741239ab17a321bcd71cc1d714673651b6fc",
+      "label_sha256": "73018c9e89e96616ad08512c180c47b00da4c1debb7a8d99fedb5ec7727eb5d3"
+    },
+    {
+      "sample_id": "inv-0024",
+      "split": "dev",
+      "stratum": "payee_changed",
+      "layout": [],
+      "source_file": "dev/documents/inv-0024.pdf",
+      "source_file_sha256": "d017028df325338136115ba2cb09b931d7ea3f45efc8b60dbc57e62e4de6ba12",
+      "label_sha256": "39b35e41f5c1b81ae057d918ecd8842c9fd9d0db129c6a6431c792b798d354d5"
+    },
+    {
+      "sample_id": "inv-0025",
+      "split": "dev",
+      "stratum": "payee_changed",
+      "layout": [
+        "table_heavy"
+      ],
+      "source_file": "dev/documents/inv-0025.pdf",
+      "source_file_sha256": "31f7747ee8a9eefe6a44a5d8e255c197a0e99c7151340a85aa41ba217a119e1d",
+      "label_sha256": "9ac78717f7a25ca07bdddf2d603ce91dc097aa2f05882f9118f9fc6f20ee1c1f"
+    },
+    {
+      "sample_id": "inv-0028",
+      "split": "dev",
+      "stratum": "missing_due_date",
+      "layout": [],
+      "source_file": "dev/documents/inv-0028.pdf",
+      "source_file_sha256": "6d79e5ababd939550edfceecaf133f2b03a3a31ab0c40c2ada531618185c1c7f",
+      "label_sha256": "29563a6fa83548ba400031fbc1112e701a419674466707cfbdf68b32e9b899ca"
+    },
+    {
+      "sample_id": "inv-0029",
+      "split": "dev",
+      "stratum": "missing_due_date",
+      "layout": [
+        "table_heavy",
+        "wareki"
+      ],
+      "source_file": "dev/documents/inv-0029.pdf",
+      "source_file_sha256": "d357a1fba44489cbce07bd365a18997304eaf0ab687c39c1397cb6b0ccf7db18",
+      "label_sha256": "ff5ce128f840bf878669e0686f3dba155cc1f865ee8c8631807ec7762b6b3b45"
+    },
+    {
+      "sample_id": "inv-0030",
+      "split": "dev",
+      "stratum": "missing_due_date",
+      "layout": [],
+      "source_file": "dev/documents/inv-0030.pdf",
+      "source_file_sha256": "815e91260b5ffe1be09f7006738cb46e5d5cb8984b2da65c3bd1417fd801f7be",
+      "label_sha256": "9b60dabad16ecc6fa43634c0cab67f99c0b602a9f9a7410891315ff76e6876c5"
+    },
+    {
+      "sample_id": "inv-0032",
+      "split": "dev",
+      "stratum": "duplicate_invoice_no",
+      "layout": [],
+      "source_file": "dev/documents/inv-0032.pdf",
+      "source_file_sha256": "ad09155e8c5efabaefdfef0ac11d3beaaf1473c8735a86726644fb0739a9869c",
+      "label_sha256": "29fd6417e8dd7ec250cdb557a6ea692e35cc676312af574041b1e2241fb155e5"
+    },
+    {
+      "sample_id": "inv-0033",
+      "split": "dev",
+      "stratum": "duplicate_invoice_no",
+      "layout": [],
+      "source_file": "dev/documents/inv-0033.pdf",
+      "source_file_sha256": "c351a71baf7943a685330cb52752c1ce4eeac0f466f191abdb8d7f54b9727d27",
+      "label_sha256": "afd38acec78de4c2ba28a899c453c7b09f29a61c919e7a8967239357c5639b77"
+    },
+    {
+      "sample_id": "inv-0035",
+      "split": "dev",
+      "stratum": "ambiguous",
+      "layout": [
+        "wareki"
+      ],
+      "source_file": "dev/documents/inv-0035.pdf",
+      "source_file_sha256": "b977155924fe141add20b805ba0faaa96957fcdb49f6ae3b82058319f82ead37",
+      "label_sha256": "32053b87d68ac020056df3ea8763d0dbda9bfcf7d21cdba6dd4f768bcadabf0b"
+    },
+    {
+      "sample_id": "inv-0036",
+      "split": "dev",
+      "stratum": "ambiguous",
+      "layout": [
+        "duplicate_label"
+      ],
+      "source_file": "dev/documents/inv-0036.pdf",
+      "source_file_sha256": "fda20983af1a7141ca929cb7886a0dd74b5a51c22b117242fd256d0174c3d1fc",
+      "label_sha256": "f518c06fa24e0bc418f9ba2e791f2a85e5e7b6306ec06b90ccb4c077df0603b7"
+    },
+    {
+      "sample_id": "inv-0038",
+      "split": "dev",
+      "stratum": "injected_instruction",
+      "layout": [
+        "scan"
+      ],
+      "source_file": "dev/documents/inv-0038.png",
+      "source_file_sha256": "d4999762f28311a6c39f0b093889926752cedcd2b5ba56a8e1cc74a24f09a213",
+      "label_sha256": "a8da77b0e85a3f32d13339f46e32e9c3f176c75dac58420331577a12f9ba9101"
+    },
+    {
+      "sample_id": "inv-0039",
+      "split": "dev",
+      "stratum": "injected_instruction",
+      "layout": [],
+      "source_file": "dev/documents/inv-0039.pdf",
+      "source_file_sha256": "cd5d067f9e148f8bd6b3294e751615e9024b95639c3d1d11e123db42ed6e80d2",
+      "label_sha256": "2f26d330e34a68921467c7b82ad55c824cb9d0a1ed2c9e050007649d8535d0d7"
+    }
+  ],
+  "holdout": {
+    "sample_ids": [
+      "inv-0009",
+      "inv-0010",
+      "inv-0014",
+      "inv-0017",
+      "inv-0021",
+      "inv-0022",
+      "inv-0026",
+      "inv-0027",
+      "inv-0031",
+      "inv-0034",
+      "inv-0037",
+      "inv-0040"
+    ],
+    "manifest": "fixtures/manifest.holdout.json (generated by a person)"
+  }
+}

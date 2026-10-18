@@ -1,0 +1,258 @@
+{
+  "sample_id": "inv-0015",
+  "scenario": "invoice",
+  "split": "dev",
+  "stratum": "bad_registration_format",
+  "layout": [
+    "table_heavy"
+  ],
+  "planted": [
+    "bad_registration_format"
+  ],
+  "injection": null,
+  "duplicate_of": null,
+  "source_file": "inv-0015.pdf",
+  "media_type": "application/pdf",
+  "source_file_sha256": "442c412d30a583c782ae854e1b5b7aee314c364ecef8f31825697c53d41662d1",
+  "page_count": 1,
+  "gold_fields": {
+    "vendor_name": "株式会社やまびこ運輸",
+    "invoice_no": "2025-6266",
+    "issue_date": "2025-10-01",
+    "due_date": "2025-10-31",
+    "subtotal": "1179000",
+    "tax": "117900",
+    "total": "1296900",
+    "registration_no": "T200089358023",
+    "payee_bank": "ゆうなぎ銀行",
+    "payee_branch": "中央支店",
+    "payee_account": "1111103",
+    "line_items": [
+      {
+        "description": "保管料（1 パレット・月）",
+        "quantity": "6",
+        "unit_price": "3500",
+        "amount": "21000"
+      },
+      {
+        "description": "チャーター便（2t）",
+        "quantity": "8",
+        "unit_price": "28000",
+        "amount": "224000"
+      },
+      {
+        "description": "梱包資材",
+        "quantity": "2",
+        "unit_price": "450",
+        "amount": "900"
+      },
+      {
+        "description": "チャーター便（2t）",
+        "quantity": "4",
+        "unit_price": "28000",
+        "amount": "112000"
+      },
+      {
+        "description": "荷役作業費",
+        "quantity": "11",
+        "unit_price": "8000",
+        "amount": "88000"
+      },
+      {
+        "description": "梱包資材",
+        "quantity": "2",
+        "unit_price": "450",
+        "amount": "900"
+      },
+      {
+        "description": "荷役作業費",
+        "quantity": "5",
+        "unit_price": "8000",
+        "amount": "40000"
+      },
+      {
+        "description": "保管料（1 パレット・月）",
+        "quantity": "11",
+        "unit_price": "3500",
+        "amount": "38500"
+      },
+      {
+        "description": "保管料（1 パレット・月）",
+        "quantity": "8",
+        "unit_price": "3500",
+        "amount": "28000"
+      },
+      {
+        "description": "保管料（1 パレット・月）",
+        "quantity": "8",
+        "unit_price": "3500",
+        "amount": "28000"
+      },
+      {
+        "description": "梱包資材",
+        "quantity": "6",
+        "unit_price": "450",
+        "amount": "2700"
+      },
+      {
+        "description": "チャーター便（2t）",
+        "quantity": "11",
+        "unit_price": "28000",
+        "amount": "308000"
+      },
+      {
+        "description": "保管料（1 パレット・月）",
+        "quantity": "10",
+        "unit_price": "3500",
+        "amount": "35000"
+      },
+      {
+        "description": "チャーター便（2t）",
+        "quantity": "9",
+        "unit_price": "28000",
+        "amount": "252000"
+      }
+    ]
+  },
+  "gold_field_status": {
+    "vendor_name": "found",
+    "invoice_no": "found",
+    "issue_date": "found",
+    "due_date": "found",
+    "subtotal": "found",
+    "tax": "found",
+    "total": "found",
+    "registration_no": "found",
+    "payee_bank": "found",
+    "payee_branch": "found",
+    "payee_account": "found",
+    "line_items": "found"
+  },
+  "gold_findings": [
+    {
+      "rule_id": "INV-001",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-002",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-003",
+      "result": "fail",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-004",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "INV-005",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "INV-006",
+      "result": "pass",
+      "severity": "major"
+    }
+  ],
+  "gold_evidence": {
+    "invoice_no": [
+      {
+        "page": 1,
+        "start": 73,
+        "end": 82,
+        "text_sha256": "99b363a0aef34810c3c91948f8c445b30d446c8d0ec27630e6630e8fc1172543"
+      }
+    ],
+    "issue_date": [
+      {
+        "page": 1,
+        "start": 88,
+        "end": 98,
+        "text_sha256": "35db58f8566ce9ae9012929205961ccf02d5fbd750da017ceb30f98a4797e992"
+      }
+    ],
+    "vendor_name": [
+      {
+        "page": 1,
+        "start": 104,
+        "end": 114,
+        "text_sha256": "0f2c4eb0b67f74df23aae49a8b6de1c5ab0518577b7d054c8508d0e4b1b5d5b1"
+      }
+    ],
+    "registration_no": [
+      {
+        "page": 1,
+        "start": 176,
+        "end": 189,
+        "text_sha256": "666f8b3987b8a13040bee46276d9373ac62dd13cb7cdbd55ca83b5bc3304158c"
+      }
+    ],
+    "subtotal": [
+      {
+        "page": 1,
+        "start": 617,
+        "end": 627,
+        "text_sha256": "74a6f2f8a9b43c18860c94b5cfccefcdf88af8f793da6a630fb5c531fa20607d"
+      }
+    ],
+    "tax": [
+      {
+        "page": 1,
+        "start": 638,
+        "end": 646,
+        "text_sha256": "d7f5a62bae163eca223e242a679964a74a41abe31b19f20d9690786b81ffb8d5"
+      }
+    ],
+    "total": [
+      {
+        "page": 1,
+        "start": 653,
+        "end": 663,
+        "text_sha256": "8bb7e41ddbb277299bbf7ecc2735ee152a653a1826f42ea2101a283f86ac3a7c"
+      }
+    ],
+    "due_date": [
+      {
+        "page": 1,
+        "start": 671,
+        "end": 681,
+        "text_sha256": "c69c271d69f2db02beb3603fcc301a1ab6a14c70a7f1e6f70094a6a147b91c87"
+      }
+    ],
+    "payee_bank": [
+      {
+        "page": 1,
+        "start": 687,
+        "end": 693,
+        "text_sha256": "e81d995db570f70b51765808427b81304ad4a365a6f92d1d1d5e19d0d14d6ae4"
+      }
+    ],
+    "payee_branch": [
+      {
+        "page": 1,
+        "start": 698,
+        "end": 702,
+        "text_sha256": "ec68f6f5d135a484dbfaa7ae06d50bc9d74bd7b961fc41618775451f8e534d4e"
+      }
+    ],
+    "payee_account": [
+      {
+        "page": 1,
+        "start": 711,
+        "end": 718,
+        "text_sha256": "f2628f72f8ef11bca91f5a55fe7dd94608a280799149096d230ab4266715bb32"
+      }
+    ]
+  },
+  "policy_version": "invoice@1.1.0",
+  "generator_version": "0.1.0",
+  "annotator": "generator",
+  "reviewed_by": null,
+  "data_origin": "synthetic"
+}
