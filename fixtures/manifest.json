@@ -14,8 +14,8 @@
         "wareki"
       ],
       "source_file": "dev/documents/inv-0001.pdf",
-      "source_file_sha256": "56d5cdbaa380918296e3456d926c9503903dd879a6be96db0d73fb8321723ed3",
-      "label_sha256": "27d1f4cef3c457f3dc96bf68d471c96d70353546ce30886306c025cd4953dbb0"
+      "source_file_sha256": "762166ea6bba5b96007c3cce8563d21ef00d8b7200c5e18397d5fc70017f9f87",
+      "label_sha256": "f351d0f723bdabbd5bf98a462461e0fa24db37e8ba9c52da36c0fdafe38a59a7"
     },
     {
       "sample_id": "inv-0002",
@@ -26,8 +26,8 @@
         "multi_page"
       ],
       "source_file": "dev/documents/inv-0002.pdf",
-      "source_file_sha256": "a6a65907a01df349f7fa10f4323de8f3a3ea8f96e077ace996418021f3c3b09d",
-      "label_sha256": "f810fc5e16de7ef4507f105ca93b2bef46825752ea6246e32ef7245f2197c65d"
+      "source_file_sha256": "08293f0da79f5d60bba60ef1fefc36ff112b4a391cf212390e2ccb340084abb6",
+      "label_sha256": "49fd1165338b2e7196187cffb36213c663baa6fc416e244a7bb487c3c8fab7a0"
     },
     {
       "sample_id": "inv-0003",
@@ -35,8 +35,8 @@
       "stratum": "normal",
       "layout": [],
       "source_file": "dev/documents/inv-0003.pdf",
-      "source_file_sha256": "55e1adf9e0bb8230d023cc8c9c8b1456869e57a37892d19a703442b8399ae1ed",
-      "label_sha256": "1bf812f693154518cc2badc9d7f10402ca360bbc1caaa7f11c504957b2d84cd8"
+      "source_file_sha256": "65f6704a86285061e89d11b8f593f04831ce5281bcab7e413cf28c611deb36a2",
+      "label_sha256": "799de9b6615ec13ed8f9c9726dbfed6b74865f35d50939b2fa52531dd8b96e69"
     },
     {
       "sample_id": "inv-0004",
@@ -44,8 +44,8 @@
       "stratum": "normal",
       "layout": [],
       "source_file": "dev/documents/inv-0004.pdf",
-      "source_file_sha256": "bdfce2854217cbba841a2820b0eb9ea0aac68587df9cb8d6441373bc7cc5231e",
-      "label_sha256": "9ac557dcc65c4aa330c5fe4a6e8242fb0f1800ccf4ce07793d0e2dfdb7079767"
+      "source_file_sha256": "5cb0186273381976c428c81341c72e86f72d39d00de937b185c0ffb57f15df68",
+      "label_sha256": "ca1557e479bf680ea2c21e1a07a57740bfa5d1798f2f4f9a0743b770d1e4133d"
     },
     {
       "sample_id": "inv-0005",
@@ -56,8 +56,8 @@
         "wareki"
       ],
       "source_file": "dev/documents/inv-0005.pdf",
-      "source_file_sha256": "0f8acebe81f5ca7808401df2a264b512dfe7fed75ca0aae4e13856927a52e9c3",
-      "label_sha256": "715a39fdee6af7e9ee46a1ee1c6f537503d2a34ecdc1a2bfe9f5570150d6f665"
+      "source_file_sha256": "a2968c0487fe9646e76e9c6d0b9d9bedb3c79e99b74c4e4817d22cf1a5cdeb3c",
+      "label_sha256": "6f185220da71e9b002f22d41724340cd73d1a7a7806887494d37c10ad4dcd851"
     },
     {
       "sample_id": "inv-0006",
@@ -68,8 +68,8 @@
         "wareki"
       ],
       "source_file": "dev/documents/inv-0006.pdf",
-      "source_file_sha256": "7122ce2999a0bd2f357c52c836a48c0b76720787a0afb9ef60e1cd04f1cc9ade",
-      "label_sha256": "96fd1148d41f8655479ab2692e99e613b2e0799c1fdde3b01528c6fdd3e2b8d5"
+      "source_file_sha256": "0bd789ff7044a05cf38700b10f2cf4faf0b50fb0cdc58d99e0123e3d678f2029",
+      "label_sha256": "06cdb407d5262b8f88c9071da2b11c1bf8ab295ba403d2755c20615ac9024a24"
     },
     {
       "sample_id": "inv-0007",
@@ -77,8 +77,8 @@
       "stratum": "normal",
       "layout": [],
       "source_file": "dev/documents/inv-0007.pdf",
-      "source_file_sha256": "b8d85421bdc6d175ce7d80a8d29911909c85f0458a09e30a3c397e8d15ce2b8a",
-      "label_sha256": "536394870077976c6dec17393f35ce5d9e7b9ae2ba2087103d7680179b77bbcc"
+      "source_file_sha256": "5220a8db4910ad3ff4fd6f04746eaec62e310d7d8e37622093ee425c748e48b7",
+      "label_sha256": "b1e2dfbfaf6d8a23eab6ce3dcdb7a3b952df5b0ce76e054462d7cda5d883c9a6"
     },
     {
       "sample_id": "inv-0008",
@@ -88,8 +88,8 @@
         "scan"
       ],
       "source_file": "dev/documents/inv-0008.png",
-      "source_file_sha256": "1b1f6ae533dda03f1740f967790ff6822797da47c493488165573da580e324a6",
-      "label_sha256": "ecbdb4c0bc8082a54093afcad26cb60b982c484862b00d215c3eede8e243aae9"
+      "source_file_sha256": "f57fa1dad861de4855d4e6a346e37e2fcfba246b463c595846937eec98a0f8be",
+      "label_sha256": "eb1b89ddfc5619248ec924026ddfb101cb18c8099a9d786e75f21f37dd60ba9a"
     },
     {
       "sample_id": "inv-0011",
@@ -97,8 +97,8 @@
       "stratum": "missing_registration",
       "layout": [],
       "source_file": "dev/documents/inv-0011.pdf",
-      "source_file_sha256": "212cac714491310dfca872c5af8980b949ee6f22e6ed14044f313d462485cddb",
-      "label_sha256": "88c7c7fde8eb8c2eeeeeed34e1897124044fae3140962a23cf0a314d23497723"
+      "source_file_sha256": "06dd3cadcd74ee0514b0bd81c808ec28a8e3ff319f3ebb7792de651d8b012c76",
+      "label_sha256": "7b0bf04823388175b27f4fe3b35829d0089f5db2b216487368a84459df5224ef"
     },
     {
       "sample_id": "inv-0012",
@@ -108,8 +108,8 @@
         "table_heavy"
       ],
       "source_file": "dev/documents/inv-0012.pdf",
-      "source_file_sha256": "755b5d7eaaa6596726fa5efb69995dc53e693d455eafa09848d6247f22b02bb2",
-      "label_sha256": "2f03cb0093b59a36f276d408725e76a3d234bf23cd177d8568bc29631d6448f7"
+      "source_file_sha256": "8b1ad019ca8616b650be263a1b515afc5a2260d34a98d53bd0e9ec23f0b72d78",
+      "label_sha256": "01fd0273576d7782e9ea50818fcffafb17f5eceecbf0fabea39f5d7c201b969f"
     },
     {
       "sample_id": "inv-0013",
@@ -119,8 +119,8 @@
         "multi_page"
       ],
       "source_file": "dev/documents/inv-0013.pdf",
-      "source_file_sha256": "702840b4118e0210e30856045411fce53df19958a07635ac126cea07ccb3885c",
-      "label_sha256": "372613d979b0a148d68e68f1a634a03bb1f8ba74466abdbba0944bdf0b4a6748"
+      "source_file_sha256": "3e6979caf72c974497ff8cfb1e2eaff957daec00ef0dde1f4d5d54a1e3de832d",
+      "label_sha256": "c72d13a00e1b007d7d92be9c86afcf53d4157d734a52467b0025003a5b7faaee"
     },
     {
       "sample_id": "inv-0015",
@@ -130,8 +130,8 @@
         "table_heavy"
       ],
       "source_file": "dev/documents/inv-0015.pdf",
-      "source_file_sha256": "442c412d30a583c782ae854e1b5b7aee314c364ecef8f31825697c53d41662d1",
-      "label_sha256": "2d932158e0b08db35c91eeb0b5703fb0824db5c9241f72baea637a09d1611e2c"
+      "source_file_sha256": "02e36c8dbc53f7acf923627f3781a6ddf701438e09ff5793bb2d6de519e006ef",
+      "label_sha256": "5ebf127a30d88617331e4113b5412a568f824f57f4046489190df6fc2d7fa9f6"
     },
     {
       "sample_id": "inv-0016",
@@ -139,8 +139,8 @@
       "stratum": "bad_registration_format",
       "layout": [],
       "source_file": "dev/documents/inv-0016.pdf",
-      "source_file_sha256": "628a4159682f34761e259e6deaace670842324555cee03a338f5ec19492b0226",
-      "label_sha256": "fe3cbac2bc4e8b04b0208dc165b034b068e8ed1a28785708963e2438a1f92a19"
+      "source_file_sha256": "f7b489d9514763582db4a40357a4071332c168133a8bf80bed08d1d4cfa5ede3",
+      "label_sha256": "23f49480da9d216e3e2f6c711f4d3547a3e7138400162d308f7279acb89bdf38"
     },
     {
       "sample_id": "inv-0018",
@@ -150,8 +150,8 @@
         "wareki"
       ],
       "source_file": "dev/documents/inv-0018.pdf",
-      "source_file_sha256": "666f97be95bd973a71c6584bf4f442694567a91291faf23b7d785258a8b0ca5c",
-      "label_sha256": "207c70d93a0d89b0add6ff7f9c550b67180d668ba1b8a771b2fb5bbb7b5c01ce"
+      "source_file_sha256": "fe38341e2855c9bed6d729ab3c5434d091f03cd94823314de605fca0f52db5f1",
+      "label_sha256": "189abb53e1befede388d612ddf0ca69ea8ff1d288a4d5b7818a07e70f80f5186"
     },
     {
       "sample_id": "inv-0019",
@@ -161,8 +161,8 @@
         "wareki"
       ],
       "source_file": "dev/documents/inv-0019.pdf",
-      "source_file_sha256": "8ddb4527e05dee4731bd035dfce082ad03641a39aa883901e84f98dd8e57b9fb",
-      "label_sha256": "283fdb9cf91eff22a99ac8349fd1c005e035b372d6f5284e4b0772ac04712eb7"
+      "source_file_sha256": "27d912b151175544a51a714b369574112070cd69a61a9af6bf8cf0787f5fecd6",
+      "label_sha256": "5bc40278dcdd2946eb13a1457fbb0ebefbd028e54866b34158b4a619ad67a353"
     },
     {
       "sample_id": "inv-0020",
@@ -172,8 +172,8 @@
         "multi_page"
       ],
       "source_file": "dev/documents/inv-0020.pdf",
-      "source_file_sha256": "275cef49670af07d116a530829925fc1b0c3c71b41b90483bcb0638a1fedd56a",
-      "label_sha256": "6f2def1e36ecf18fff99d5f9d8824bb903a34d567e1380bbb51924b8951c4d38"
+      "source_file_sha256": "990de399522e1389777962ef0f85e90f164ea85cf32fd7ab2bad5533dbe03da9",
+      "label_sha256": "76f613db38b92269d9dc775ec76c901087c06a24d3eb7a7c7638fa05dadf65cd"
     },
     {
       "sample_id": "inv-0023",
@@ -181,8 +181,8 @@
       "stratum": "payee_changed",
       "layout": [],
       "source_file": "dev/documents/inv-0023.pdf",
-      "source_file_sha256": "1545c8c4e6ca5b712f3765bca125741239ab17a321bcd71cc1d714673651b6fc",
-      "label_sha256": "73018c9e89e96616ad08512c180c47b00da4c1debb7a8d99fedb5ec7727eb5d3"
+      "source_file_sha256": "e8178d4b412e144684117a5165d2373673ff37c3e68fec74a320f3d93451242f",
+      "label_sha256": "ab22115a189f3cfb5b36f3e42db14dcb325600d0396774f5557f25772e98788d"
     },
     {
       "sample_id": "inv-0024",
@@ -190,8 +190,8 @@
       "stratum": "payee_changed",
       "layout": [],
       "source_file": "dev/documents/inv-0024.pdf",
-      "source_file_sha256": "d017028df325338136115ba2cb09b931d7ea3f45efc8b60dbc57e62e4de6ba12",
-      "label_sha256": "39b35e41f5c1b81ae057d918ecd8842c9fd9d0db129c6a6431c792b798d354d5"
+      "source_file_sha256": "b4f29802ca7de5a666797d40c2c782c56bf477d080c081fe5a42f058915e0a20",
+      "label_sha256": "a959733fc05e828450727b3c856ce06189c111a81f974a45c77eb52256262f2f"
     },
     {
       "sample_id": "inv-0025",
@@ -201,8 +201,8 @@
         "table_heavy"
       ],
       "source_file": "dev/documents/inv-0025.pdf",
-      "source_file_sha256": "31f7747ee8a9eefe6a44a5d8e255c197a0e99c7151340a85aa41ba217a119e1d",
-      "label_sha256": "9ac78717f7a25ca07bdddf2d603ce91dc097aa2f05882f9118f9fc6f20ee1c1f"
+      "source_file_sha256": "2183440975093f5d7b849176e896565918998a35b79656d9940e31b5e205b7cb",
+      "label_sha256": "6a0971ce9570798b4569aca490c9e8236ffa7405c457b324ae076e90d07bcd78"
     },
     {
       "sample_id": "inv-0028",
@@ -210,8 +210,8 @@
       "stratum": "missing_due_date",
       "layout": [],
       "source_file": "dev/documents/inv-0028.pdf",
-      "source_file_sha256": "6d79e5ababd939550edfceecaf133f2b03a3a31ab0c40c2ada531618185c1c7f",
-      "label_sha256": "29563a6fa83548ba400031fbc1112e701a419674466707cfbdf68b32e9b899ca"
+      "source_file_sha256": "7eecb561abbe42fb66126522324898839d82e78eee1dd388cf40f02609b72baf",
+      "label_sha256": "3983b99220cb7333f4437bbcb4f694f437ac8ae53f8936c7e014327abd649664"
     },
     {
       "sample_id": "inv-0029",
@@ -222,8 +222,8 @@
         "wareki"
       ],
       "source_file": "dev/documents/inv-0029.pdf",
-      "source_file_sha256": "d357a1fba44489cbce07bd365a18997304eaf0ab687c39c1397cb6b0ccf7db18",
-      "label_sha256": "ff5ce128f840bf878669e0686f3dba155cc1f865ee8c8631807ec7762b6b3b45"
+      "source_file_sha256": "a355585c5ecec301af922752d0fa4f405f1a89b654391335fe26f0e33971a4bd",
+      "label_sha256": "6a746f0c3d73ec74b7b6217ae1e64357f6c8fadc8746e2ea9bf2451b3c8b3e54"
     },
     {
       "sample_id": "inv-0030",
@@ -231,8 +231,8 @@
       "stratum": "missing_due_date",
       "layout": [],
       "source_file": "dev/documents/inv-0030.pdf",
-      "source_file_sha256": "815e91260b5ffe1be09f7006738cb46e5d5cb8984b2da65c3bd1417fd801f7be",
-      "label_sha256": "9b60dabad16ecc6fa43634c0cab67f99c0b602a9f9a7410891315ff76e6876c5"
+      "source_file_sha256": "45656dd065ac083ed9b6595f2aca79e3f748b38d2b3bb3c7e7753f337d0ce5f7",
+      "label_sha256": "9c2b95e89b523b80109d77bb38292121ef40afb4b016c01f8e484131b80035ad"
     },
     {
       "sample_id": "inv-0032",
@@ -240,8 +240,8 @@
       "stratum": "duplicate_invoice_no",
       "layout": [],
       "source_file": "dev/documents/inv-0032.pdf",
-      "source_file_sha256": "ad09155e8c5efabaefdfef0ac11d3beaaf1473c8735a86726644fb0739a9869c",
-      "label_sha256": "29fd6417e8dd7ec250cdb557a6ea692e35cc676312af574041b1e2241fb155e5"
+      "source_file_sha256": "bd9d1b3458bfd143b30870b6a9f0a9336d1aa2af57fac9f98b97e3e8f80b91de",
+      "label_sha256": "28145b5f92889b1b941069203d9fa91d40a17d61dfb81756cda35c67bc028fda"
     },
     {
       "sample_id": "inv-0033",
@@ -249,8 +249,8 @@
       "stratum": "duplicate_invoice_no",
       "layout": [],
       "source_file": "dev/documents/inv-0033.pdf",
-      "source_file_sha256": "c351a71baf7943a685330cb52752c1ce4eeac0f466f191abdb8d7f54b9727d27",
-      "label_sha256": "afd38acec78de4c2ba28a899c453c7b09f29a61c919e7a8967239357c5639b77"
+      "source_file_sha256": "8b0fc61c7cedcd5f59af468f6a0affffb0d67235a252b7813da3ce227fa02c57",
+      "label_sha256": "cad0d0ce752bcf0f3b89cb5411fd02390134112e2d1f63a083f89357aabf45ce"
     },
     {
       "sample_id": "inv-0035",
@@ -260,8 +260,8 @@
         "wareki"
       ],
       "source_file": "dev/documents/inv-0035.pdf",
-      "source_file_sha256": "b977155924fe141add20b805ba0faaa96957fcdb49f6ae3b82058319f82ead37",
-      "label_sha256": "32053b87d68ac020056df3ea8763d0dbda9bfcf7d21cdba6dd4f768bcadabf0b"
+      "source_file_sha256": "edbd14ad566f27ac1c0cdbf1fafd1b2ccd274eb1be12ed491d69d4f128f0acd5",
+      "label_sha256": "3748bcae9342e6646b901d5df92f053df738c9859629b000145c48b530f5b9a7"
     },
     {
       "sample_id": "inv-0036",
@@ -271,8 +271,8 @@
         "duplicate_label"
       ],
       "source_file": "dev/documents/inv-0036.pdf",
-      "source_file_sha256": "fda20983af1a7141ca929cb7886a0dd74b5a51c22b117242fd256d0174c3d1fc",
-      "label_sha256": "f518c06fa24e0bc418f9ba2e791f2a85e5e7b6306ec06b90ccb4c077df0603b7"
+      "source_file_sha256": "7f8856c55e526344e794408dd3b9f61128583ffac23168f3ca07a13ec82a4200",
+      "label_sha256": "98fe26440a13b71d8b75ca33948aafd7690a1bba78974448e2616988af32a204"
     },
     {
       "sample_id": "inv-0038",
@@ -282,8 +282,8 @@
         "scan"
       ],
       "source_file": "dev/documents/inv-0038.png",
-      "source_file_sha256": "d4999762f28311a6c39f0b093889926752cedcd2b5ba56a8e1cc74a24f09a213",
-      "label_sha256": "a8da77b0e85a3f32d13339f46e32e9c3f176c75dac58420331577a12f9ba9101"
+      "source_file_sha256": "0fea4b04a58b79764b8fd16a8bbb5dc47d93ead17388c6e756929a275b0267d4",
+      "label_sha256": "545598bf3f95ad06fdc6538539418fe7ee68ce0dbfe2cffcd8b7f869de30ec97"
     },
     {
       "sample_id": "inv-0039",
@@ -291,8 +291,8 @@
       "stratum": "injected_instruction",
       "layout": [],
       "source_file": "dev/documents/inv-0039.pdf",
-      "source_file_sha256": "cd5d067f9e148f8bd6b3294e751615e9024b95639c3d1d11e123db42ed6e80d2",
-      "label_sha256": "2f26d330e34a68921467c7b82ad55c824cb9d0a1ed2c9e050007649d8535d0d7"
+      "source_file_sha256": "e7c9b1242bae5733a5fc100caf1d6dc67e1a77305d4df30279df54b5e5387b18",
+      "label_sha256": "bdca483d5f653d9228391ad73ab44aed66a1d2546a5351babe9e7e5babcfb43b"
     }
   ],
   "holdout": {

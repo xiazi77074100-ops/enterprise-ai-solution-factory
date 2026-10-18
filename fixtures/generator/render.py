@@ -1,4 +1,4 @@
-"""Render a Record as an A4 invoice PDF (ReportLab, built-in Japanese CID font; D-028), and scans as PNG.
+"""Render a Record as an A4 invoice PDF (ReportLab, embedded BIZ UDPGothic; D-028), and scans as PNG.
 
 The renderer returns anchors (page, label, printed token) for every gold field. Gold evidence is then located in
 the text extracted by app.capabilities.pdf_text — the same function the document parser uses — so offsets agree.
@@ -6,19 +6,24 @@ the text extracted by app.capabilities.pdf_text — the same function the docume
 
 import io
 import random
+import struct
+import zlib
 from dataclasses import dataclass
+from pathlib import Path
 
 from PIL import Image, ImageFilter
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
 from fixtures.generator.invoice import Record, format_date, yen
 from fixtures.generator.names import INJECTIONS
 
-FONT = "HeiseiKakuGo-W5"
-pdfmetrics.registerFont(UnicodeCIDFont(FONT))
+# Embedded (subset) so every OS renders the same pixels: scans are rasterized from the PDF (D-028 v2).
+# BIZ UDPGothic, SIL OFL 1.1 (fonts/OFL.txt).
+FONT = "BIZUDPGothic"
+pdfmetrics.registerFont(TTFont(FONT, str(Path(__file__).with_name("fonts") / "BIZUDPGothic-Regular.ttf")))
 WIDTH, HEIGHT = A4
 LEFT, RIGHT = 56, WIDTH - 56
 MARK = "TEST ONLY／合成データ（架空の請求書です。実在の取引ではありません）"
@@ -147,6 +152,25 @@ def render_scan(pdf: bytes, sample_id: str) -> bytes:
     for _ in range(width * height // 150):
         x, y = rng.randrange(width), rng.randrange(height)
         pixels[x, y] = rng.choice([0, 96, 160])
-    out = io.BytesIO()
-    image.save(out, format="PNG", optimize=False)
-    return out.getvalue()
+    return encode_png_gray(width, height, image.tobytes())
+
+
+def encode_png_gray(width: int, height: int, raw: bytes) -> bytes:
+    """8-bit grayscale PNG with uncompressed (stored) deflate blocks.
+
+    zlib builds differ between platforms (Windows vs Linux wheels), so compressed PNG bytes differed for the same
+    pixels. Stored blocks make the file a pure function of the pixels, keeping the recorded SHA-256 stable.
+    """
+    rows = b"".join(b"\x00" + raw[y * width : (y + 1) * width] for y in range(height))  # filter type 0 per row
+    blocks = []
+    for offset in range(0, len(rows), 65535):
+        chunk = rows[offset : offset + 65535]
+        final = 1 if offset + 65535 >= len(rows) else 0
+        blocks.append(struct.pack("<BHH", final, len(chunk), len(chunk) ^ 0xFFFF) + chunk)
+    deflate = b"\x78\x01" + b"".join(blocks) + struct.pack(">I", zlib.adler32(rows))
+
+    def png_chunk(kind: bytes, data: bytes) -> bytes:
+        return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data))
+
+    header = struct.pack(">IIBBBBB", width, height, 8, 0, 0, 0, 0)
+    return b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", header) + png_chunk(b"IDAT", deflate) + png_chunk(b"IEND", b"")

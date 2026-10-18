@@ -75,7 +75,8 @@
                  └─ gold_evidence：描画した PDF からテキストを抽出し、値の文字範囲を照合して決める
 ```
 
-- 生成器：Python（`fixtures/generator/`）。PDF は ReportLab 5.0.1（BSD）＋組み込みの日本語 CID フォント（フォントのファイルは同梱しない、D-028）。不変モード（`invariant=1`）で同じレコードから同じバイト列を作る。スキャンは pypdfium2 で画像化し、Pillow で回転（±3°）・ぼかし・点の雑音を加えた PNG。
+- 生成器：Python（`fixtures/generator/`）。PDF は ReportLab 5.0.1（BSD）＋ BIZ UDPゴシック（SIL OFL 1.1、`fixtures/generator/fonts/`、使う字だけを埋め込む。D-029）。不変モード（`invariant=1`）で同じレコードから同じバイト列を作る。スキャンは pypdfium2 で画像化し、Pillow で回転（±3°）・ぼかし・点の雑音を加え、**無圧縮の PNG**（自前の符号化）で保存する。
+- 再現性：Windows と Linux（CI）で同じバイト列になることをテストで確かめる。字体を埋め込まないと画像化に OS の字体が使われて画素が変わり、PNG を zlib で圧縮すると環境ごとにバイト列が変わったため（D-029）。
 - 根拠の位置：描画したときの「見出し＋値」を、`backend/app/capabilities/pdf_text.py`（解析と同じ関数）で抜き出したページのテキストの中で探し、文字の番号と SHA-256 を記録する。値があいまい（`uncertain`）な項目は、候補の位置をすべて根拠にする。スキャンはテキスト層がないので根拠は空（OCR で取れても `unverified`）。
 - 乱数は文書ごとに「分割の種:sample_id」で起こす。ある文書を変えても他の文書は変わらない。使わない値も引いて捨てる（`fixture-data` §5）。
 - 振込先の照合（INV-004）は、生成器の取引先（公開の一覧）の登録口座を表にした Rule pack `invoice@1.1.0`（`fixtures/rule_packs/`）を使う。1.0.0 から設定（参照表）だけを変えた版。
