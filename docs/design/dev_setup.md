@@ -24,6 +24,12 @@ uv run alembic upgrade head                       # 所有者ロール（EASF_MI
 uv run uvicorn app.main:create_app --factory --no-server-header --port 8000
 ```
 
+最初の利用者（管理者）は CLI で作る（API はない。ADR-006）：
+
+```sh
+uv run python -m app.admin create-user --login-id admin --display-name "管理者" --admin   # パスワードは入力を求められる
+```
+
 `--no-server-header` を必ず付ける（`Server: uvicorn` を出さない。`jp-secure-coding`）。
 
 ## 3. テストと検査（CI と同じ）

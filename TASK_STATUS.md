@@ -14,3 +14,4 @@
 | P1-02 Capability Catalog（不変の版・検証） | CC | 未着手 | `cc/P1-02-catalog` | — | 2026-10-18 |
 | P1-03 日本語 UI の枠と共通部品 | CC | 未着手 | `cc/P1-03-ui-shell` | — | 2026-10-18 |
 | P1-04 契約テスト・否定テスト | CC | 未着手 | `cc/P1-04-contract-tests` | — | 2026-10-18 |
+| P1-05 認証・セッション・案件・メンバー・要件の版 | CC | 完了 | `cc/P1-05-auth-projects` | pytest 30 passed（ログイン・固定化・列挙・ロック・CSRF/Origin・IDOR・一括代入・自己承認を含む）、ruff・mypy・bandit・pip-audit 問題なし | 2026-10-18 |

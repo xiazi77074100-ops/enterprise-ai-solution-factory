@@ -17,7 +17,9 @@
 | `admin` | 全体の管理者（案件に属さなくてよい）。業務の承認・確認の決定はできない |
 
 - 案件に属さない操作（Capability・Rule pack の登録）の `solution_architect` は「どれかの案件でそのロールを持つ人」。
-- 利用者の作成・無効化は API にせず、管理用の CLI で行う（RV-G0-006、ADR-006）。
+- 利用者の作成・無効化は API にせず、管理用の CLI（`python -m app.admin`）で行う（RV-G0-006、ADR-006）。
+- 案件を作った人は、その案件の `solution_lead` メンバーになる（`admin` が作った場合も同じ。最初の案件はこの方法で作る）。メンバーの登録・変更は `putProjectMembers`（自分の `solution_lead` は外せない）。
+- 要件の版の自己承認の禁止は DB の制約（`ck_requirement_no_self_approval`）でも守る（保険的対策）。
 
 ## 2. 追加の規則（ロール以外）
 

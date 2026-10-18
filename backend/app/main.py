@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api import system
+from app.api import projects, session, system
 from app.core.config import Settings, get_settings
 from app.core.db import make_session_factory
 from app.core.errors import install_error_handlers
@@ -17,8 +17,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         redoc_url=None,
         openapi_url="/openapi.json" if docs else None,
     )
+    app.state.settings = settings
     app.state.session_factory = make_session_factory(settings)  # engine connects lazily
     install_error_handlers(app)
     app.add_middleware(SecurityMiddleware, settings=settings)
     app.include_router(system.router)
+    app.include_router(session.public_router)
+    app.include_router(session.router)
+    app.include_router(projects.router)
     return app

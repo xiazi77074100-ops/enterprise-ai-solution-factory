@@ -11,6 +11,8 @@ def make_settings(**overrides: object) -> Settings:
     values: dict[str, object] = {
         "env": "test",
         "database_url": os.environ.get("EASF_TEST_DATABASE_URL", "postgresql+psycopg://unused@127.0.0.1:1/unused"),
+        "secret_key": "test-secret-key-0123456789-abcdefghijklmnop",
+        "site_origin": "http://testserver",
     }
     values.update(overrides)
     return Settings(**values)  # type: ignore[arg-type]

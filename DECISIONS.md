@@ -22,3 +22,4 @@
 | D-016 | 2026-10-18 | 事前登録（`docs/experiment/preregistration.md`）を承認。Q2：CR-2（請求書）は参考値とし、比較は CR-1（契約書）だけ | 推奨どおり | プロジェクト責任者 | ADR-008 |
 | D-017 | 2026-10-18 | Phase 1（G1a）に着手。Codex がいないため CC が P1-01〜P1-04 を順に実施し、タスクごとにプッシュする（D-011・D-013） | G0 承認による | プロジェクト責任者 | PHASE_PLAN |
 | D-018 | 2026-10-18 | バックエンドの依存を `backend/uv.lock` で固定（Python 3.12.3、FastAPI 0.143.3、SQLAlchemy 2.1.5、Alembic 1.20.0、Pydantic 2.14.1、psycopg 3.3.6）。PostgreSQL は `postgres:17-alpine`（ダイジェストの固定は G1a の診断時に行う） | P1-01 で `uv lock` した結果。pip-audit で既知の脆弱性なし | CC | ADR-001・ADR-004 |
+| D-019 | 2026-10-18 | Phase 1 に P1-05（認証・セッション・案件・メンバー・要件の版）を追加し、Catalog（P1-02）より先に行う | Catalog の登録 API が認証とロールを前提にするため。PHASE_PLAN の Phase 1（auth skeleton・project CRUD）の範囲内 | CC | PHASE_PLAN |
