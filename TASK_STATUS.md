@@ -21,4 +21,4 @@
 | P2-01 Composer と Solution の API | CC | 完了 | `cc/P2-01-composer` | Composer の検査 13 種（見本の Workflow 2 件は合格、誤り 14 種を検出）、Solution の API 6 操作（ETag・If-Match・承認の規則・DB トリガーで凍結）、認可の全件表に追加。契約 1.0.2（D-025）。pytest 102 passed | 2026-10-18 |
 | P2-02 Executor・アダプタ・Run と確認の API・トレース | CC | 完了 | `cc/P2-02-executor` | 状態機械・DB をキューにしたワーカー・子プロセスでのローカル実行・LLM は mock のみ・人の確認（割り当て・決定・再開・却下）・ハッシュ連鎖のトレース、API 8 操作。試験用 Capability（testkit）で端から端まで、再現性（同じ入力で同じハッシュとイベントの並び）、mock の `mixed`、予算超過。pytest 124 passed | 2026-10-18 |
 | P2-04 Executor の敵対的テスト | CC | 完了 | `cc/P2-04-adversarial` | 13 件：無限ループの強制終了、例外は型名だけ（入力値が漏れない）、不正な出力は再試行しない、出力の上限、子プロセスの異常終了とワーカーの継続、冪等なら再試行・そうでなければしない、予算による時間切れは budget_exceeded、ノードの入力スキーマ違反、ワーカーの異常終了からの回復、2 つのワーカーの取り合い、別の実行の確認タスク。pytest 137 passed | 2026-10-18 |
-| P2-03 実行・確認の画面 | CC | 未着手 | `cc/P2-03-run-ui` | — | — |
+| P2-03 実行・確認の画面 | CC | 完了 | `cc/P2-03-run-ui` | 解決策（検証・承認・実行）、実行の一覧、実行モニター（自動更新・処理の流れ・トレース）、確認タスク、確認（AI 下書き・根拠・3 値の判定・修正前後）。lint・typecheck・vitest 6・build・npm audit 0 件・Playwright 4 passed（模擬 API の流れ＋実バックエンドの既存の流れ、1440px・390px） | 2026-10-18 |

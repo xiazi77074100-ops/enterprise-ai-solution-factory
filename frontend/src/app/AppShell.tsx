@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { Boxes, FolderKanban, LogOut, Menu } from "lucide-react";
+import { Boxes, ClipboardCheck, FolderKanban, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
 import { NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
 
@@ -9,6 +9,7 @@ import { useApi } from "./feedback";
 
 const NAV = [
   { to: "/projects", label: "プロジェクト一覧", icon: FolderKanban },
+  { to: "/reviews", label: "確認タスク", icon: ClipboardCheck },
   { to: "/catalog", label: "能力カタログ", icon: Boxes },
 ];
 

@@ -38,9 +38,9 @@ function buildUrl(path: string, query?: Query): string {
 export async function api<T>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   path: string,
-  options: { query?: Query; body?: unknown } = {},
+  options: { query?: Query; body?: unknown; headers?: Record<string, string> } = {},
 ): Promise<T> {
-  const headers: Record<string, string> = { Accept: "application/json" };
+  const headers: Record<string, string> = { ...options.headers, Accept: "application/json" };
   if (options.body !== undefined) headers["Content-Type"] = "application/json";
   if (method !== "GET" && csrfToken) headers["X-CSRF-Token"] = csrfToken;
   const res = await fetch(buildUrl(path, options.query), {
@@ -62,4 +62,9 @@ export async function api<T>(
     );
   }
   return data as T;
+}
+
+/** A fresh Idempotency-Key for one user intent (keep it while the same dialog is open, so a retry is not a new run). */
+export function newIdempotencyKey(): string {
+  return crypto.randomUUID();
 }

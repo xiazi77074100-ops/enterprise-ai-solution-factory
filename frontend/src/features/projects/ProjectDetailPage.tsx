@@ -12,6 +12,8 @@ import { ConfirmDialog } from "../../components/Modal";
 import { Truncate } from "../../components/Truncate";
 import { Badge, Button } from "../../components/ui";
 import { formatDateTime } from "../../lib/format";
+import { RunsPanel } from "../runs/RunsPanel";
+import { SolutionsPanel } from "../solutions/SolutionsPanel";
 import { firstError, maxLength, required } from "../../lib/validation";
 
 const ROLE_LABELS: Record<string, string> = {
@@ -66,6 +68,8 @@ export function ProjectDetailPage() {
           </Panel>
         )}
         <RequirementsPanel projectId={projectId} myRoles={myRoles} myId={session?.user.id ?? ""} />
+        <SolutionsPanel projectId={projectId} myRoles={myRoles} />
+        <RunsPanel projectId={projectId} />
         <Panel title="メンバー" icon={Users} meta={members.data ? `${members.data.length} 人` : undefined}>
           <ul className="divide-y divide-border">
             {(members.data ?? []).map((m) => (

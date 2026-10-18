@@ -12,6 +12,9 @@ import { CatalogListPage } from "./features/catalog/CatalogListPage";
 import { LoginPage } from "./features/login/LoginPage";
 import { ProjectDetailPage } from "./features/projects/ProjectDetailPage";
 import { ProjectListPage } from "./features/projects/ProjectListPage";
+import { ReviewListPage } from "./features/reviews/ReviewListPage";
+import { ReviewPage } from "./features/reviews/ReviewPage";
+import { RunDetailPage } from "./features/runs/RunDetailPage";
 
 const router = createBrowserRouter([
   { path: "/login", element: <LoginPage /> },
@@ -23,6 +26,9 @@ const router = createBrowserRouter([
       { path: "/projects/:projectId", element: <ProjectDetailPage /> },
       { path: "/catalog", element: <CatalogListPage /> },
       { path: "/catalog/:capabilityId/:version", element: <CapabilityDetailPage /> },
+      { path: "/runs/:runId", element: <RunDetailPage /> },
+      { path: "/runs/:runId/reviews/:reviewId", element: <ReviewPage /> },
+      { path: "/reviews", element: <ReviewListPage /> },
       { path: "*", element: <Navigate to="/projects" replace /> },
     ],
   },
