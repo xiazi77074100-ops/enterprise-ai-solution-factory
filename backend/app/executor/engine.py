@@ -198,6 +198,7 @@ class _Step:
     inputs: dict[str, Any]
     config: dict[str, Any]
     timeout_s: float
+    budget_limited: bool  # the timeout was shortened to the remaining processing budget
 
 
 class Executor:
@@ -322,9 +323,10 @@ class Executor:
                 return None
 
             remaining_ms = workflow["budget"]["max_duration_ms"] - self._processing_ms(nodes)
-            timeout_ms = min(
-                specs[ready.node_id].get("timeout_ms", contract["timeout_ms"]), contract["timeout_ms"], remaining_ms
+            node_timeout_ms = min(
+                specs[ready.node_id].get("timeout_ms", contract["timeout_ms"]), contract["timeout_ms"]
             )
+            timeout_ms = min(node_timeout_ms, remaining_ms)
             ready.status = "running"
             ready.started_at = now()
             run.lease_until = now() + timedelta(milliseconds=timeout_ms) + LEASE_MARGIN
@@ -333,7 +335,15 @@ class Executor:
                 metadata={"attempt": ready.attempt, "input_sha256": ready.input_sha256},
             )  # fmt: skip
             db.commit()
-            return _Step(run.id, ready.id, handler, inputs, specs[ready.node_id]["config"], timeout_ms / 1000)
+            return _Step(
+                run.id,
+                ready.id,
+                handler,
+                inputs,
+                specs[ready.node_id]["config"],
+                timeout_ms / 1000,
+                budget_limited=remaining_ms < node_timeout_ms,
+            )
 
     def _record(self, step: _Step, result: AdapterResult, duration_ms: int) -> None:
         with self.session_factory() as db:
@@ -375,7 +385,7 @@ class Executor:
                         metadata={"output_sha256": node.output_sha256, "duration_ms": node.duration_ms,
                                   "attempt": node.attempt},
                     )  # fmt: skip
-            elif over_budget:
+            elif over_budget or result.status == "timeout" and step.budget_limited:
                 self._fail_node(db, run, node, "budget_exceeded", contract_row.id)
             elif result.status in TRANSIENT:
                 self._retry(db, run, node, contract, result.error_code or result.status)

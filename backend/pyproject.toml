@@ -40,7 +40,8 @@ target-version = "py312"
 select = ["E", "F", "I", "B", "UP", "S", "SIM", "N"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101", "S105", "S106"]
+# F811: pytest fixtures are imported from other modules and reused as parameter names.
+"tests/**" = ["S101", "S105", "S106", "F811"]
 "migrations/**" = ["N999"]
 
 [tool.mypy]

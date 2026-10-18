@@ -20,5 +20,5 @@
 | P2-00 Phase 2 計画・詳細設計・テスト専用 DB | CC | 完了 | `cc/P2-00-plan` | `docs/phase2/PHASE2_PLAN.md`、`docs/design/detail/run_execution.md`。テストは `easf_test` だけを使い、`_test` 以外の DB 名では停止。pytest 71 passed、開発用 DB の利用者数は実行前後で同じ | 2026-10-18 |
 | P2-01 Composer と Solution の API | CC | 完了 | `cc/P2-01-composer` | Composer の検査 13 種（見本の Workflow 2 件は合格、誤り 14 種を検出）、Solution の API 6 操作（ETag・If-Match・承認の規則・DB トリガーで凍結）、認可の全件表に追加。契約 1.0.2（D-025）。pytest 102 passed | 2026-10-18 |
 | P2-02 Executor・アダプタ・Run と確認の API・トレース | CC | 完了 | `cc/P2-02-executor` | 状態機械・DB をキューにしたワーカー・子プロセスでのローカル実行・LLM は mock のみ・人の確認（割り当て・決定・再開・却下）・ハッシュ連鎖のトレース、API 8 操作。試験用 Capability（testkit）で端から端まで、再現性（同じ入力で同じハッシュとイベントの並び）、mock の `mixed`、予算超過。pytest 124 passed | 2026-10-18 |
-| P2-04 Executor の敵対的テスト | CC | 未着手 | `cc/P2-04-adversarial` | — | — |
+| P2-04 Executor の敵対的テスト | CC | 完了 | `cc/P2-04-adversarial` | 13 件：無限ループの強制終了、例外は型名だけ（入力値が漏れない）、不正な出力は再試行しない、出力の上限、子プロセスの異常終了とワーカーの継続、冪等なら再試行・そうでなければしない、予算による時間切れは budget_exceeded、ノードの入力スキーマ違反、ワーカーの異常終了からの回復、2 つのワーカーの取り合い、別の実行の確認タスク。pytest 137 passed | 2026-10-18 |
 | P2-03 実行・確認の画面 | CC | 未着手 | `cc/P2-03-run-ui` | — | — |

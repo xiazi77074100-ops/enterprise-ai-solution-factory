@@ -80,7 +80,7 @@ NodeRun: pending ─▶ running ─▶ succeeded
 6. **出力の検証**：**出力スキーマで検証**（2 か所目。3 か所目は Composer での設定の検証）。違えば `invalid_output`。出力の大きさの上限は 1 MiB。
 7. **記録**：NodeRun に入力・出力の SHA-256（JCS）、所要時間、`execution_mode`、使用量。出力そのものは DB の NodeRun にだけ保存し、トレースにはハッシュと件数だけ。
 8. **再試行**：時間切れ・アダプタの一時的な失敗（例外・子プロセスの異常終了）で、版の `retry.idempotent` が真なら再試行する。契約の `retry.max_attempts`（0〜2）は**再試行の回数**で、試行は最大 `1 + max_attempts` 回（NodeRun の `attempt` は 1〜3）。不正な出力・出力の上限超えは再試行しない。
-9. **予算**：`max_duration_ms` は**処理時間**（各ノードの実行時間の合計。人の確認を待つ時間は含めない）と比べ、ノードの時間切れも残りの処理時間で短くする。LLM のトークン・円は呼び出しごとに Run の `usage` に足し、上限を超えたらそのノードを失敗にして Run を `failed`（`budget_exceeded`）。
+9. **予算**：`max_duration_ms` は**処理時間**（各ノードの実行時間の合計。人の確認を待つ時間は含めない）と比べ、ノードの時間切れも残りの処理時間で短くする（そのために時間切れになったときは `timeout` ではなく `budget_exceeded`）。LLM のトークン・円は呼び出しごとに Run の `usage` に足し、上限を超えたらそのノードを失敗にして Run を `failed`（`budget_exceeded`）。
 10. **終了**：全ノード成功で `succeeded`。失敗したら残りを `skipped` にして `failed`。`outputs` は `succeeded` のときだけ組み立て、Run の内部の列に保存する（契約の `Run` には含めない。出力の取り出しは Phase 3 の `exportRunResult`）。
 11. **実行の方式**：ノードの `execution_mode` はアダプタが返す（人の確認は `real`）。Run は、実行したノードがすべて `real` なら `real`、すべて `mock` なら `mock`、混在なら `mixed`。
 
