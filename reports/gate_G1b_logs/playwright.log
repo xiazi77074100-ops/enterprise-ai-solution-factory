@@ -1,0 +1,9 @@
+
+Running 4 tests using 1 worker
+
+  ok 1 [desktop-1440] › e2e\runs.spec.ts:154:1 › solutions → run monitor → review with a correction (mocked API) (4.6s)
+  ok 2 [desktop-1440] › e2e\smoke.spec.ts:40:1 › login → project → requirement → catalog (5.4s)
+  ok 3 [mobile-390] › e2e\runs.spec.ts:154:1 › solutions → run monitor → review with a correction (mocked API) (3.4s)
+  ok 4 [mobile-390] › e2e\smoke.spec.ts:40:1 › login → project → requirement → catalog (7.6s)
+
+  4 passed (26.1s)

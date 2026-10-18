@@ -3,3 +3,39 @@ d0c9e1a3ca4e9759f051332d2ecaa04150954738:backend/tests/conftest.py:generic-api-k
 d0c9e1a3ca4e9759f051332d2ecaa04150954738:backend/tests/integration/test_admin_cli.py:generic-api-key:17
 backend/tests/conftest.py:generic-api-key:14
 backend/tests/integration/test_admin_cli.py:generic-api-key:17
+
+# False positives in committed assessment reports (reviewed 2026-10-18, G1b re-assessment):
+# - generic-api-key on "api:8000": the Docker service host name `api` in ZAP report URLs.
+# - generic-api-key on GPG_KEY: the public CPython release signing key fingerprint in the base image history.
+815a5b05c3673e23b275ac3b5d0ffb2a4d08cb15:reports/security/2026-10-18/container/trivy-image.json:generic-api-key:72
+815a5b05c3673e23b275ac3b5d0ffb2a4d08cb15:reports/security/2026-10-18/container/trivy-image.json:generic-api-key:195
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:135
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:155
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:165
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:5785
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:5795
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:5805
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:18415
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:26515
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:28815
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:33395
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:33405
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:33415
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:33425
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api-auth.json:generic-api-key:33705
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:125
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:165
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:175
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:195
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:205
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:5825
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:5835
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:5845
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:18475
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:26595
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:28895
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:33515
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:33525
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:33555
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:33565
+e54782a4f172d7ab6ecf4e339617a8093e0f3aa7:reports/security/2026-10-18/dast/zap-api.json:generic-api-key:33855

@@ -22,3 +22,5 @@
 | P2-02 Executor・アダプタ・Run と確認の API・トレース | CC | 完了 | `cc/P2-02-executor` | 状態機械・DB をキューにしたワーカー・子プロセスでのローカル実行・LLM は mock のみ・人の確認（割り当て・決定・再開・却下）・ハッシュ連鎖のトレース、API 8 操作。試験用 Capability（testkit）で端から端まで、再現性（同じ入力で同じハッシュとイベントの並び）、mock の `mixed`、予算超過。pytest 124 passed | 2026-10-18 |
 | P2-04 Executor の敵対的テスト | CC | 完了 | `cc/P2-04-adversarial` | 13 件：無限ループの強制終了、例外は型名だけ（入力値が漏れない）、不正な出力は再試行しない、出力の上限、子プロセスの異常終了とワーカーの継続、冪等なら再試行・そうでなければしない、予算による時間切れは budget_exceeded、ノードの入力スキーマ違反、ワーカーの異常終了からの回復、2 つのワーカーの取り合い、別の実行の確認タスク。pytest 137 passed | 2026-10-18 |
 | P2-03 実行・確認の画面 | CC | 完了 | `cc/P2-03-run-ui` | 解決策（検証・承認・実行）、実行の一覧、実行モニター（自動更新・処理の流れ・トレース）、確認タスク、確認（AI 下書き・根拠・3 値の判定・修正前後）。lint・typecheck・vitest 6・build・npm audit 0 件・Playwright 4 passed（模擬 API の流れ＋実バックエンドの既存の流れ、1440px・390px） | 2026-10-18 |
+| G1b 前の脆弱性の再診断 | CC | 完了 | `cc/G1b-gate` | 新しい指摘は高・中・低 0 件、情報 3 件。SAST・SCA・trivy・gitleaks（誤検知を除外）0 件、ZAP（未ログイン・認証付き、45 操作）失敗 0・500 なし。`reports/security/2026-10-18-g1b/report.md` | 2026-10-19 |
+| G1b ゲート報告 | CC | 完了（承認待ち） | `cc/G1b-gate` | `reports/gate_G1b.md`。pytest 137・vitest 6・Playwright 4 passed、静的検査・SCA 問題なし | 2026-10-19 |
