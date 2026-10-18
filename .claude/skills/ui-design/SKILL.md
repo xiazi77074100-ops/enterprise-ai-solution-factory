@@ -5,7 +5,7 @@ description: EASF の画面（frontend/）を追加・変更するときは必�
 
 # ui-design — EASF の画面の決まり
 
-sales-assistant の `ui-design`（2026-10-14 版）の規約を EASF 向けに書き直したもの。部品の名前・振る舞いの決まりを引き継ぎ、sales-assistant 固有の画面・業務用語・配色・データは含めない。
+sales-assistant の `ui-design`（2026-10-14 版）の規約を EASF 向けに書き直したもの。部品の名前・振る舞いの決まりを引き継ぐ。**見た目も sales-assistant の UI を手本にする**（D-026：面の重ね方、深い色のグラデーションのサイドバーと白いレールの現在地、淡いグラデーションのヘッダ帯とパネルの見出し帯、表の見出し帯とゼブラ、浮動ラベルの入力欄、グラデーションの主ボタン、ログイン画面の暗い背景と光）。配色は EASF の色（青緑・ミント・空色。`frontend/src/styles/theme.css`）で、sales-assistant の製品名・ロゴ・会社名・著作権表示・業務用語・データは使わない。
 汎用の原則は `japan-enterprise-frontend`、画面の一覧と流れは `easf_package/docs/05_UI_AND_DEMO.md`、画面の安全は `jp-secure-coding`（frontend-react.md）。
 
 前提（ADR-009）：React ＋ TypeScript ＋ Vite ＋ Tailwind CSS ＋ Radix（ヘッドレス）。共通部品は Phase 1 で `frontend/src/components/` に作り、**画面ごとに自作しない**。迷ったら既存の画面を真似る（見本の画面は Phase 1 で決めてここに書く）。
@@ -107,7 +107,7 @@ sales-assistant の `ui-design`（2026-10-14 版）の規約を EASF 向けに�
 
 - 6 段以外の大きさを足さない（タイルの数字だけ 28/24/18px）。階層は大きさと字重で作り、補助文字をさらに薄くしない。
 - 色はトークン（`bg-card` `text-foreground` `text-muted-foreground` `border-border` …）だけ。16 進数を直書きしない。**状態の文字は ink 系**（`text-success-ink` など。面・線・アイコン用の色を白地の文字に使わない）。状態は色だけでなくアイコン＋文言でも示す。
-- 配色は EASF で決める（Phase 1 の `theme.css`）：落ち着いた中間色、主色は 1 色、影は 1 段・弱く、グラデーション・地紋・カーソル追従の光などの装飾を使わない。ダークモードはトークンの差し替えだけで効くように書く。
+- 配色は `theme.css` のトークンだけ（D-026）：画布は淡い青緑、カードは白、主色は青緑。グラデーションは**サイドバー・ヘッダ帯・パネルの見出し帯・主ボタン・ログイン画面の背景**に限る（本文の面・表・文字には使わない）。地紋（点の格子）はログイン画面だけ。影は 1 段・弱く、カーソル追従の光などの装飾は使わない。模擬（MOCK）の紫は意味の色なので主色と混ぜない。ダークモードはトークンの差し替えだけで効くように書く。
 - 動きは読み込みの骨組み・API の線・フェードインだけ。`prefers-reduced-motion` で止める。
 
 ## 7. EASF 固有の表示

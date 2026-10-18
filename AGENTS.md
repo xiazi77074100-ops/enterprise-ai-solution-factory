@@ -44,7 +44,7 @@ Claude Code と Codex の両方が読む共通の規則。`CLAUDE.md` は `@AGEN
 | `design-taste-frontend` / `redesign-existing-projects` | 余白・揃え・配色の調整と、既存画面の見た目の点検だけ。**`ui-design` と食い違ったら `ui-design` が優先**（LP 向けの装飾・動きを業務画面に持ち込まない） |
 | `ponytail` / `ponytail-review` | 既存の部品・標準ライブラリを再利用し最小のコードで書く／作りすぎのレビュー |
 
-- フロントエンドの skill は `D:\aidd\sales-assistant` から取り込んだ。`ui-design`・`spec-sync`・`fixture-data` は同リポジトリの `ui-design`・`demo-spec-sync`・`demo-mock-data` を EASF 向けに書き直したもの（出所は `.claude/skills/README.md`）。sales-assistant のコード・配色・業務用語・データは使わない。
+- フロントエンドの skill は `D:\aidd\sales-assistant` から取り込んだ。`ui-design`・`spec-sync`・`fixture-data` は同リポジトリの `ui-design`・`demo-spec-sync`・`demo-mock-data` を EASF 向けに書き直したもの（出所は `.claude/skills/README.md`）。画面の見た目（部品の作り・面の構成・浮動ラベル・サイドバー・ヘッダ帯・ログイン画面）は sales-assistant の UI を手本にしてよい（D-026）。ただし配色は EASF の色（青緑・ミント・空色）に変え、sales-assistant の製品名・ロゴ・会社名・著作権表示・業務用語・データは使わない。
 - sales-assistant の skill が更新されたら、同じ表の対応で差分を確かめて取り込み、README の取得日を直す。
 - skill の正本は `.claude/skills/`。Codex 用の `.agents/skills/` はその写し。skill を足す・直したら `python scripts/sync_skills.py` を実行して両方をコミットする。`python scripts/sync_skills.py --check` はずれ・frontmatter の不備で失敗する（Phase 1 で CI に入れる）。
 

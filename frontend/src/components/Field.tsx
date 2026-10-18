@@ -1,4 +1,3 @@
-import { clsx } from "clsx";
 import { cloneElement, isValidElement, useCallback, useId, useMemo, useState, type ReactElement } from "react";
 
 import type { Check } from "../lib/validation";
@@ -59,24 +58,27 @@ export function Field({
         onBlur,
       })
     : children;
+  // Floating label (sales-assistant style, D-026): the label sits on the top-left edge of the box.
   return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor={id} className={clsx("text-[12px] font-semibold", error ? "text-danger-ink" : "text-foreground")}>
-        {label}
-        {required && (
-          <span className="ml-0.5 text-danger-ink" aria-hidden="true">
-            *
-          </span>
-        )}
-      </label>
-      {control}
+    <div className="flex flex-col">
+      <div className="floating-field">
+        <label htmlFor={id} className="field-label">
+          {label}
+          {required && (
+            <span className="ml-0.5 text-danger-ink" aria-hidden="true">
+              *
+            </span>
+          )}
+        </label>
+        {control}
+      </div>
       {error ? (
-        <p id={messageId} role="alert" className="text-[12px] text-danger-ink">
+        <p id={messageId} role="alert" className="field-message" data-error="true">
           {error}
         </p>
       ) : (
         hint && (
-          <p id={messageId} className="text-[12px] text-muted-foreground">
+          <p id={messageId} className="field-message">
             {hint}
           </p>
         )

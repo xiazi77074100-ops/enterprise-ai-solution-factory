@@ -1,3 +1,4 @@
+import { ArrowRight, Factory, Lock } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
@@ -7,6 +8,7 @@ import { Field, useFormCheck } from "../../components/Field";
 import { Button } from "../../components/ui";
 import { maxLength, firstError, required } from "../../lib/validation";
 
+// Login scene follows the sales-assistant UI (D-026): the only screen with brand color on the background.
 export function LoginPage() {
   const { session, login } = useAuth();
   const navigate = useNavigate();
@@ -37,33 +39,48 @@ export function LoginPage() {
   };
 
   return (
-    <div className="grid min-h-full place-items-center p-4">
-      <form onSubmit={submit} className="card flex w-[min(92vw,380px)] flex-col gap-4 p-6" noValidate>
-        <div>
-          <h1 className="page-title">EASF</h1>
-          <p className="text-[12px] text-muted-foreground">Enterprise AI Solution Factory（検証用）</p>
+    <div className="login-scene relative flex min-h-full items-center justify-center overflow-hidden p-6">
+      <div aria-hidden="true" className="login-wash pointer-events-none absolute inset-0" />
+      <div aria-hidden="true" className="login-dots pointer-events-none absolute inset-0" />
+      <div className="relative w-full max-w-[400px]">
+        <div className="mb-6 flex items-center gap-3">
+          <span className="flex size-10 items-center justify-center rounded-xl bg-white/95 shadow-lg shadow-black/20" style={{ color: "var(--deep)" }}>
+            <Factory className="size-5" aria-hidden="true" />
+          </span>
+          <div>
+            <h1 className="text-[18px] font-bold leading-tight tracking-tight text-white">EASF</h1>
+            <p className="text-[12px] text-white/75">Enterprise AI Solution Factory ── AI 部品の組立と再利用</p>
+          </div>
         </div>
-        <Field label="ユーザー ID" required {...form.field("loginId", f.loginId !== "")}>
-          <input
-            className="field-control"
-            autoComplete="username"
-            value={f.loginId}
-            onChange={(e) => setF({ ...f, loginId: e.target.value })}
-          />
-        </Field>
-        <Field label="パスワード" required {...form.field("password", f.password !== "")}>
-          <input
-            className="field-control"
-            type="password"
-            autoComplete="current-password"
-            value={f.password}
-            onChange={(e) => setF({ ...f, password: e.target.value })}
-          />
-        </Field>
-        <Button type="submit" variant="default" className="h-9" disabled={!form.valid} loading={api.busy}>
-          ログイン
-        </Button>
-      </form>
+        <form onSubmit={submit} className="card flex flex-col gap-3 p-5 shadow-xl shadow-black/10" noValidate>
+          <p className="text-[13px] font-semibold">ログイン</p>
+          <Field label="ユーザー ID" required {...form.field("loginId", f.loginId !== "")}>
+            <input
+              className="field-control"
+              autoComplete="username"
+              value={f.loginId}
+              onChange={(e) => setF({ ...f, loginId: e.target.value })}
+            />
+          </Field>
+          <Field label="パスワード" required {...form.field("password", f.password !== "")}>
+            <input
+              className="field-control pr-8"
+              type="password"
+              autoComplete="current-password"
+              value={f.password}
+              onChange={(e) => setF({ ...f, password: e.target.value })}
+            />
+          </Field>
+          <Button type="submit" variant="default" className="mt-1 h-9 w-full" disabled={!form.valid} loading={api.busy}>
+            ログイン <ArrowRight className="size-3.5" aria-hidden="true" />
+          </Button>
+          <p className="mt-2 flex items-start gap-1.5 text-[11px] leading-snug text-muted-foreground">
+            <Lock className="mt-0.5 size-3 shrink-0" aria-hidden="true" />
+            検証用の環境です（本番利用不可）。データは合成データだけを使います。
+          </p>
+        </form>
+      </div>
+      <p className="absolute inset-x-0 bottom-0 py-2 text-center text-[11px] text-white/60">EASF — 個人の検証用 POC</p>
     </div>
   );
 }

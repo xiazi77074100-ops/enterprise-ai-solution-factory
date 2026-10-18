@@ -1,61 +1,86 @@
 @import "tailwindcss";
 
-/* EASF design tokens (ui-design §6). Neutral, one primary hue, status colors split into
-   fill (surfaces/lines/icons) and ink (text on white, >= 4.5:1). No gradients or decoration. */
+/* EASF design tokens (ui-design §6, D-026).
+   The structure follows the sales-assistant UI (soft canvas, deep gradient sidebar, light gradient header band,
+   gradient panel heads, floating field labels, dark login scene). The palette is EASF's own: teal / mint / sky.
+   Status colors are split into fill (surfaces, lines, icons) and ink (text on white, >= 4.5:1). */
 :root {
   color-scheme: light;
-  --background: oklch(0.965 0.004 250);
-  --card: oklch(1 0 0);
-  --foreground: oklch(0.2 0.015 255);
-  --muted: oklch(0.955 0.005 250);
-  --muted-foreground: oklch(0.45 0.015 255);
-  --border: oklch(0.88 0.008 250);
-  --input: oklch(0.82 0.01 250);
-  --primary: oklch(0.47 0.13 258);
+  --background: oklch(0.968 0.008 210);
+  --card: oklch(0.997 0.002 210);
+  --foreground: oklch(0.18 0.03 230);
+  --muted: oklch(0.953 0.01 210);
+  --muted-foreground: oklch(0.45 0.03 230);
+  --border: oklch(0.885 0.014 210);
+  --input: oklch(0.86 0.018 210);
+  --primary: oklch(0.5 0.1 205);
   --primary-foreground: oklch(0.99 0 0);
-  --primary-ink: oklch(0.42 0.13 258);
-  --primary-soft: oklch(0.95 0.025 258);
-  --ring: oklch(0.55 0.15 258);
+  --primary-ink: oklch(0.42 0.1 210);
+  --primary-soft: oklch(0.95 0.025 200);
+  --ring: oklch(0.6 0.11 200);
+  --accent: oklch(0.95 0.02 195);
   --success: oklch(0.62 0.13 155);
-  --success-ink: oklch(0.43 0.11 155);
-  --success-soft: oklch(0.96 0.03 155);
-  --warning: oklch(0.75 0.14 75);
-  --warning-ink: oklch(0.47 0.11 60);
+  --success-ink: #067647;
+  --success-soft: oklch(0.95 0.035 155);
+  --warning: oklch(0.74 0.15 70);
+  --warning-ink: #8a5a00;
   --warning-soft: oklch(0.97 0.04 85);
-  --danger: oklch(0.6 0.19 25);
-  --danger-ink: oklch(0.47 0.17 25);
-  --danger-soft: oklch(0.96 0.025 25);
+  --danger: oklch(0.58 0.19 25);
+  --danger-ink: #b42318;
+  --danger-soft: oklch(0.95 0.025 25);
+  --danger-fill: oklch(0.56 0.2 25);
+  /* 模擬（MOCK）は主色と混ざらない紫で固定（意味の色、ui-design §7） */
   --mock: oklch(0.55 0.12 300);
   --mock-ink: oklch(0.45 0.12 300);
   --mock-soft: oklch(0.96 0.03 300);
-  --sidebar: oklch(0.25 0.02 255);
-  --sidebar-foreground: oklch(0.93 0.01 255);
-  --shadow-card: 0 1px 2px oklch(0.2 0.02 255 / 0.06);
+
+  /* Brand: light lines (tile accents) and a deep gradient for white text (primary button, active tab). */
+  --brand-teal: oklch(0.72 0.09 190);
+  --brand-mint: oklch(0.8 0.08 160);
+  --brand-sky: oklch(0.74 0.08 240);
+  --brand-gradient: linear-gradient(110deg, var(--brand-teal), var(--brand-mint) 50%, var(--brand-sky));
+  --brand-gradient-deep: linear-gradient(110deg, oklch(0.47 0.1 210), oklch(0.5 0.1 180) 50%, oklch(0.48 0.1 245));
+
+  /* Shell colors (white text on deep: >= 8:1; ink on soft: >= 10:1). */
+  --deep: #0e4f5c;
+  --deep2: #153f66;
+  --soft: #e3f4f5;
+  --ink: #0b3a44;
+  --side-muted: #bcd8dc;
+  --sidebar: var(--deep);
+  --sidebar-foreground: #ffffff;
+  --shadow-card: 0 1px 2px oklch(0.3 0.05 220 / 0.05);
+  --radius: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --background: oklch(0.18 0.01 255);
-    --card: oklch(0.22 0.012 255);
-    --foreground: oklch(0.94 0.005 255);
-    --muted: oklch(0.25 0.012 255);
-    --muted-foreground: oklch(0.72 0.012 255);
-    --border: oklch(0.33 0.012 255);
-    --input: oklch(0.4 0.012 255);
-    --primary: oklch(0.62 0.14 258);
-    --primary-ink: oklch(0.78 0.11 258);
-    --primary-soft: oklch(0.3 0.05 258);
-    --success-ink: oklch(0.8 0.12 155);
-    --success-soft: oklch(0.28 0.04 155);
-    --warning-ink: oklch(0.85 0.12 85);
+    --background: oklch(0.16 0.02 220);
+    --card: oklch(0.21 0.022 220);
+    --foreground: oklch(0.96 0.006 210);
+    --muted: oklch(0.26 0.022 220);
+    --muted-foreground: oklch(0.74 0.02 215);
+    --border: oklch(0.32 0.024 220);
+    --input: oklch(0.38 0.026 220);
+    --primary: oklch(0.74 0.1 200);
+    --primary-foreground: oklch(0.17 0.03 220);
+    --primary-ink: oklch(0.82 0.09 200);
+    --primary-soft: oklch(0.3 0.05 205);
+    --accent: oklch(0.29 0.035 205);
+    --success-ink: oklch(0.8 0.13 155);
+    --success-soft: oklch(0.27 0.04 155);
+    --warning-ink: oklch(0.84 0.13 70);
     --warning-soft: oklch(0.3 0.05 85);
-    --danger-ink: oklch(0.8 0.13 25);
-    --danger-soft: oklch(0.3 0.06 25);
+    --danger-ink: oklch(0.78 0.14 25);
+    --danger-soft: oklch(0.27 0.04 25);
+    --danger-fill: oklch(0.5 0.18 25);
     --mock-ink: oklch(0.8 0.1 300);
     --mock-soft: oklch(0.3 0.05 300);
-    --sidebar: oklch(0.15 0.01 255);
-    --shadow-card: none;
+    --brand-gradient-deep: linear-gradient(110deg, oklch(0.78 0.09 205), oklch(0.82 0.08 170) 50%, oklch(0.78 0.08 245));
+    --soft: oklch(0.24 0.04 210);
+    --ink: oklch(0.9 0.04 200);
+    --shadow-card: 0 1px 2px oklch(0 0 0 / 0.25);
   }
 }
 
@@ -67,6 +92,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
+  --color-accent: var(--accent);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-ink: var(--primary-ink);
@@ -81,97 +107,290 @@
   --color-danger: var(--danger);
   --color-danger-ink: var(--danger-ink);
   --color-danger-soft: var(--danger-soft);
+  --color-danger-fill: var(--danger-fill);
   --color-mock: var(--mock);
   --color-mock-ink: var(--mock-ink);
   --color-mock-soft: var(--mock-soft);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
-  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
-  --font-mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --font-sans: "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
 }
 
 @layer base {
+  * {
+    border-color: var(--border);
+  }
+  /* Native controls do not inherit color/font (dark mode would show black text). */
+  button,
+  input,
+  select,
+  textarea {
+    color: inherit;
+    font: inherit;
+  }
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--primary);
+  }
   html,
   body,
   #root {
     height: 100%;
   }
   body {
+    margin: 0;
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
     font-size: 13px;
     line-height: 1.6;
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
   }
   thead th {
     white-space: nowrap; /* ui-design §4: headers never wrap */
   }
-  :focus-visible {
+  :where(button, a, [tabindex], summary):focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation: none !important;
-      transition: none !important;
-    }
+  a:any-link:hover {
+    text-underline-offset: 2px;
   }
 }
 
 @layer components {
   .page-title {
+    margin: 0;
     font-size: 18px;
     font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
   }
   .panel-head {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    column-gap: 8px;
     min-height: 40px;
-    padding: 0 16px;
+    padding: 6px 14px;
     border-bottom: 1px solid var(--border);
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: linear-gradient(110deg, oklch(0.96 0.016 200), oklch(0.97 0.014 165) 55%, oklch(0.965 0.014 240));
+  }
+  .panel-head > svg {
+    color: var(--muted-foreground);
   }
   .panel-title {
+    margin: 0;
     font-size: 15px;
     font-weight: 700;
+    line-height: 1.3;
   }
   .section-title {
+    margin: 0 0 8px;
     font-size: 14px;
     font-weight: 700;
   }
   .card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius);
     box-shadow: var(--shadow-card);
   }
-  .zebra > tbody > tr:nth-child(even) {
-    background: var(--muted);
+  /* Table head band and pale zebra rows; hover/selection/state colors win. */
+  .card thead tr {
+    background-color: color-mix(in oklch, var(--muted) 70%, var(--card));
+  }
+  .zebra > tbody > tr:nth-child(even),
+  ul.divide-y > li:nth-child(even) {
+    background-color: color-mix(in oklch, var(--muted) 40%, transparent);
+  }
+  .zebra > tbody > tr:hover {
+    background-color: color-mix(in oklch, var(--primary) 6%, var(--card));
   }
   .field-control {
     height: 36px;
     width: 100%;
     border: 1px solid var(--input);
-    border-radius: 6px;
+    border-radius: calc(var(--radius) - 2px);
     background: var(--card);
     padding: 0 10px;
     font-size: 13px;
+    box-shadow: inset 0 1px 1px color-mix(in oklch, var(--foreground), transparent 96%);
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .field-control:hover {
+    border-color: color-mix(in oklch, var(--primary) 35%, var(--input));
+  }
+  .field-control:focus-visible {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 25%, transparent);
+  }
+  .field-control:disabled {
+    cursor: not-allowed;
+    background: var(--muted);
+    color: var(--muted-foreground);
   }
   textarea.field-control {
     height: auto;
     min-height: 96px;
-    padding: 8px 10px;
+    padding: 10px;
   }
   .field-control[aria-invalid="true"] {
     border-color: var(--danger);
   }
+
+  /* Floating field label (outlined field): the label sits on the top-left of the box. */
+  .floating-field {
+    position: relative;
+    padding-top: 6px;
+  }
+  .floating-field > .field-label {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 8px;
+    max-width: calc(100% - 16px);
+    padding: 0 4px;
+    overflow: hidden;
+    background: var(--card);
+    color: var(--muted-foreground);
+    font-size: 11px;
+    line-height: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.15s ease;
+  }
+  .floating-field:focus-within > .field-label {
+    color: var(--primary-ink);
+  }
+  .floating-field:has([aria-invalid="true"]) > .field-label {
+    color: var(--danger-ink);
+  }
+  .field-message {
+    margin: 3px 8px 0;
+    color: var(--muted-foreground);
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .field-message[data-error="true"] {
+    color: var(--danger-ink);
+    font-size: 12px;
+  }
+
+  /* API busy line under the header (ui-design §5.4). */
   .api-line {
     position: fixed;
     inset: 0 0 auto 0;
     height: 2px;
-    background: var(--primary);
+    overflow: hidden;
     z-index: 200;
+    background: color-mix(in oklch, var(--deep) 14%, transparent);
+  }
+  .api-line::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    animation: api-sweep 1s ease-in-out infinite;
+  }
+
+  /* ---- Shell ---- */
+  .app-header {
+    background: linear-gradient(110deg, var(--soft) 0%, var(--soft) 40%, oklch(0.965 0.02 165) 75%, oklch(0.96 0.02 240));
+    border-bottom: 1px solid color-mix(in srgb, var(--deep) 22%, var(--soft));
+    box-shadow: inset 0 3px 0 0 var(--deep);
+  }
+  .app-sidebar {
+    background: linear-gradient(185deg, var(--deep) 0%, var(--deep2) 100%);
+    color: #fff;
+    /* Re-scope tokens so muted text and hover surfaces read on the deep background. */
+    --foreground: #ffffff;
+    --muted-foreground: var(--side-muted);
+    --accent: rgba(255, 255, 255, 0.14);
+    --border: rgba(255, 255, 255, 0.16);
+  }
+  .app-sidebar .nav-item {
+    color: #fff;
+  }
+  .app-sidebar .nav-item:hover {
+    background: var(--accent);
+  }
+  .app-sidebar .nav-active {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08));
+    box-shadow: inset 3px 0 0 0 #fff;
+    font-weight: 700;
+  }
+  .page-host > * {
+    animation: page-in 0.24s ease-out both;
+  }
+
+  /* ---- Login: the only screen with brand color on the background (seen once a day). ---- */
+  .login-scene {
+    background: #0b2530;
+  }
+  .login-wash {
+    background:
+      radial-gradient(90% 70% at 12% 8%, rgba(20, 184, 166, 0.45) 0%, transparent 55%),
+      radial-gradient(80% 65% at 88% 18%, rgba(56, 189, 248, 0.4) 0%, transparent 55%),
+      radial-gradient(75% 70% at 70% 95%, rgba(52, 211, 153, 0.28) 0%, transparent 60%),
+      linear-gradient(160deg, #0b2530 0%, #0f3341 45%, #0a2029 100%);
+  }
+  .login-dots {
+    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.2) 1px, transparent 0);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black, transparent);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-header {
+    background: linear-gradient(110deg, color-mix(in oklch, var(--deep) 45%, var(--background)), color-mix(in oklch, var(--deep2) 25%, var(--background)));
+    border-bottom-color: color-mix(in oklch, var(--deep) 55%, var(--background));
+  }
+  .app-sidebar {
+    background: linear-gradient(185deg, color-mix(in oklch, var(--deep) 70%, black), color-mix(in oklch, var(--deep2) 60%, black));
+  }
+  .panel-head {
+    background: color-mix(in oklch, var(--muted) 55%, var(--card));
+  }
+}
+
+@keyframes api-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }

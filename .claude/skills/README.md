@@ -20,7 +20,7 @@
 | `fixture-data` | sales-assistant の `demo-mock-data`（81f79e2）を EASF 向けに書き直し | プロジェクトに従う | 2026-10-18 |
 
 - 外部の skill は中身を変えずに取り込み、フォルダ名だけ frontmatter の `name` に合わせた（`taste-skill` → `design-taste-frontend`、`redesign-skill` → `redesign-existing-projects`）。
-- 書き直した 3 つは、規約の構成と決まり（部品の振る舞い・フォームの約束・文字の段・整合ルール・同期の手順）を引き継ぎ、sales-assistant 固有のファイルパス・画面・業務用語・配色・ロール色・データは除いた。
+- 書き直した 3 つは、規約の構成と決まり（部品の振る舞い・フォームの約束・文字の段・整合ルール・同期の手順）を引き継ぎ、sales-assistant 固有のファイルパス・画面・業務用語・ロール色・データは除いた。見た目の作り（部品・面の構成）は D-026 で sales-assistant を手本にすることにし、配色だけ EASF の色に変えている。
 - 取り込まなかったもの：`gsap-*`（動きの演出。EASF の画面方針では使わない）。
 
 ## 同期の対応表（sales-assistant が更新されたとき）
