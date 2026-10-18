@@ -39,6 +39,7 @@ FastAPI（モジュラーモノリス）─── PostgreSQL（メタデータ�
 | `reuse` | 再利用の記録と集計 | core, observability |
 
 - `domain` の実装は起動時にレジストリへ登録し、`executor` はレジストリのキー（`implementation.ref`）で呼ぶ。
+- **予約入力 `project_context`**：Executor は、Capability の入力スキーマに `project_context` があるとき、同じ案件の成功した実行の確認済みの値を、実行開始時点のスナップショットとして渡す（辺からは渡さない）。Capability は DB を直接読まない（RV-G0-002）。
 - 汎用モジュール（catalog・composer・executor・adapters・evaluation・observability・reuse）に業務名を書かない。`scripts/validate_contracts.py` が検査し、Phase 1 で import-linter による依存の向きの検査を CI に加える。
 
 ## 3. LLM ポート（ADR-002）

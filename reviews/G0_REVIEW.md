@@ -27,26 +27,26 @@
 
 ## 2. 指摘一覧
 
-| ID | 区分 | 観点 | 場所 | 内容 | 修正案 |
-|---|---|---|---|---|---|
-| RV-G0-001 | MAJOR | 仕様 | `contracts/openapi.yaml` RunStatus、`examples/capabilities/human_review.json` | 確認で **却下（rejected）** されたときの実行の結末が決まっていない。export は却下でも動く配線になっており、「確認を通っていない結果が出力される」余地がある | Run の状態に `rejected` を追加。却下ならそれ以降のノードは `skipped`、出力しない。状態遷移を詳細設計に書く |
-| RV-G0-002 | MAJOR | 設計 | `rule_pack.schema.json` の `unique_in_project`、INV-006 | 案件をまたぐ判定には過去の実行の値が要るが、RuleValidator の入力契約にそれがない。暗黙に DB を読むと Capability が純粋でなくなり、再実行・評価の再現性が崩れる | Executor が読み取り専用の `project_context`（同じ案件の確認済みの値の一覧、実行開始時点のスナップショット）を入力として渡す。RuleValidator の入力に任意項目 `project_context` を追加 |
-| RV-G0-003 | MAJOR | セキュリティ | `docs/design/` | **権限表（ロール × 操作）が無い**。ADR-006 にロールはあるが、どの API を誰が呼べるかが契約にない。認可のテスト（期待値表）が作れない | `docs/design/basic/permissions.md` を作り、OpenAPI の全 operationId について許可ロールを書く。OpenAPI に `x-easf-roles` を付ける |
-| RV-G0-004 | MAJOR | 仕様 | `contracts/openapi.yaml` | FR-09 の再利用の分類（unchanged / config_only …）と追加工数を **記録する API が無い**（参照だけ） | `POST /api/v1/projects/{project_id}/reuse-records` を追加（solution_lead / qa_evaluator） |
-| RV-G0-005 | MAJOR | 仕様 | `contracts/openapi.yaml` | 画面に必要な一覧が無い：案件の解決策一覧、要件の版の一覧、評価の一覧 | `GET /projects/{id}/solutions`、`GET /projects/{id}/requirements`、`GET /evaluations?solution_id=` を追加 |
-| RV-G0-006 | MAJOR | セキュリティ | `contracts/openapi.yaml`、ADR-006 | 利用者・案件メンバーの管理方法が無い（オブジェクト単位の認可の前提なのに、メンバーを登録する手段がない） | 利用者の作成は管理用の CLI（API にしない＝攻撃面を減らす）。案件メンバーは `GET/PUT /projects/{id}/members`（solution_lead）。ADR-006 に追記 |
-| RV-G0-007 | MAJOR | 設計 | ADR-004、`capability.schema.json` | 版の不変性の判定に使う **内容ハッシュの正規化方法** が決まっていない。キーの順序・空白・改行（このリポジトリは autocrlf で CRLF になる）で同じ内容が別ハッシュになり、冪等な再登録が 409 になる | ハッシュは RFC 8785（JSON Canonicalization Scheme）で正規化した JSON の SHA-256 と決める。`.gitattributes` で `eol=lf` を固定 |
-| RV-G0-008 | MINOR | 仕様 | `human_review.json` の `route_when: on_flags` | 「フラグがなければ確認を飛ばす」ときの下流（export は `reviewed_fields` 必須）の扱いが未定義 | v1 は `always` だけにする（条件付きの経路は v2 で検討） |
-| RV-G0-009 | MINOR | セキュリティ | `rule_pack.schema.json` の `and/or/not` | 入れ子の深さに上限がない（深い式で評価器の再帰が深くなる） | 評価器で深さ 8 まで、登録時に検査。スキーマの説明に明記 |
-| RV-G0-010 | MINOR | セキュリティ | `openapi.yaml` の login | ログインは CSRF トークン無しのため、ログイン CSRF（攻撃者のアカウントでログインさせる）の余地 | ログインでも `Origin` の照合を必須にすることを説明に明記 |
-| RV-G0-011 | MINOR | 仕様 | `events.schema.json` | `execution_mode` に `mixed` が無い（Run には有る） | `mixed` を追加 |
-| RV-G0-012 | MINOR | 仕様 | `capability.schema.json` の `side_effects` | Exporter は内部の保存領域に書くが、それが「副作用」かが曖昧 | 「EASF の外への作用（送信・外部の書き込み・支払い等）」と定義を明記 |
-| RV-G0-013 | MINOR | 規約 | `scripts/sync_skills.py` | Windows の Git Bash でエラー文が文字化けする | 出力を UTF-8 に固定（`sys.stderr.reconfigure`） |
-| RV-G0-014 | MINOR | データ | `examples/rule_packs/invoice-1.0.0.json` | 参照表の社名「TEST ONLY 例示商事株式会社」は、`fixture-data` の「社名はリアルに、偽物の印は欄外」と食い違う | 見本であることを残しつつ、Phase 3 で生成器の出力から参照表を作ると README に明記（見本の値は変えない） |
-| RV-G0-015 | MINOR | 計画 | `PHASE0_PLAN.md` §D-1 の 6 | G0 の受入条件が「Codex の独立レビュー」のまま | 「G0 レビュー（D-011・D-012）」に直す |
-| Q1 | 質問 | 評価 | ADR-002・`fixture_plan.md` | **mock の LLM は既知の文書の固定応答しか返せないため、holdout（未知の文書）を評価できない。** 実 API を使わないままだと、抽出の品質の評価と ADR-007 の判定ができない | 選択肢：(a) Phase 3 の前に実 API を 1 社だけ有効化（上限 5,000 円、D-008）、(b) LLM を使わないローカルの抽出（見出しの近くの値を拾う規則ベース）を別の Capability 版として作り、mock の代わりに使う、(c) 両方。**提案：(c)**。(b) は費用ゼロで評価の流れを先に通せ、(a) と同じ契約で比べられる。決定は Phase 3 の着手前 |
-| Q2 | 質問 | 実験 | `preregistration.md` §6 | CR-2（請求書）をベースラインと比べるか | 提案：参考値（比較は CR-1 だけ） |
-| Q3 | 質問 | 実験 | `preregistration.md` 全体 | 事前登録を Factory 側（CC）が作った | 承認時に人が「A に不利な条件がないか」を確認する。必要なら別セッションの AI に読ませて意見を取る |
+| ID | 区分 | 観点 | 場所 | 内容 | 修正案 | 対応（P0-06） |
+|---|---|---|---|---|---|---|
+| RV-G0-001 | MAJOR | 仕様 | `contracts/openapi.yaml` RunStatus、`examples/capabilities/human_review.json` | 確認で **却下（rejected）** されたときの実行の結末が決まっていない。export は却下でも動く配線になっており、「確認を通っていない結果が出力される」余地がある | Run の状態に `rejected` を追加。却下ならそれ以降のノードは `skipped`、出力しない。状態遷移を詳細設計に書く | 対応済み：openapi RunStatus に rejected、ADR-001 |
+| RV-G0-002 | MAJOR | 設計 | `rule_pack.schema.json` の `unique_in_project`、INV-006 | 案件をまたぐ判定には過去の実行の値が要るが、RuleValidator の入力契約にそれがない。暗黙に DB を読むと Capability が純粋でなくなり、再実行・評価の再現性が崩れる | Executor が読み取り専用の `project_context`（同じ案件の確認済みの値の一覧、実行開始時点のスナップショット）を入力として渡す。RuleValidator の入力に任意項目 `project_context` を追加 | 対応済み：rule_validator の予約入力 project_context、architecture.md |
+| RV-G0-003 | MAJOR | セキュリティ | `docs/design/` | **権限表（ロール × 操作）が無い**。ADR-006 にロールはあるが、どの API を誰が呼べるかが契約にない。認可のテスト（期待値表）が作れない | `docs/design/basic/permissions.md` を作り、OpenAPI の全 operationId について許可ロールを書く。OpenAPI に `x-easf-roles` を付ける | 対応済み：permissions.md、全 46 操作に x-easf-roles、検査を追加 |
+| RV-G0-004 | MAJOR | 仕様 | `contracts/openapi.yaml` | FR-09 の再利用の分類（unchanged / config_only …）と追加工数を **記録する API が無い**（参照だけ） | `POST /api/v1/projects/{project_id}/reuse-records` を追加（solution_lead / qa_evaluator） | 対応済み：POST /projects/{id}/reuse-records |
+| RV-G0-005 | MAJOR | 仕様 | `contracts/openapi.yaml` | 画面に必要な一覧が無い：案件の解決策一覧、要件の版の一覧、評価の一覧 | `GET /projects/{id}/solutions`、`GET /projects/{id}/requirements`、`GET /evaluations?solution_id=` を追加 | 対応済み：listSolutions・listRequirementRevisions・listEvaluations |
+| RV-G0-006 | MAJOR | セキュリティ | `contracts/openapi.yaml`、ADR-006 | 利用者・案件メンバーの管理方法が無い（オブジェクト単位の認可の前提なのに、メンバーを登録する手段がない） | 利用者の作成は管理用の CLI（API にしない＝攻撃面を減らす）。案件メンバーは `GET/PUT /projects/{id}/members`（solution_lead）。ADR-006 に追記 | 対応済み：GET/PUT /projects/{id}/members、ADR-006（利用者は CLI） |
+| RV-G0-007 | MAJOR | 設計 | ADR-004、`capability.schema.json` | 版の不変性の判定に使う **内容ハッシュの正規化方法** が決まっていない。キーの順序・空白・改行（このリポジトリは autocrlf で CRLF になる）で同じ内容が別ハッシュになり、冪等な再登録が 409 になる | ハッシュは RFC 8785（JSON Canonicalization Scheme）で正規化した JSON の SHA-256 と決める。`.gitattributes` で `eol=lf` を固定 | 対応済み：RFC 8785、ADR-004、.gitattributes |
+| RV-G0-008 | MINOR | 仕様 | `human_review.json` の `route_when: on_flags` | 「フラグがなければ確認を飛ばす」ときの下流（export は `reviewed_fields` 必須）の扱いが未定義 | v1 は `always` だけにする（条件付きの経路は v2 で検討） | 対応済み：route_when を always だけに |
+| RV-G0-009 | MINOR | セキュリティ | `rule_pack.schema.json` の `and/or/not` | 入れ子の深さに上限がない（深い式で評価器の再帰が深くなる） | 評価器で深さ 8 まで、登録時に検査。スキーマの説明に明記 | 対応済み：rule_pack.schema の説明に深さ 8 |
+| RV-G0-010 | MINOR | セキュリティ | `openapi.yaml` の login | ログインは CSRF トークン無しのため、ログイン CSRF（攻撃者のアカウントでログインさせる）の余地 | ログインでも `Origin` の照合を必須にすることを説明に明記 | 対応済み：login の説明に Origin 必須 |
+| RV-G0-011 | MINOR | 仕様 | `events.schema.json` | `execution_mode` に `mixed` が無い（Run には有る） | `mixed` を追加 | 対応済み：events に mixed |
+| RV-G0-012 | MINOR | 仕様 | `capability.schema.json` の `side_effects` | Exporter は内部の保存領域に書くが、それが「副作用」かが曖昧 | 「EASF の外への作用（送信・外部の書き込み・支払い等）」と定義を明記 | 対応済み：side_effects の定義 |
+| RV-G0-013 | MINOR | 規約 | `scripts/sync_skills.py` | Windows の Git Bash でエラー文が文字化けする | 出力を UTF-8 に固定（`sys.stderr.reconfigure`） | 対応済み：sync_skills.py の出力を UTF-8 に |
+| RV-G0-014 | MINOR | データ | `examples/rule_packs/invoice-1.0.0.json` | 参照表の社名「TEST ONLY 例示商事株式会社」は、`fixture-data` の「社名はリアルに、偽物の印は欄外」と食い違う | 見本であることを残しつつ、Phase 3 で生成器の出力から参照表を作ると README に明記（見本の値は変えない） | 対応済み：contracts/README.md に明記 |
+| RV-G0-015 | MINOR | 計画 | `PHASE0_PLAN.md` §D-1 の 6 | G0 の受入条件が「Codex の独立レビュー」のまま | 「G0 レビュー（D-011・D-012）」に直す | 対応済み：PHASE0_PLAN §D-1 |
+| Q1 | 質問 | 評価 | ADR-002・`fixture_plan.md` | **mock の LLM は既知の文書の固定応答しか返せないため、holdout（未知の文書）を評価できない。** 実 API を使わないままだと、抽出の品質の評価と ADR-007 の判定ができない | 選択肢：(a) Phase 3 の前に実 API を 1 社だけ有効化（上限 5,000 円、D-008）、(b) LLM を使わないローカルの抽出（見出しの近くの値を拾う規則ベース）を別の Capability 版として作り、mock の代わりに使う、(c) 両方。**提案：(c)**。(b) は費用ゼロで評価の流れを先に通せ、(a) と同じ契約で比べられる。決定は Phase 3 の着手前 | G0 で決定 |
+| Q2 | 質問 | 実験 | `preregistration.md` §6 | CR-2（請求書）をベースラインと比べるか | 提案：参考値（比較は CR-1 だけ） | G0 で決定 |
+| Q3 | 質問 | 実験 | `preregistration.md` 全体 | 事前登録を Factory 側（CC）が作った | 承認時に人が「A に不利な条件がないか」を確認する。必要なら別セッションの AI に読ませて意見を取る | G0 で決定 |
 
 ## 3. 独立テストの観点（Phase 1 以降のテスト設計の入力）
 
@@ -72,4 +72,4 @@
 
 ## 5. 対応の方針
 
-MAJOR 7 件・MINOR 8 件は P0-06（CC）で反映し、`validate_contracts.py` を再実行してから G0 報告を書く。Q1〜Q3 は G0 報告で人に決めてもらう。
+MAJOR 7 件・MINOR 8 件は P0-06（CC）で反映した（上の表の右端）。反映後の `validate_contracts.py` は exit 0、`x-easf-roles` の陰性試験（欠落・公開してはいけない操作の public）も検出（exit 1）。Q1〜Q3 は G0 報告で人に決めてもらう。

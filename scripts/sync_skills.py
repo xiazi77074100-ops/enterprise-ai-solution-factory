@@ -59,6 +59,8 @@ def trees_equal(a: Path, b: Path) -> bool:
 
 
 def main() -> int:
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
     errors = [e for d in sorted(SRC.iterdir()) if d.is_dir() for e in frontmatter_errors(d)]
     if errors:
         print("\n".join(errors), file=sys.stderr)

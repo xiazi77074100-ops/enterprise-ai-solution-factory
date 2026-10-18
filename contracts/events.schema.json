@@ -5,10 +5,24 @@
   "description": "Append-only trace/audit event. Never contains full document payloads, secrets or raw LLM output; only hashes and redacted metadata.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "event_id", "event_type", "timestamp", "trace_id", "actor", "status", "redacted_metadata"],
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "timestamp",
+    "trace_id",
+    "actor",
+    "status",
+    "redacted_metadata"
+  ],
   "properties": {
-    "schema_version": { "const": "1" },
-    "event_id": { "type": "string", "format": "uuid" },
+    "schema_version": {
+      "const": "1"
+    },
+    "event_id": {
+      "type": "string",
+      "format": "uuid"
+    },
     "event_type": {
       "enum": [
         "project.created",
@@ -33,32 +47,99 @@
         "export.created"
       ]
     },
-    "timestamp": { "type": "string", "format": "date-time" },
-    "trace_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
-    "run_id": { "type": ["string", "null"], "format": "uuid" },
-    "node_id": { "type": ["string", "null"], "pattern": "^[a-z][a-z0-9_]{0,31}$" },
-    "project_id": { "type": ["string", "null"], "format": "uuid" },
-    "capability_version_id": { "type": ["string", "null"], "format": "uuid" },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "trace_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$"
+    },
+    "run_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "node_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-z][a-z0-9_]{0,31}$"
+    },
+    "project_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "capability_version_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
     "actor": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["type", "id"],
+      "required": [
+        "type",
+        "id"
+      ],
       "properties": {
-        "type": { "enum": ["user", "system"] },
-        "id": { "type": "string", "maxLength": 64 }
+        "type": {
+          "enum": [
+            "user",
+            "system"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "maxLength": 64
+        }
       }
     },
-    "status": { "enum": ["ok", "failed", "pending", "rejected"] },
-    "execution_mode": { "enum": ["real", "mock", null] },
+    "status": {
+      "enum": [
+        "ok",
+        "failed",
+        "pending",
+        "rejected"
+      ]
+    },
+    "execution_mode": {
+      "enum": [
+        "real",
+        "mock",
+        "mixed",
+        null
+      ]
+    },
     "redacted_metadata": {
       "type": "object",
       "maxProperties": 30,
-      "propertyNames": { "pattern": "^[a-z][a-z0-9_]{0,63}$" },
-      "additionalProperties": { "type": ["string", "number", "boolean", "null"] }
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number",
+          "boolean",
+          "null"
+        ]
+      }
     },
     "prev_event_hash": {
       "description": "SHA-256 of the previous event in the same stream (tamper evidence for audit events).",
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "pattern": "^[0-9a-f]{64}$"
     }
   }

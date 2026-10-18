@@ -2,15 +2,35 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:easf:contract:rule-pack:1",
   "title": "RulePack v1",
-  "description": "Business rules as data, evaluated by RuleValidator with a fixed set of operators (no eval, no user-supplied regex). Each rule yields pass / fail / uncertain. Field paths are JSON Pointers into the extractor output.",
+  "description": "Business rules as data, evaluated by RuleValidator with a fixed set of operators (no eval, no user-supplied regex). Each rule yields pass / fail / uncertain. Field paths are JSON Pointers into the extractor output. Expression nesting depth is limited to 8 (checked at registration and enforced by the evaluator). content_sha256 uses RFC 8785 canonical JSON.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "rule_pack_id", "version", "name", "notice", "rules"],
+  "required": [
+    "schema_version",
+    "rule_pack_id",
+    "version",
+    "name",
+    "notice",
+    "rules"
+  ],
   "properties": {
-    "schema_version": { "const": "1" },
-    "rule_pack_id": { "type": "string", "maxLength": 64, "pattern": "^[a-z][a-z0-9-]*$" },
-    "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
-    "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "schema_version": {
+      "const": "1"
+    },
+    "rule_pack_id": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
     "notice": {
       "description": "Disclaimer shown with results, e.g. synthetic policy / not legal advice.",
       "type": "string",
@@ -20,11 +40,16 @@
       "description": "Small static lookup tables shipped with the pack (e.g. registered payee per vendor in the synthetic set).",
       "type": "object",
       "maxProperties": 10,
-      "propertyNames": { "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
       "additionalProperties": {
         "type": "array",
         "maxItems": 1000,
-        "items": { "type": "object", "maxProperties": 20 }
+        "items": {
+          "type": "object",
+          "maxProperties": 20
+        }
       }
     },
     "rules": {
@@ -34,115 +59,337 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["rule_id", "title", "severity", "check", "on_missing", "evidence_fields"],
+        "required": [
+          "rule_id",
+          "title",
+          "severity",
+          "check",
+          "on_missing",
+          "evidence_fields"
+        ],
         "properties": {
-          "rule_id": { "type": "string", "pattern": "^[A-Z]{2,8}-[0-9]{3}$" },
-          "title": { "type": "string", "minLength": 1, "maxLength": 100 },
-          "description": { "type": "string", "maxLength": 1000 },
-          "severity": { "enum": ["critical", "major", "minor"] },
-          "check": { "$ref": "#/$defs/expr" },
+          "rule_id": {
+            "type": "string",
+            "pattern": "^[A-Z]{2,8}-[0-9]{3}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "severity": {
+            "enum": [
+              "critical",
+              "major",
+              "minor"
+            ]
+          },
+          "check": {
+            "$ref": "#/$defs/expr"
+          },
           "on_missing": {
             "description": "Result when a referenced field is null/missing. 'uncertain' routes to human review; 'fail' is for rules whose purpose is to detect absence.",
-            "enum": ["uncertain", "fail"]
+            "enum": [
+              "uncertain",
+              "fail"
+            ]
           },
           "evidence_fields": {
             "type": "array",
             "maxItems": 10,
-            "items": { "$ref": "#/$defs/path" }
+            "items": {
+              "$ref": "#/$defs/path"
+            }
           }
         }
       }
     }
   },
   "$defs": {
-    "path": { "type": "string", "maxLength": 256, "pattern": "^(/([^/~]|~[01])*)+$" },
+    "path": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "^(/([^/~]|~[01])*)+$"
+    },
     "operand": {
       "oneOf": [
         {
-          "type": "object", "additionalProperties": false, "required": ["field"],
-          "properties": { "field": { "$ref": "#/$defs/path" } }
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "field"
+          ],
+          "properties": {
+            "field": {
+              "$ref": "#/$defs/path"
+            }
+          }
         },
         {
-          "type": "object", "additionalProperties": false, "required": ["const"],
-          "properties": { "const": { "type": ["number", "string", "boolean"] } }
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "const"
+          ],
+          "properties": {
+            "const": {
+              "type": [
+                "number",
+                "string",
+                "boolean"
+              ]
+            }
+          }
         },
         {
-          "type": "object", "additionalProperties": false, "required": ["sum_of"],
-          "properties": { "sum_of": { "$ref": "#/$defs/path" } }
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sum_of"
+          ],
+          "properties": {
+            "sum_of": {
+              "$ref": "#/$defs/path"
+            }
+          }
         },
         {
-          "type": "object", "additionalProperties": false, "required": ["add"],
-          "properties": { "add": { "type": "array", "minItems": 2, "maxItems": 10, "items": { "$ref": "#/$defs/operand" } } }
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "add"
+          ],
+          "properties": {
+            "add": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 10,
+              "items": {
+                "$ref": "#/$defs/operand"
+              }
+            }
+          }
         }
       ]
     },
     "expr": {
       "oneOf": [
         {
-          "type": "object", "additionalProperties": false, "required": ["op", "field"],
-          "properties": { "op": { "const": "present" }, "field": { "$ref": "#/$defs/path" } }
-        },
-        {
-          "type": "object", "additionalProperties": false, "required": ["op", "left", "right"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "field"
+          ],
           "properties": {
-            "op": { "enum": ["eq", "ne", "lt", "le", "gt", "ge"] },
-            "left": { "$ref": "#/$defs/operand" },
-            "right": { "$ref": "#/$defs/operand" }
+            "op": {
+              "const": "present"
+            },
+            "field": {
+              "$ref": "#/$defs/path"
+            }
           }
         },
         {
-          "type": "object", "additionalProperties": false, "required": ["op", "left", "right", "tolerance"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "left",
+            "right"
+          ],
           "properties": {
-            "op": { "const": "abs_diff_le" },
-            "left": { "$ref": "#/$defs/operand" },
-            "right": { "$ref": "#/$defs/operand" },
-            "tolerance": { "type": "number", "minimum": 0 }
+            "op": {
+              "enum": [
+                "eq",
+                "ne",
+                "lt",
+                "le",
+                "gt",
+                "ge"
+              ]
+            },
+            "left": {
+              "$ref": "#/$defs/operand"
+            },
+            "right": {
+              "$ref": "#/$defs/operand"
+            }
           }
         },
         {
-          "type": "object", "additionalProperties": false, "required": ["op", "field", "values"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "left",
+            "right",
+            "tolerance"
+          ],
           "properties": {
-            "op": { "const": "in" },
-            "field": { "$ref": "#/$defs/path" },
-            "values": { "type": "array", "minItems": 1, "maxItems": 50, "items": { "type": ["string", "number", "boolean"] } }
+            "op": {
+              "const": "abs_diff_le"
+            },
+            "left": {
+              "$ref": "#/$defs/operand"
+            },
+            "right": {
+              "$ref": "#/$defs/operand"
+            },
+            "tolerance": {
+              "type": "number",
+              "minimum": 0
+            }
           }
         },
         {
-          "type": "object", "additionalProperties": false, "required": ["op", "field", "format"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "field",
+            "values"
+          ],
           "properties": {
-            "op": { "const": "format" },
-            "field": { "$ref": "#/$defs/path" },
-            "format": { "enum": ["jp_invoice_registration_no", "iso_date", "jp_bank_account_no", "jp_postal_code"] }
+            "op": {
+              "const": "in"
+            },
+            "field": {
+              "$ref": "#/$defs/path"
+            },
+            "values": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 50,
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean"
+                ]
+              }
+            }
           }
         },
         {
-          "type": "object", "additionalProperties": false, "required": ["op", "field", "table", "key_field", "match_field", "value_field"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "field",
+            "format"
+          ],
           "properties": {
-            "op": { "const": "matches_reference" },
-            "field": { "$ref": "#/$defs/path" },
-            "table": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
-            "key_field": { "$ref": "#/$defs/path" },
-            "match_field": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
-            "value_field": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" }
+            "op": {
+              "const": "format"
+            },
+            "field": {
+              "$ref": "#/$defs/path"
+            },
+            "format": {
+              "enum": [
+                "jp_invoice_registration_no",
+                "iso_date",
+                "jp_bank_account_no",
+                "jp_postal_code"
+              ]
+            }
           }
         },
         {
-          "type": "object", "additionalProperties": false, "required": ["op", "field"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "field",
+            "table",
+            "key_field",
+            "match_field",
+            "value_field"
+          ],
           "properties": {
-            "op": { "const": "unique_in_project" },
-            "field": { "$ref": "#/$defs/path" }
+            "op": {
+              "const": "matches_reference"
+            },
+            "field": {
+              "$ref": "#/$defs/path"
+            },
+            "table": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,63}$"
+            },
+            "key_field": {
+              "$ref": "#/$defs/path"
+            },
+            "match_field": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,63}$"
+            },
+            "value_field": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,63}$"
+            }
           }
         },
         {
-          "type": "object", "additionalProperties": false, "required": ["op", "args"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "field"
+          ],
           "properties": {
-            "op": { "enum": ["and", "or"] },
-            "args": { "type": "array", "minItems": 2, "maxItems": 10, "items": { "$ref": "#/$defs/expr" } }
+            "op": {
+              "const": "unique_in_project"
+            },
+            "field": {
+              "$ref": "#/$defs/path"
+            }
           }
         },
         {
-          "type": "object", "additionalProperties": false, "required": ["op", "arg"],
-          "properties": { "op": { "const": "not" }, "arg": { "$ref": "#/$defs/expr" } }
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "args"
+          ],
+          "properties": {
+            "op": {
+              "enum": [
+                "and",
+                "or"
+              ]
+            },
+            "args": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 10,
+              "items": {
+                "$ref": "#/$defs/expr"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "arg"
+          ],
+          "properties": {
+            "op": {
+              "const": "not"
+            },
+            "arg": {
+              "$ref": "#/$defs/expr"
+            }
+          }
         }
       ]
     }

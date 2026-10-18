@@ -22,6 +22,8 @@
 - 不変性は DB でも守る：`capability_version`・`rule_pack_version`・`dataset_version` は UPDATE・DELETE を拒否するトリガー（保険的対策）、アプリ側でも拒否（根本）。
 - 保持：合成データだけなので POC の期間中は保持し、終了時に削除手順（DB とボリューム）を実行して記録する。
 
+- 内容ハッシュ（`content_sha256`）は RFC 8785（JSON Canonicalization Scheme）で正規化した JSON の SHA-256。ファイルの改行・キーの順序・空白に左右されない。リポジトリは `.gitattributes` で改行を LF に固定する（2026-10-18 追記、RV-G0-007）。
+
 ## 影響
 - テストは実際の PostgreSQL（Docker）で行う。SQLite で代用しない（挙動の差を避ける）。
 - マイグレーションは CC だけが作る（`AGENTS.md`）。

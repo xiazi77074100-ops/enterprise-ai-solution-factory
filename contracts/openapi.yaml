@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: EASF API
-  version: 1.0.0-draft
+  version: 1.0.0-draft.2
   description: |
     Enterprise AI Solution Factory API contract v1 (draft, to be frozen at G0).
     - All endpoints except /health and /ready require an authenticated session cookie.
@@ -31,6 +31,7 @@ paths:
     get:
       tags: [system]
       operationId: getHealth
+      x-easf-roles: [public]
       security: []
       responses:
         "200": { description: Process is alive., content: { application/json: { schema: { $ref: "#/components/schemas/Health" } } } }
@@ -38,6 +39,7 @@ paths:
     get:
       tags: [system]
       operationId: getReady
+      x-easf-roles: [public]
       security: []
       responses:
         "200": { description: Dependencies reachable., content: { application/json: { schema: { $ref: "#/components/schemas/Health" } } } }
@@ -47,8 +49,9 @@ paths:
     post:
       tags: [session]
       operationId: login
+      x-easf-roles: [public]
       security: []
-      description: Issues a new session cookie (rotated on every login). Failure message is identical for unknown user and wrong password.
+      description: Issues a new session cookie (rotated on every login). Failure message is identical for unknown user and wrong password. No CSRF token exists yet, so the Origin header must match the site (login CSRF protection).
       requestBody:
         required: true
         content:
@@ -64,12 +67,14 @@ paths:
     get:
       tags: [session]
       operationId: getSession
+      x-easf-roles: [any_authenticated]
       responses:
         "200": { description: Current user and CSRF token., content: { application/json: { schema: { $ref: "#/components/schemas/SessionInfo" } } } }
         "401": { $ref: "#/components/responses/Error" }
     delete:
       tags: [session]
       operationId: logout
+      x-easf-roles: [any_authenticated]
       parameters: [ { $ref: "#/components/parameters/CsrfToken" } ]
       responses:
         "204": { description: Session deleted server-side and cookie cleared. }
@@ -80,6 +85,7 @@ paths:
     get:
       tags: [projects]
       operationId: listProjects
+      x-easf-roles: [any_authenticated]
       parameters:
         - { $ref: "#/components/parameters/Limit" }
         - { $ref: "#/components/parameters/Cursor" }
@@ -96,6 +102,7 @@ paths:
     post:
       tags: [projects]
       operationId: createProject
+      x-easf-roles: [solution_lead, admin]
       parameters: [ { $ref: "#/components/parameters/CsrfToken" } ]
       requestBody:
         required: true
@@ -109,15 +116,30 @@ paths:
     get:
       tags: [projects]
       operationId: getProject
+      x-easf-roles: [project_member]
       parameters: [ { $ref: "#/components/parameters/ProjectId" } ]
       responses:
         "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Project" } } } }
         "401": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
   /api/v1/projects/{project_id}/requirements:
+    get:
+      tags: [projects]
+      operationId: listRequirementRevisions
+      x-easf-roles: [project_member]
+      parameters: [ { $ref: "#/components/parameters/ProjectId" } ]
+      responses:
+        "200":
+          description: All revisions, newest first.
+          content:
+            application/json:
+              schema: { type: array, maxItems: 200, items: { $ref: "#/components/schemas/RequirementRevision" } }
+        "401": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
     post:
       tags: [projects]
       operationId: createRequirementRevision
+      x-easf-roles: [solution_lead, solution_architect]
       parameters: [ { $ref: "#/components/parameters/ProjectId" }, { $ref: "#/components/parameters/CsrfToken" } ]
       requestBody:
         required: true
@@ -128,10 +150,72 @@ paths:
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
         "422": { $ref: "#/components/responses/Error" }
+  /api/v1/projects/{project_id}/members:
+    get:
+      tags: [projects]
+      operationId: getProjectMembers
+      x-easf-roles: [project_member]
+      parameters: [ { $ref: "#/components/parameters/ProjectId" } ]
+      responses:
+        "200":
+          description: Members and their project roles.
+          content:
+            application/json:
+              schema: { type: array, maxItems: 100, items: { $ref: "#/components/schemas/ProjectMember" } }
+        "401": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+    put:
+      tags: [projects]
+      operationId: putProjectMembers
+      x-easf-roles: [solution_lead]
+      description: Replaces the member list. Users themselves are created only through the admin CLI. The caller cannot remove their own solution_lead role.
+      parameters: [ { $ref: "#/components/parameters/ProjectId" }, { $ref: "#/components/parameters/CsrfToken" } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: array, minItems: 1, maxItems: 100, items: { $ref: "#/components/schemas/ProjectMember" } }
+      responses:
+        "200":
+          description: Updated.
+          content:
+            application/json:
+              schema: { type: array, maxItems: 100, items: { $ref: "#/components/schemas/ProjectMember" } }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "422": { $ref: "#/components/responses/Error" }
+  /api/v1/projects/{project_id}/solutions:
+    get:
+      tags: [solutions]
+      operationId: listSolutions
+      x-easf-roles: [project_member]
+      parameters: [ { $ref: "#/components/parameters/ProjectId" }, { $ref: "#/components/parameters/Limit" }, { $ref: "#/components/parameters/Cursor" } ]
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/SolutionPage" } } } }
+        "401": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+  /api/v1/projects/{project_id}/reuse-records:
+    post:
+      tags: [reuse]
+      operationId: createReuseRecord
+      x-easf-roles: [solution_lead, qa_evaluator]
+      description: Records the reuse classification of a capability version in this project. evidence_run_ids must be succeeded runs of this project that executed that version; adaptation_minutes must come from HUMAN_TIME_LOG (null if not recorded).
+      parameters: [ { $ref: "#/components/parameters/ProjectId" }, { $ref: "#/components/parameters/CsrfToken" } ]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: "#/components/schemas/ReuseRecordCreate" } } }
+      responses:
+        "201": { description: Recorded., content: { application/json: { schema: { $ref: "#/components/schemas/ReuseRecord" } } } }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "422": { $ref: "#/components/responses/Error" }
   /api/v1/requirements/{revision_id}/approve:
     post:
       tags: [projects]
       operationId: approveRequirementRevision
+      x-easf-roles: [solution_lead]
       parameters:
         - { name: revision_id, in: path, required: true, schema: { type: string, format: uuid } }
         - { $ref: "#/components/parameters/CsrfToken" }
@@ -146,6 +230,7 @@ paths:
     get:
       tags: [documents]
       operationId: listDocuments
+      x-easf-roles: [project_member]
       parameters: [ { $ref: "#/components/parameters/ProjectId" }, { $ref: "#/components/parameters/Limit" }, { $ref: "#/components/parameters/Cursor" } ]
       responses:
         "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/DocumentPage" } } } }
@@ -154,6 +239,7 @@ paths:
     post:
       tags: [documents]
       operationId: uploadDocument
+      x-easf-roles: [solution_lead, solution_architect, qa_evaluator]
       description: PDF/PNG/JPEG only; extension, declared type and magic bytes must agree. Max 10 MB, 30 pages. Stored under a server-generated UUID.
       parameters: [ { $ref: "#/components/parameters/ProjectId" }, { $ref: "#/components/parameters/CsrfToken" } ]
       requestBody:
@@ -179,6 +265,7 @@ paths:
     get:
       tags: [documents]
       operationId: downloadDocument
+      x-easf-roles: [project_member]
       parameters: [ { name: document_id, in: path, required: true, schema: { type: string, format: uuid } } ]
       responses:
         "200":
@@ -194,6 +281,7 @@ paths:
     get:
       tags: [catalog]
       operationId: listCapabilities
+      x-easf-roles: [any_authenticated]
       parameters:
         - { $ref: "#/components/parameters/Limit" }
         - { $ref: "#/components/parameters/Cursor" }
@@ -206,6 +294,7 @@ paths:
     post:
       tags: [catalog]
       operationId: registerCapabilityVersion
+      x-easf-roles: [solution_architect, admin]
       description: Registers an immutable version. Same id@version with identical content hash is idempotent (200); different content is 409.
       parameters: [ { $ref: "#/components/parameters/CsrfToken" } ]
       requestBody:
@@ -222,6 +311,7 @@ paths:
     post:
       tags: [catalog]
       operationId: validateCapabilityContract
+      x-easf-roles: [solution_architect, admin]
       parameters: [ { $ref: "#/components/parameters/CsrfToken" } ]
       requestBody:
         required: true
@@ -234,6 +324,7 @@ paths:
     get:
       tags: [catalog]
       operationId: getCapabilityVersion
+      x-easf-roles: [any_authenticated]
       parameters:
         - { name: capability_id, in: path, required: true, schema: { type: string, maxLength: 64 } }
         - { name: version, in: path, required: true, schema: { $ref: "#/components/schemas/Semver" } }
@@ -246,6 +337,7 @@ paths:
     get:
       tags: [catalog]
       operationId: listRulePacks
+      x-easf-roles: [any_authenticated]
       parameters: [ { $ref: "#/components/parameters/Limit" }, { $ref: "#/components/parameters/Cursor" } ]
       responses:
         "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/RulePackVersionPage" } } } }
@@ -253,6 +345,7 @@ paths:
     post:
       tags: [catalog]
       operationId: registerRulePackVersion
+      x-easf-roles: [solution_architect, admin]
       parameters: [ { $ref: "#/components/parameters/CsrfToken" } ]
       requestBody:
         required: true
@@ -268,6 +361,7 @@ paths:
     get:
       tags: [catalog]
       operationId: getRulePackVersion
+      x-easf-roles: [any_authenticated]
       parameters:
         - { name: rule_pack_id, in: path, required: true, schema: { type: string, maxLength: 64 } }
         - { name: version, in: path, required: true, schema: { $ref: "#/components/schemas/Semver" } }
@@ -280,6 +374,7 @@ paths:
     post:
       tags: [solutions]
       operationId: createSolution
+      x-easf-roles: [solution_architect]
       parameters: [ { $ref: "#/components/parameters/CsrfToken" } ]
       requestBody:
         required: true
@@ -294,6 +389,7 @@ paths:
     get:
       tags: [solutions]
       operationId: getSolution
+      x-easf-roles: [project_member]
       parameters: [ { $ref: "#/components/parameters/SolutionId" } ]
       responses:
         "200": { description: OK, headers: { ETag: { $ref: "#/components/headers/ETag" } }, content: { application/json: { schema: { $ref: "#/components/schemas/Solution" } } } }
@@ -302,6 +398,7 @@ paths:
     put:
       tags: [solutions]
       operationId: updateSolutionDraft
+      x-easf-roles: [solution_architect]
       description: Only draft solutions can be updated. Approved solutions are immutable; create a new revision instead.
       parameters:
         - { $ref: "#/components/parameters/SolutionId" }
@@ -322,6 +419,7 @@ paths:
     post:
       tags: [solutions]
       operationId: validateSolution
+      x-easf-roles: [solution_architect]
       parameters: [ { $ref: "#/components/parameters/SolutionId" }, { $ref: "#/components/parameters/CsrfToken" } ]
       responses:
         "200": { description: "Composer validation (pinned versions, config schemas, edge type compatibility, acyclicity, budget).", content: { application/json: { schema: { $ref: "#/components/schemas/ValidationReport" } } } }
@@ -331,6 +429,7 @@ paths:
     post:
       tags: [solutions]
       operationId: approveSolution
+      x-easf-roles: [solution_lead]
       description: Requires a valid solution and an approver other than the author. Freezes workflow_hash.
       parameters: [ { $ref: "#/components/parameters/SolutionId" }, { $ref: "#/components/parameters/CsrfToken" } ]
       responses:
@@ -343,6 +442,7 @@ paths:
     post:
       tags: [runs]
       operationId: startRun
+      x-easf-roles: [solution_lead, solution_architect, qa_evaluator]
       parameters:
         - { $ref: "#/components/parameters/SolutionId" }
         - { $ref: "#/components/parameters/CsrfToken" }
@@ -362,6 +462,7 @@ paths:
     get:
       tags: [runs]
       operationId: listRuns
+      x-easf-roles: [project_member]
       parameters:
         - { name: project_id, in: query, required: true, schema: { type: string, format: uuid } }
         - { name: status, in: query, schema: { $ref: "#/components/schemas/RunStatus" } }
@@ -375,6 +476,7 @@ paths:
     get:
       tags: [runs]
       operationId: getRun
+      x-easf-roles: [project_member]
       parameters: [ { $ref: "#/components/parameters/RunId" } ]
       responses:
         "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Run" } } } }
@@ -384,6 +486,7 @@ paths:
     get:
       tags: [runs]
       operationId: listNodeRuns
+      x-easf-roles: [project_member]
       parameters: [ { $ref: "#/components/parameters/RunId" } ]
       responses:
         "200": { description: OK, content: { application/json: { schema: { type: array, maxItems: 30, items: { $ref: "#/components/schemas/NodeRun" } } } } }
@@ -393,6 +496,7 @@ paths:
     get:
       tags: [runs]
       operationId: getRunTrace
+      x-easf-roles: [project_member]
       parameters: [ { $ref: "#/components/parameters/RunId" }, { $ref: "#/components/parameters/Limit" }, { $ref: "#/components/parameters/Cursor" } ]
       responses:
         "200": { description: Redacted events., content: { application/json: { schema: { $ref: "#/components/schemas/EventPage" } } } }
@@ -402,6 +506,7 @@ paths:
     get:
       tags: [runs]
       operationId: exportRunResult
+      x-easf-roles: [solution_lead, qa_evaluator, business_reviewer]
       description: Only for succeeded runs. CSV cells starting with = + - @ tab CR are prefixed with a quote.
       parameters:
         - { $ref: "#/components/parameters/RunId" }
@@ -420,6 +525,7 @@ paths:
     get:
       tags: [reviews]
       operationId: listReviewTasks
+      x-easf-roles: [solution_lead, business_reviewer]
       parameters:
         - { name: status, in: query, schema: { type: string, enum: [pending, completed] } }
         - { name: assigned_to_me, in: query, schema: { type: boolean, default: true } }
@@ -432,6 +538,7 @@ paths:
     get:
       tags: [reviews]
       operationId: getReviewTask
+      x-easf-roles: [project_member]
       parameters: [ { $ref: "#/components/parameters/RunId" }, { $ref: "#/components/parameters/ReviewId" } ]
       responses:
         "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/ReviewTask" } } } }
@@ -441,6 +548,7 @@ paths:
     post:
       tags: [reviews]
       operationId: decideReviewTask
+      x-easf-roles: [business_reviewer]
       description: Only the assigned business_reviewer. A completed task cannot be decided again (409); the same idempotency key returns the original result.
       parameters:
         - { $ref: "#/components/parameters/RunId" }
@@ -462,13 +570,27 @@ paths:
     get:
       tags: [evaluations]
       operationId: listDatasetVersions
+      x-easf-roles: [solution_lead, qa_evaluator]
       responses:
         "200": { description: Registered dataset versions (manifest hashes; no holdout labels)., content: { application/json: { schema: { type: array, maxItems: 100, items: { $ref: "#/components/schemas/DatasetVersion" } } } } }
         "401": { $ref: "#/components/responses/Error" }
   /api/v1/evaluations:
+    get:
+      tags: [evaluations]
+      operationId: listEvaluations
+      x-easf-roles: [project_member]
+      parameters:
+        - { name: solution_id, in: query, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/Limit" }
+        - { $ref: "#/components/parameters/Cursor" }
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/EvaluationPage" } } } }
+        "401": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
     post:
       tags: [evaluations]
       operationId: startEvaluation
+      x-easf-roles: [qa_evaluator]
       parameters: [ { $ref: "#/components/parameters/CsrfToken" }, { $ref: "#/components/parameters/IdempotencyKey" } ]
       requestBody:
         required: true
@@ -483,6 +605,7 @@ paths:
     get:
       tags: [evaluations]
       operationId: getEvaluation
+      x-easf-roles: [project_member]
       parameters: [ { name: evaluation_id, in: path, required: true, schema: { type: string, format: uuid } } ]
       responses:
         "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Evaluation" } } } }
@@ -493,6 +616,7 @@ paths:
     get:
       tags: [reuse]
       operationId: getProjectReuseEvidence
+      x-easf-roles: [project_member]
       parameters: [ { $ref: "#/components/parameters/ProjectId" } ]
       responses:
         "200": { description: OK, content: { application/json: { schema: { type: array, maxItems: 500, items: { $ref: "#/components/schemas/ReuseRecord" } } } } }
@@ -502,6 +626,7 @@ paths:
     get:
       tags: [reuse]
       operationId: getReuseSummary
+      x-easf-roles: [any_authenticated]
       description: Capability versions executed in more than one project the caller can see, with trace-linked run IDs.
       responses:
         "200": { description: OK, content: { application/json: { schema: { type: array, maxItems: 500, items: { $ref: "#/components/schemas/ReuseSummaryItem" } } } } }
@@ -511,6 +636,7 @@ paths:
     get:
       tags: [llm]
       operationId: listLlmProfiles
+      x-easf-roles: [any_authenticated]
       description: Read-only view of config/llm_profiles.yaml. Never returns keys, key variable names, or endpoints.
       responses:
         "200": { description: OK, content: { application/json: { schema: { type: array, maxItems: 20, items: { $ref: "#/components/schemas/LlmProfileView" } } } } }
@@ -807,7 +933,8 @@ components:
           description: Keys match workflow.inputs[].name. document_ref values are document UUIDs of the same project.
     RunStatus:
       type: string
-      enum: [pending, running, waiting_review, succeeded, failed, cancelled]
+      enum: [pending, running, waiting_review, succeeded, rejected, failed, cancelled]
+      description: "rejected = a human reviewer rejected the result; downstream nodes are skipped and nothing is exported. Only succeeded runs can be exported or used as reuse evidence."
     Run:
       type: object
       additionalProperties: false
@@ -1004,6 +1131,42 @@ components:
         project_ids: { type: array, items: { type: string, format: uuid } }
         real_run_count: { type: integer, minimum: 0 }
         mock_run_count: { type: integer, minimum: 0 }
+    ProjectMember:
+      type: object
+      additionalProperties: false
+      required: [user_id, roles]
+      properties:
+        user_id: { type: string, format: uuid }
+        display_name: { type: string, maxLength: 100, readOnly: true }
+        roles:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items: { type: string, enum: [solution_lead, solution_architect, qa_evaluator, business_reviewer] }
+    SolutionPage:
+      type: object
+      additionalProperties: false
+      required: [items, page]
+      properties:
+        items: { type: array, items: { $ref: "#/components/schemas/Solution" } }
+        page: { $ref: "#/components/schemas/PageInfo" }
+    EvaluationPage:
+      type: object
+      additionalProperties: false
+      required: [items, page]
+      properties:
+        items: { type: array, items: { $ref: "#/components/schemas/Evaluation" } }
+        page: { $ref: "#/components/schemas/PageInfo" }
+    ReuseRecordCreate:
+      type: object
+      additionalProperties: false
+      required: [capability_version_id, reuse_kind, evidence_run_ids]
+      properties:
+        capability_version_id: { type: string, format: uuid }
+        reuse_kind: { type: string, enum: [unchanged, config_only, adapter_modification, new_code] }
+        adaptation_minutes: { type: [integer, "null"], minimum: 0 }
+        evidence_run_ids: { type: array, minItems: 1, maxItems: 100, items: { type: string, format: uuid } }
+        note: { type: string, maxLength: 1000 }
     LlmProfileView:
       type: object
       additionalProperties: false

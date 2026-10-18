@@ -12,6 +12,12 @@
 
 所有者は Claude Code だけ（`AGENTS.md`）。凍結後の変更は版を上げ、全利用者のテストを通してから。`easf_package/schemas/` からの変更点は `docs/phase0/PHASE0_PLAN.md` §B-4（S1〜S11）。
 
+## 補足
+
+- 内容ハッシュは RFC 8785 で正規化した JSON の SHA-256（ADR-004）。
+- `examples/rule_packs/invoice-1.0.0.json` の参照表（`registered_payees`）は形を示す見本。Phase 3 で合成データの生成器の出力から作り直し、新しい版として登録する（RV-G0-014）。
+- 権限は各操作の `x-easf-roles`（`docs/design/basic/permissions.md`）。
+
 ## 検査
 
 ```sh

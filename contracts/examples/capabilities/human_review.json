@@ -104,10 +104,8 @@
         "const": "business_reviewer"
       },
       "route_when": {
-        "enum": [
-          "always",
-          "on_flags"
-        ]
+        "const": "always",
+        "description": "v1 always pauses for review. Conditional routing is out of scope for v1."
       }
     }
   },

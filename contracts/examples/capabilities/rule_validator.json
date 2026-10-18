@@ -21,6 +21,35 @@
       },
       "field_status": {
         "type": "object"
+      },
+      "project_context": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "snapshot_at",
+          "values"
+        ],
+        "description": "Reserved input supplied by the Executor (not by edges): reviewed values of earlier succeeded runs in the same project, snapshotted at run start. Used by unique_in_project.",
+        "properties": {
+          "snapshot_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "values": {
+            "type": "object",
+            "maxProperties": 50,
+            "additionalProperties": {
+              "type": "array",
+              "maxItems": 10000,
+              "items": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              }
+            }
+          }
+        }
       }
     }
   },

@@ -27,7 +27,7 @@ A。ループは持たない（`graphlib` が循環を検出したら構成エ�
 外部エンジンの利点（耐障害の再実行、分散）は POC の規模では効かず、Workflow をデータとして検証・凍結する部分は自作が必要なため。全部が見えるので「汎用エンジンに業務分岐がない」ことも示しやすい。
 
 ## 影響・やらないこと
-- 状態機械（Run：`pending → running → waiting_review → running → succeeded / failed / cancelled`、NodeRun：`pending → running → succeeded / failed / skipped / waiting_review`）は詳細設計で定義する。
+- 状態機械（Run：`pending → running → waiting_review → running → succeeded / rejected / failed / cancelled`、NodeRun：`pending → running → succeeded / failed / skipped / waiting_review`）は詳細設計で定義する。確認で却下されたら Run は `rejected`、以降のノードは `skipped` で、出力しない（2026-10-18 追記、RV-G0-001）。
 - 分散実行・並列ノードの同時実行は行わない（ready なノードを順に実行）。
 - LangGraph などは将来の「外部 Agent ランタイム」のアダプタとして扱う。
 

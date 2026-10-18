@@ -25,5 +25,7 @@ A。
 - ローカルで HTTPS を使わない間は `__Host-` と `Secure` が使えないため、設定 `EASF_COOKIE_SECURE=false` を開発時だけ許し、診断用の設定（`EASF_ENV=assessment`）ではローカルの自己署名 HTTPS（リバースプロキシ）で `true` にする。
 - 秘密：環境変数と `.env`（コミットしない）、`pydantic-settings` の `SecretStr`、`gitleaks` を pre-commit と CI。
 
+- 利用者の作成・無効化・パスワードの初期化は **管理用の CLI**（`python -m easf.admin ...`）だけで行い、API を作らない（攻撃面を減らす）。案件のメンバーとロールは `GET/PUT /projects/{id}/members`（solution_lead）。権限の全体は `docs/design/basic/permissions.md`（2026-10-18 追記、RV-G0-003・006）。
+
 ## やらないこと
 多要素認証、パスワードリセットのメール、外部 IdP 連携（ASVS の自己評価では「対象外（POC）」と書く）。

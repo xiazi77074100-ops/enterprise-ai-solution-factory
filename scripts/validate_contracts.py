@@ -30,6 +30,9 @@ CONTRACTS = ROOT / "contracts"
 EXAMPLES = CONTRACTS / "examples"
 ENGINE_DIRS = ["catalog", "composer", "executor", "adapters", "evaluation", "observability", "reuse"]
 SCENARIO_WORDS = re.compile(r"invoice|contract_review|請求書|契約")
+ALLOWED_ROLES = {"public", "any_authenticated", "project_member", "admin",
+                 "solution_lead", "solution_architect", "qa_evaluator", "business_reviewer"}
+PUBLIC_ROUTES = {"/health", "/ready", "/api/v1/session"}
 
 errors: list[str] = []
 
@@ -166,6 +169,16 @@ def main() -> int:
         validate_openapi(openapi)
     except Exception as exc:  # noqa: BLE001
         errors.append(f"openapi.yaml: {exc}")
+    # Every operation declares who may call it (docs/design/basic/permissions.md).
+    for route, item in openapi.get("paths", {}).items():
+        for method, op in item.items():
+            if method not in ("get", "post", "put", "patch", "delete"):
+                continue
+            declared = op.get("x-easf-roles")
+            if not declared or not set(declared) <= ALLOWED_ROLES:
+                errors.append(f"openapi.yaml: {method.upper()} {route}: x-easf-roles missing or invalid: {declared}")
+            elif "public" in declared and route not in PUBLIC_ROUTES:
+                errors.append(f"openapi.yaml: {method.upper()} {route}: public is allowed only for {sorted(PUBLIC_ROUTES)}")
     # An unquoted comma inside a YAML flow mapping silently turns prose into null-valued keys.
     for pointer in null_keys(openapi):
         errors.append(f"openapi.yaml: null-valued key (unquoted comma in flow mapping?): {pointer}")
