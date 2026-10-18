@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import text, update
+from sqlalchemy import create_engine, text, update
 from sqlalchemy.orm import Session
 
 from app.auth.models import User, UserSession
@@ -23,7 +23,15 @@ pytestmark = pytest.mark.db
 BACKEND = Path(__file__).resolve().parents[2]
 ORIGIN = {"Origin": "http://testserver"}
 PASSWORD = "correct horse battery staple"
-TABLES = ("requirement_revision", "project_member", "project", "user_session", "app_user")
+TABLES = (
+    "capability_version",
+    "rule_pack_version",
+    "requirement_revision",
+    "project_member",
+    "project",
+    "user_session",
+    "app_user",
+)
 
 
 @pytest.fixture(scope="module")
@@ -37,10 +45,10 @@ def migrated() -> None:
 
 @pytest.fixture
 def db(migrated: None, db_url: str) -> Iterator[Session]:
+    # The owner role truncates (versioned rows are immutable: DELETE is rejected by trigger).
+    with create_engine(os.environ["EASF_MIGRATION_DATABASE_URL"]).begin() as owner:
+        owner.execute(text(f"TRUNCATE {', '.join(TABLES)} CASCADE"))  # nosec B608 - fixed table names
     with make_session_factory(make_settings(database_url=db_url))() as session:
-        for table in TABLES:
-            session.execute(text(f"DELETE FROM {table}"))  # noqa: S608  # nosec B608 - fixed table names
-        session.commit()
         yield session
 
 

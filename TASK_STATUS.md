@@ -11,7 +11,7 @@
 | P0-06 レビュー指摘の反映 | CC | 完了（15 件すべて反映） | `cc/P0-06-review-fixes` | `reviews/G0_REVIEW.md` §5 | 2026-10-18 |
 | G0 ゲート報告 | CC | 完了・**承認済み**（D-014） | — | `reports/gate_G0.md` | 2026-10-18 |
 | P1-01 FastAPI・PostgreSQL の雛形（健康確認・マイグレーション・CI） | CC | 完了 | `cc/P1-01-scaffold` | pytest 15 passed（実 PostgreSQL）、ruff・mypy strict・bandit・pip-audit 問題なし | 2026-10-18 |
-| P1-02 Capability Catalog（不変の版・検証） | CC | 未着手 | `cc/P1-02-catalog` | — | 2026-10-18 |
+| P1-02 Capability Catalog（不変の版・検証） | CC | 完了 | `cc/P1-02-catalog` | pytest 44 passed（見本 6 件の登録・冪等・409・外部 $ref・実装の許可リスト・DB トリガー・Rule pack）、静的検査問題なし | 2026-10-18 |
 | P1-03 日本語 UI の枠と共通部品 | CC | 未着手 | `cc/P1-03-ui-shell` | — | 2026-10-18 |
 | P1-04 契約テスト・否定テスト | CC | 未着手 | `cc/P1-04-contract-tests` | — | 2026-10-18 |
 | P1-05 認証・セッション・案件・メンバー・要件の版 | CC | 完了 | `cc/P1-05-auth-projects` | pytest 30 passed（ログイン・固定化・列挙・ロック・CSRF/Origin・IDOR・一括代入・自己承認を含む）、ruff・mypy・bandit・pip-audit 問題なし | 2026-10-18 |
