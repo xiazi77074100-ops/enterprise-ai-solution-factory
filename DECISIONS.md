@@ -26,3 +26,4 @@
 | D-020 | 2026-10-18 | 実装の許可リスト（`backend/app/catalog/registry.py`）に D-015 の規則ベースの抽出 `rule_based_extractor.v1`（kind=local）を宣言。全キーは `available=False`（コードは Phase 2・3）で、登録はできるが実行はできない | 契約を先に Catalog で確かめられるようにするため。実行可否は Executor が判定 | CC | ADR-001、easf-capability-contract §2 |
 | D-021 | 2026-10-18 | フロントエンドの依存を `frontend/package-lock.json` で固定（版は ADR-009 の追記）。jsdom は 29.1.1（30 系は Node 22.22.2 以上が必要で、この環境は 22.14） | 実行環境に合わせるため。npm audit で既知の脆弱性なし | CC | ADR-009 |
 | D-022 | 2026-10-18 | 契約を 1.0.1 に上げる：`login` の応答に 403（Origin が無い・違う）を追加。後方互換（エラー応答の追記だけ） | P1-04 の契約テストが、実装が返す 403 を契約が宣言していないことを検出したため。説明文では既に Origin の照合を必須にしていた | CC | D-014、contracts/openapi.yaml |
+| D-023 | 2026-10-18 | 診断の道具は版を固定して使う。OWASP ZAP は `ghcr.io/zaproxy/zaproxy:2.16.1`（この端末の `stable` イメージが壊れていたため）。trivy 0.76.0・gitleaks 8.30.1・semgrep 1.180.0 は今回の版を記録し、CI に入れるときに固定する | 診断の再現性。壊れたイメージでは ZAP が起動しない | CC | reports/security/2026-10-18/report.md |

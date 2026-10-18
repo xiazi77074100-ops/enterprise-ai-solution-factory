@@ -6,6 +6,7 @@ security headers as normal ones (Starlette's own error middleware sits outside u
 
 import json
 import logging
+import re
 
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
@@ -20,6 +21,21 @@ CSP = (
 )
 
 
+# VA-004: PostgreSQL text/jsonb cannot store NUL, so reject it up front (422) instead of failing in the DB (500).
+# In JSON a NUL is the escape \u0000 preceded by an even number of backslashes (\\u0000 is literal text).
+_JSON_NUL = re.compile(rb"(?<!\\)(?:\\\\)*\\u0000")
+
+
+def _has_nul(scope: Scope, body: bytes) -> bool:
+    for part in (scope.get("raw_path") or scope["path"].encode(), scope.get("query_string", b"")):
+        if b"\x00" in part or b"%00" in part:
+            return True
+    if "\x00" in scope["path"]:
+        return True
+    content_type = dict(scope.get("headers", [])).get(b"content-type", b"")
+    return content_type.startswith(b"application/json") and (b"\x00" in body or bool(_JSON_NUL.search(body)))
+
+
 class SecurityMiddleware:
     def __init__(self, app: ASGIApp, settings: Settings) -> None:
         self.app = app
@@ -31,6 +47,7 @@ class SecurityMiddleware:
             (b"referrer-policy", b"strict-origin-when-cross-origin"),
             (b"permissions-policy", b"camera=(), microphone=(), geolocation=()"),
             (b"cross-origin-opener-policy", b"same-origin"),
+            (b"cross-origin-resource-policy", b"same-origin"),  # VA-003 (ZAP 90004)
         ]
         if settings.hsts_enabled:
             self.headers.append((b"strict-transport-security", b"max-age=31536000; includeSubDomains"))
@@ -53,6 +70,9 @@ class SecurityMiddleware:
             body = await self._read_body(scope, receive)
             if body is None:
                 await self._json(send_with_headers, 413, "payload_too_large", "送信データが大きすぎます。")
+                return
+            if _has_nul(scope, body):
+                await self._json(send_with_headers, 422, "validation_error", "入力内容に誤りがあります。")
                 return
             await self.app(scope, _replay(body, receive), tracking_send)
         except Exception as exc:

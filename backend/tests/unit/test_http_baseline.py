@@ -16,6 +16,7 @@ SECURITY_HEADERS = {
     "referrer-policy",
     "permissions-policy",
     "cross-origin-opener-policy",
+    "cross-origin-resource-policy",
     "x-trace-id",
 }
 

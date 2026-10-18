@@ -16,6 +16,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         docs_url="/docs" if docs else None,
         redoc_url=None,
         openapi_url="/openapi.json" if docs else None,
+        # VA-005: the trailing-slash redirect builds Location from the Host header; contract paths have no slash.
+        redirect_slashes=False,
     )
     app.state.settings = settings
     app.state.session_factory = make_session_factory(settings)  # engine connects lazily
