@@ -1,0 +1,14 @@
+
+> easf-frontend@0.1.0 build
+> tsc --noEmit && vite build
+
+[36mvite v8.3.4 [32mbuilding client environment for production...[36m[39m
+transforming...
+✓ 2003 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.38 kB │ gzip:   0.26 kB
+dist/assets/index-DPviFo5t.css   17.35 kB │ gzip:   4.66 kB
+dist/assets/index-Cvc6FW0h.js   392.03 kB │ gzip: 124.77 kB
+
+[32m✓ built in 989ms[39m

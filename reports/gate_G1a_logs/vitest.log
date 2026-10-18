@@ -1,0 +1,13 @@
+
+> easf-frontend@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.5 D:/aidd/enterprise-ai-solution-factory/frontend
+
+
+ Test Files  2 passed (2)
+      Tests  6 passed (6)
+   Start at  21:36:47
+   Duration  4.25s (environment 68%, setup 14%, tests 8%, import 5%, transform 4%, worker 1%)
+
