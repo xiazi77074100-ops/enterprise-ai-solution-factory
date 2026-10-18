@@ -3,7 +3,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -21,6 +21,13 @@ class Settings(BaseSettings):
     session_absolute_hours: int = Field(default=8, ge=1, le=72)
     login_max_failures: int = Field(default=5, ge=1, le=20)
     login_lock_minutes: int = Field(default=15, ge=1, le=1440)
+
+    @model_validator(mode="after")
+    def _prod_requires_secure_cookie(self) -> "Settings":
+        # VA-001: production must never fall back to a non-Secure session cookie.
+        if self.env == "prod" and not self.cookie_secure:
+            raise ValueError("EASF_COOKIE_SECURE must be true when EASF_ENV=prod")
+        return self
 
     @property
     def session_cookie_name(self) -> str:

@@ -18,5 +18,26 @@ services:
       timeout: 3s
       retries: 30
 
+  # Started only with `--profile app` (security assessment / container checks). Dev runs uvicorn locally.
+  api:
+    profiles: ["app"]
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    image: easf-backend:local
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      EASF_ENV: assessment  # fixed: never assess with dev settings (jp-vuln-assessment §0)
+      EASF_DATABASE_URL: postgresql+psycopg://easf_app:${EASF_APP_DB_PASSWORD}@db:5432/easf
+      EASF_SECRET_KEY: ${EASF_SECRET_KEY:?set in .env}
+      EASF_SITE_ORIGIN: ${EASF_SITE_ORIGIN:-http://localhost:5173}
+    ports:
+      - "127.0.0.1:8001:8000"
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+
 volumes:
   easf_db:

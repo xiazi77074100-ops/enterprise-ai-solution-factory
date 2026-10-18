@@ -1,0 +1,5 @@
+# False positives: fixed dummy keys used only by tests (not real secrets). Reviewed 2026-10-18 (jp-vuln-assessment).
+d0c9e1a3ca4e9759f051332d2ecaa04150954738:backend/tests/conftest.py:generic-api-key:14
+d0c9e1a3ca4e9759f051332d2ecaa04150954738:backend/tests/integration/test_admin_cli.py:generic-api-key:17
+backend/tests/conftest.py:generic-api-key:14
+backend/tests/integration/test_admin_cli.py:generic-api-key:17
