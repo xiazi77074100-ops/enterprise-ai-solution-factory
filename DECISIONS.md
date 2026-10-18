@@ -21,3 +21,4 @@
 | D-015 | 2026-10-18 | Q1：抽出は 2 つとも用意する。(1) LLM を使わないローカルの規則ベースの抽出（見出しの近くの値を拾う）を別の Capability 版として作る、(2) LLM の抽出は mock で先に流れを通し、実 API は Gemini（無料の API キー、`.env` の `EASF_LLM_GEMINI_API_KEY`）から使う。Gemini を有効にする前に、無料枠のデータの扱い（学習への利用など）と制限を公式の資料で確かめ ADR-002 に記録する | 費用ゼロで評価の流れを通し、実 API と同じ契約で比べるため | プロジェクト責任者 | ADR-002、D-004 |
 | D-016 | 2026-10-18 | 事前登録（`docs/experiment/preregistration.md`）を承認。Q2：CR-2（請求書）は参考値とし、比較は CR-1（契約書）だけ | 推奨どおり | プロジェクト責任者 | ADR-008 |
 | D-017 | 2026-10-18 | Phase 1（G1a）に着手。Codex がいないため CC が P1-01〜P1-04 を順に実施し、タスクごとにプッシュする（D-011・D-013） | G0 承認による | プロジェクト責任者 | PHASE_PLAN |
+| D-018 | 2026-10-18 | バックエンドの依存を `backend/uv.lock` で固定（Python 3.12.3、FastAPI 0.143.3、SQLAlchemy 2.1.5、Alembic 1.20.0、Pydantic 2.14.1、psycopg 3.3.6）。PostgreSQL は `postgres:17-alpine`（ダイジェストの固定は G1a の診断時に行う） | P1-01 で `uv lock` した結果。pip-audit で既知の脆弱性なし | CC | ADR-001・ADR-004 |

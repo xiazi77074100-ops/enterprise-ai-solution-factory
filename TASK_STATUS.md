@@ -10,7 +10,7 @@
 | P0-05 脅威モデル・基本設計・見積・台帳 | CC | レビュー待ち | `cc/P0-05-design` | `docs/design/`、`docs/phase0/estimates.md`、台帳 5 種 | 2026-10-18 |
 | P0-06 レビュー指摘の反映 | CC | 完了（15 件すべて反映） | `cc/P0-06-review-fixes` | `reviews/G0_REVIEW.md` §5 | 2026-10-18 |
 | G0 ゲート報告 | CC | 完了・**承認済み**（D-014） | — | `reports/gate_G0.md` | 2026-10-18 |
-| P1-01 FastAPI・PostgreSQL の雛形（健康確認・マイグレーション・CI） | CC | 未着手 | `cc/P1-01-scaffold` | — | 2026-10-18 |
+| P1-01 FastAPI・PostgreSQL の雛形（健康確認・マイグレーション・CI） | CC | 完了 | `cc/P1-01-scaffold` | pytest 15 passed（実 PostgreSQL）、ruff・mypy strict・bandit・pip-audit 問題なし | 2026-10-18 |
 | P1-02 Capability Catalog（不変の版・検証） | CC | 未着手 | `cc/P1-02-catalog` | — | 2026-10-18 |
 | P1-03 日本語 UI の枠と共通部品 | CC | 未着手 | `cc/P1-03-ui-shell` | — | 2026-10-18 |
 | P1-04 契約テスト・否定テスト | CC | 未着手 | `cc/P1-04-contract-tests` | — | 2026-10-18 |

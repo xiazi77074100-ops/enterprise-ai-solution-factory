@@ -1,0 +1,22 @@
+# Local only (D-006). Ports bind to 127.0.0.1. Values come from .env (copy .env.example).
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: easf
+      POSTGRES_USER: easf_owner
+      POSTGRES_PASSWORD: ${EASF_OWNER_DB_PASSWORD:?set in .env}
+      EASF_APP_DB_PASSWORD: ${EASF_APP_DB_PASSWORD:?set in .env}
+    ports:
+      - "127.0.0.1:${EASF_DB_PORT:-55432}:5432"
+    volumes:
+      - easf_db:/var/lib/postgresql/data
+      - ./docker/postgres:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U easf_owner -d easf"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  easf_db:

@@ -1,0 +1,52 @@
+[project]
+name = "easf-backend"
+version = "0.1.0"
+description = "Enterprise AI Solution Factory backend (modular monolith)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic>=2",
+    "pydantic-settings>=2",
+    "sqlalchemy>=2",
+    "alembic",
+    "psycopg[binary]>=3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "httpx",
+    "ruff",
+    "mypy",
+    "bandit",
+    "pip-audit",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S", "SIM", "N"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106"]
+"migrations/**" = ["N999"]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
+exclude = ["migrations/"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = ["db: needs a real PostgreSQL (EASF_TEST_DATABASE_URL)"]
+
+[tool.bandit]
+exclude_dirs = ["tests"]

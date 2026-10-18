@@ -1,0 +1,132 @@
+"""Outermost ASGI middleware: trace id, request size limit, unexpected-error handling and security headers.
+
+It must produce every response itself when something goes wrong, so that 413 and 500 responses carry the same
+security headers as normal ones (Starlette's own error middleware sits outside user middleware).
+"""
+
+import json
+import logging
+
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
+
+from app.core.config import Settings
+from app.core.errors import new_trace_id, trace_id_var
+
+logger = logging.getLogger("easf.errors")
+
+CSP = (
+    "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; "
+    "connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+)
+
+
+class SecurityMiddleware:
+    def __init__(self, app: ASGIApp, settings: Settings) -> None:
+        self.app = app
+        self.limit = settings.max_request_bytes
+        self.headers = [
+            (b"content-security-policy", CSP.encode()),
+            (b"x-frame-options", b"DENY"),
+            (b"x-content-type-options", b"nosniff"),
+            (b"referrer-policy", b"strict-origin-when-cross-origin"),
+            (b"permissions-policy", b"camera=(), microphone=(), geolocation=()"),
+            (b"cross-origin-opener-policy", b"same-origin"),
+        ]
+        if settings.hsts_enabled:
+            self.headers.append((b"strict-transport-security", b"max-age=31536000; includeSubDomains"))
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+        token = trace_id_var.set(new_trace_id())
+        started = False
+        send_with_headers = self._with_headers(scope, send)
+
+        async def tracking_send(message: Message) -> None:
+            nonlocal started
+            if message["type"] == "http.response.start":
+                started = True
+            await send_with_headers(message)
+
+        try:
+            body = await self._read_body(scope, receive)
+            if body is None:
+                await self._json(send_with_headers, 413, "payload_too_large", "送信データが大きすぎます。")
+                return
+            await self.app(scope, _replay(body, receive), tracking_send)
+        except Exception as exc:
+            logger.error("unhandled exception", extra={"error_type": type(exc).__name__}, exc_info=exc)
+            if not started:
+                await self._json(
+                    send_with_headers,
+                    500,
+                    "internal_error",
+                    f"処理中にエラーが発生しました。（trace_id: {trace_id_var.get()}）",
+                )
+        finally:
+            trace_id_var.reset(token)
+
+    async def _read_body(self, scope: Scope, receive: Receive) -> bytes | None:
+        """Read the whole body up to the limit (None when exceeded). Bounded by max_request_bytes."""
+        declared = dict(scope.get("headers", [])).get(b"content-length")
+        if declared is not None and (not declared.isdigit() or int(declared) > self.limit):
+            return None
+        chunks: list[bytes] = []
+        size = 0
+        while True:
+            message = await receive()
+            if message["type"] != "http.request":
+                break
+            chunk = message.get("body", b"")
+            size += len(chunk)
+            if size > self.limit:
+                return None
+            chunks.append(chunk)
+            if not message.get("more_body", False):
+                break
+        return b"".join(chunks)
+
+    def _with_headers(self, scope: Scope, send: Send) -> Send:
+        no_store = scope["path"].startswith("/api/")
+
+        async def wrapped(message: Message) -> None:
+            if message["type"] == "http.response.start":
+                headers = [
+                    (k, v) for k, v in message.get("headers", []) if k.lower() not in (b"server", b"x-powered-by")
+                ]
+                headers += self.headers
+                headers.append((b"x-trace-id", trace_id_var.get().encode()))
+                if no_store:
+                    headers.append((b"cache-control", b"no-store"))
+                message["headers"] = headers
+            await send(message)
+
+        return wrapped
+
+    @staticmethod
+    async def _json(send: Send, status: int, code: str, message: str) -> None:
+        body = json.dumps(
+            {"code": code, "message": message, "trace_id": trace_id_var.get()}, ensure_ascii=False
+        ).encode()
+        await send(
+            {
+                "type": "http.response.start",
+                "status": status,
+                "headers": [(b"content-type", b"application/json"), (b"content-length", str(len(body)).encode())],
+            }
+        )
+        await send({"type": "http.response.body", "body": body})
+
+
+def _replay(body: bytes, receive: Receive) -> Receive:
+    sent = False
+
+    async def wrapped() -> Message:
+        nonlocal sent
+        if not sent:
+            sent = True
+            return {"type": "http.request", "body": body, "more_body": False}
+        return await receive()  # http.disconnect after the body
+
+    return wrapped

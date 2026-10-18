@@ -5,9 +5,9 @@ Claude Code と Codex の両方が読む共通の規則。`CLAUDE.md` は `@AGEN
 ## 1. 正本と現在地
 
 - 仕様の正本は `easf_package/`（README・docs・schemas・tasks・prompts）。**読み取り専用**。変更は変更要求（`easf_package/docs/06_DECISIONS_AND_RISKS.md` の Change control）を通す。
-- 現在のフェーズは **Phase 0（設計・契約・実験方法の確定）**。計画書は `docs/phase0/PHASE0_PLAN.md`。決定は `DECISIONS.md`、タスクは `TASK_STATUS.md`。
+- 現在のフェーズは **Phase 1（G1a：雛形・Catalog・UI の枠・契約テスト）**。G0 は承認済み（D-014）、契約 v1 は凍結。Phase 0 の計画書は `docs/phase0/PHASE0_PLAN.md`。開発環境は `docs/design/dev_setup.md`。決定は `DECISIONS.md`、タスクは `TASK_STATUS.md`。
 - EASF は個人の独立した POC（D-002）。会社の資産・データ・アカウント・端末・勤務時間を使わない。
-- **G0 が人間に承認されるまで、アプリケーションコード（backend/・frontend/ の実装、DB マイグレーション）を書かない。** 書いてよいのは設計書・ADR・契約（スキーマ）・skill・開発用スクリプトだけ。
+- 各フェーズは承認されたタスクだけを行う。次のゲートの承認前に次のフェーズのコードを書かない。
 - ゲートを飛ばさない。各フェーズの終わりで止まり、人間の go / no-go を待つ（`easf-phase-gate` skill）。
 
 ## 2. 言語
