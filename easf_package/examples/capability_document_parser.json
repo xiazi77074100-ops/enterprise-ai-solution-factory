@@ -1,0 +1,44 @@
+{
+  "capability_id": "document.parser",
+  "version": "1.0.0",
+  "kind": "local",
+  "name": "Document Parser",
+  "description": "Parse synthetic document and produce text/pages",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "document_ref"
+    ],
+    "properties": {
+      "document_ref": {
+        "type": "string"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "pages"
+    ],
+    "properties": {
+      "pages": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "implementation": {
+    "adapter": "local",
+    "reference": "capabilities.document_parser:run"
+  },
+  "applicability": [
+    "invoice",
+    "contract"
+  ],
+  "provenance": {
+    "source": "independent_poc",
+    "license": "internal_poc"
+  }
+}

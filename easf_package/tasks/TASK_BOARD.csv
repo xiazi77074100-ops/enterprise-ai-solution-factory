@@ -1,0 +1,22 @@
+id,phase,suggested_owner,task,evidence,gate
+P0-01,P0,CC,Architecture ADRs and engine comparison,ADR docs + recommendation,G0
+P0-02,P0,Codex,Independent architecture and security challenge,review notes + blockers,G0
+P0-03,P0,CC,Freeze capability/workflow contracts,versioned schemas and examples,G0
+P0-04,P0,Codex,Gold fixture design and baseline protocol,manifest spec and scoring plan,G0
+P1-01,P1,CC,FastAPI and PostgreSQL scaffold,"health, migrations, CI",G1a
+P1-02,P1,CC,Capability Catalog,CRUD immutable versions + validation tests,G1a
+P1-03,P1,Codex,Japanese UI shell and project screens,working UI against API,G1a
+P1-04,P1,Codex,API contract and negative tests,automated suite,G1a
+P2-01,P2,CC,Composer typed DAG,graph validation tests,G1b
+P2-02,P2,CC,Executor and adapters,"real node runs, safe failure handling",G1b
+P2-03,P2,Codex,Run/review UI,trace and review screens,G1b
+P2-04,P2,Codex,Executor adversarial tests,"timeout, malformed, unsafe cases",G1b
+P3-01,P3,CC,Invoice domain capabilities,"real workflow, export",G2
+P3-02,P3,Codex,Invoice fixtures and independent tests,gold labels + tests,G2
+P4-01,P4,Codex,Contract rule pack and workflow config,contract POC using shared versions,G3
+P4-02,P4,CC,Reuse evidence and changed-requirement experiment,trace-linked evidence,G3
+P5-01,P5,Codex,AI Coding baseline execution,labor/cost/quality logs,G5
+P5-02,P5,CC,Factory evaluation run,frozen holdout report,G4
+P5-03,P5,Codex,Security/license/IP review,signed review findings,G4
+P6-01,P6,CC,Executive demo and runbook,Japanese demo and honest results,G5
+P6-02,P6,Codex,Independent reproducibility audit,clean-room verification,G5

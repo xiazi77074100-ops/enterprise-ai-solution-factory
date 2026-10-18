@@ -1,0 +1,39 @@
+{
+  "workflow_id": "invoice-poc",
+  "version": 1,
+  "nodes": [
+    {
+      "node_id": "parse",
+      "capability_id": "document.parser",
+      "capability_version": "1.0.0",
+      "config": {}
+    },
+    {
+      "node_id": "extract",
+      "capability_id": "document.extractor",
+      "capability_version": "1.0.0",
+      "config": {
+        "schema_profile": "invoice-v1"
+      }
+    },
+    {
+      "node_id": "validate",
+      "capability_id": "document.rule_validator",
+      "capability_version": "1.0.0",
+      "config": {
+        "rule_pack": "invoice-v1"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "parse",
+      "to": "extract"
+    },
+    {
+      "from": "extract",
+      "to": "validate"
+    }
+  ],
+  "requires_human_approval": true
+}
