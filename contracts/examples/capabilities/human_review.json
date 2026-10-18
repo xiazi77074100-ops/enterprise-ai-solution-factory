@@ -1,0 +1,132 @@
+{
+  "schema_version": "1",
+  "capability_id": "review.human",
+  "version": "1.0.0",
+  "kind": "local",
+  "name": "Human Review",
+  "description": "実行を一時停止し、確認者の承認・修正・却下を待つ。",
+  "input_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "fields",
+      "findings",
+      "evidence"
+    ],
+    "properties": {
+      "fields": {
+        "type": "object",
+        "maxProperties": 100,
+        "description": "Extracted values keyed by field_spec name; null when not found."
+      },
+      "findings": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rule_id",
+            "severity",
+            "result",
+            "message"
+          ],
+          "properties": {
+            "rule_id": {
+              "type": "string",
+              "pattern": "^[A-Z]{2,8}-[0-9]{3}$"
+            },
+            "severity": {
+              "enum": [
+                "critical",
+                "major",
+                "minor"
+              ]
+            },
+            "result": {
+              "enum": [
+                "pass",
+                "fail",
+                "uncertain"
+              ]
+            },
+            "message": {
+              "type": "string",
+              "maxLength": 500
+            }
+          }
+        }
+      },
+      "evidence": {
+        "type": "object"
+      }
+    }
+  },
+  "output_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "reviewed_fields",
+      "decision",
+      "corrections"
+    ],
+    "properties": {
+      "reviewed_fields": {
+        "type": "object",
+        "maxProperties": 100,
+        "description": "Extracted values keyed by field_spec name; null when not found."
+      },
+      "decision": {
+        "enum": [
+          "approved",
+          "approved_with_corrections",
+          "rejected"
+        ]
+      },
+      "corrections": {
+        "type": "array",
+        "maxItems": 200
+      }
+    }
+  },
+  "configuration_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "reviewer_role",
+      "route_when"
+    ],
+    "properties": {
+      "reviewer_role": {
+        "const": "business_reviewer"
+      },
+      "route_when": {
+        "enum": [
+          "always",
+          "on_flags"
+        ]
+      }
+    }
+  },
+  "implementation": {
+    "ref": "human_review.v1"
+  },
+  "tags": [
+    "document"
+  ],
+  "provenance": {
+    "source": "independent_poc",
+    "license": "internal_poc",
+    "author": "easf"
+  },
+  "evaluation_profile": "document-v1",
+  "timeout_ms": 120000,
+  "retry": {
+    "max_attempts": 0,
+    "idempotent": false
+  },
+  "side_effects": false
+}

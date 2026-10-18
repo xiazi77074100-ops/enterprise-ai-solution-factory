@@ -1,0 +1,131 @@
+{
+  "schema_version": "1",
+  "capability_id": "result.exporter",
+  "version": "1.0.0",
+  "kind": "local",
+  "name": "Result Exporter",
+  "description": "確認済みの結果を JSON / CSV / レビューレポートに出力する。",
+  "input_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "reviewed_fields",
+      "findings",
+      "decision"
+    ],
+    "properties": {
+      "reviewed_fields": {
+        "type": "object",
+        "maxProperties": 100,
+        "description": "Extracted values keyed by field_spec name; null when not found."
+      },
+      "findings": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rule_id",
+            "severity",
+            "result",
+            "message"
+          ],
+          "properties": {
+            "rule_id": {
+              "type": "string",
+              "pattern": "^[A-Z]{2,8}-[0-9]{3}$"
+            },
+            "severity": {
+              "enum": [
+                "critical",
+                "major",
+                "minor"
+              ]
+            },
+            "result": {
+              "enum": [
+                "pass",
+                "fail",
+                "uncertain"
+              ]
+            },
+            "message": {
+              "type": "string",
+              "maxLength": 500
+            }
+          }
+        }
+      },
+      "decision": {
+        "enum": [
+          "approved",
+          "approved_with_corrections",
+          "rejected"
+        ]
+      }
+    }
+  },
+  "output_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "export_id",
+      "format"
+    ],
+    "properties": {
+      "export_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "format": {
+        "enum": [
+          "json",
+          "csv",
+          "review_report"
+        ]
+      }
+    }
+  },
+  "configuration_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "format"
+    ],
+    "properties": {
+      "format": {
+        "enum": [
+          "json",
+          "csv",
+          "review_report"
+        ]
+      },
+      "title_ja": {
+        "type": "string",
+        "maxLength": 100
+      }
+    }
+  },
+  "implementation": {
+    "ref": "result_exporter.v1"
+  },
+  "tags": [
+    "document"
+  ],
+  "provenance": {
+    "source": "independent_poc",
+    "license": "internal_poc",
+    "author": "easf"
+  },
+  "evaluation_profile": "document-v1",
+  "timeout_ms": 30000,
+  "retry": {
+    "max_attempts": 2,
+    "idempotent": true
+  },
+  "side_effects": false
+}

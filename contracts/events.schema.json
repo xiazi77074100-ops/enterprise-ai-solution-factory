@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:easf:contract:event:1",
+  "title": "Event envelope v1",
+  "description": "Append-only trace/audit event. Never contains full document payloads, secrets or raw LLM output; only hashes and redacted metadata.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "event_type", "timestamp", "trace_id", "actor", "status", "redacted_metadata"],
+  "properties": {
+    "schema_version": { "const": "1" },
+    "event_id": { "type": "string", "format": "uuid" },
+    "event_type": {
+      "enum": [
+        "project.created",
+        "requirement.approved",
+        "capability.registered",
+        "rule_pack.registered",
+        "solution.validated",
+        "solution.approved",
+        "run.started",
+        "node.started",
+        "node.completed",
+        "node.failed",
+        "review.requested",
+        "review.completed",
+        "run.completed",
+        "run.failed",
+        "evaluation.completed",
+        "reuse.recorded",
+        "auth.login_succeeded",
+        "auth.login_failed",
+        "auth.logout",
+        "export.created"
+      ]
+    },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "trace_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "run_id": { "type": ["string", "null"], "format": "uuid" },
+    "node_id": { "type": ["string", "null"], "pattern": "^[a-z][a-z0-9_]{0,31}$" },
+    "project_id": { "type": ["string", "null"], "format": "uuid" },
+    "capability_version_id": { "type": ["string", "null"], "format": "uuid" },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {
+        "type": { "enum": ["user", "system"] },
+        "id": { "type": "string", "maxLength": 64 }
+      }
+    },
+    "status": { "enum": ["ok", "failed", "pending", "rejected"] },
+    "execution_mode": { "enum": ["real", "mock", null] },
+    "redacted_metadata": {
+      "type": "object",
+      "maxProperties": 30,
+      "propertyNames": { "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+      "additionalProperties": { "type": ["string", "number", "boolean", "null"] }
+    },
+    "prev_event_hash": {
+      "description": "SHA-256 of the previous event in the same stream (tamper evidence for audit events).",
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

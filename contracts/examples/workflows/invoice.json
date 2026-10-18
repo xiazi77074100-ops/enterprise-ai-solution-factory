@@ -1,0 +1,272 @@
+{
+  "schema_version": "1",
+  "workflow_id": "invoice-poc",
+  "version": 1,
+  "name": "請求書処理",
+  "description": "同じ 6 つの Capability 版を、設定（field_spec・rule pack・出力形式）だけ変えて使う。",
+  "inputs": [
+    {
+      "name": "document",
+      "type": "document_ref",
+      "to": [
+        {
+          "node_id": "parse",
+          "field": "document_ref"
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "parse",
+      "capability_id": "document.parser",
+      "capability_version": "1.0.0",
+      "config": {
+        "ocr": "tesseract"
+      }
+    },
+    {
+      "node_id": "extract",
+      "capability_id": "document.extractor",
+      "capability_version": "1.0.0",
+      "config": {
+        "llm_profile": "extractor_default",
+        "field_spec": [
+          {
+            "name": "vendor_name",
+            "type": "string",
+            "label_ja": "請求元",
+            "critical": false
+          },
+          {
+            "name": "invoice_no",
+            "type": "string",
+            "label_ja": "請求書番号",
+            "critical": true
+          },
+          {
+            "name": "issue_date",
+            "type": "date",
+            "label_ja": "請求日",
+            "critical": false
+          },
+          {
+            "name": "due_date",
+            "type": "date",
+            "label_ja": "支払期日",
+            "critical": false
+          },
+          {
+            "name": "subtotal",
+            "type": "decimal",
+            "label_ja": "小計",
+            "critical": true
+          },
+          {
+            "name": "tax",
+            "type": "decimal",
+            "label_ja": "消費税",
+            "critical": true
+          },
+          {
+            "name": "total",
+            "type": "decimal",
+            "label_ja": "合計",
+            "critical": true
+          },
+          {
+            "name": "registration_no",
+            "type": "string",
+            "label_ja": "登録番号",
+            "critical": true
+          },
+          {
+            "name": "payee_bank",
+            "type": "string",
+            "label_ja": "振込先銀行",
+            "critical": true
+          },
+          {
+            "name": "payee_branch",
+            "type": "string",
+            "label_ja": "振込先支店",
+            "critical": true
+          },
+          {
+            "name": "payee_account",
+            "type": "string",
+            "label_ja": "振込先口座",
+            "critical": true
+          },
+          {
+            "name": "line_items",
+            "type": "array",
+            "label_ja": "明細",
+            "critical": false
+          }
+        ]
+      }
+    },
+    {
+      "node_id": "validate",
+      "capability_id": "document.rule_validator",
+      "capability_version": "1.0.0",
+      "config": {
+        "rule_pack_id": "invoice",
+        "rule_pack_version": "1.0.0"
+      }
+    },
+    {
+      "node_id": "locate",
+      "capability_id": "document.evidence_locator",
+      "capability_version": "1.0.0",
+      "config": {
+        "match": "normalized"
+      }
+    },
+    {
+      "node_id": "review",
+      "capability_id": "review.human",
+      "capability_version": "1.0.0",
+      "config": {
+        "reviewer_role": "business_reviewer",
+        "route_when": "always"
+      }
+    },
+    {
+      "node_id": "export",
+      "capability_id": "result.exporter",
+      "capability_version": "1.0.0",
+      "config": {
+        "format": "csv",
+        "title_ja": "請求書の確認結果"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "parse",
+      "to": "extract",
+      "mapping": [
+        {
+          "from_path": "/document_id",
+          "to_field": "document_id"
+        },
+        {
+          "from_path": "/pages",
+          "to_field": "pages"
+        }
+      ]
+    },
+    {
+      "from": "parse",
+      "to": "locate",
+      "mapping": [
+        {
+          "from_path": "/document_id",
+          "to_field": "document_id"
+        },
+        {
+          "from_path": "/pages",
+          "to_field": "pages"
+        }
+      ]
+    },
+    {
+      "from": "extract",
+      "to": "validate",
+      "mapping": [
+        {
+          "from_path": "/fields",
+          "to_field": "fields"
+        },
+        {
+          "from_path": "/field_status",
+          "to_field": "field_status"
+        }
+      ]
+    },
+    {
+      "from": "extract",
+      "to": "locate",
+      "mapping": [
+        {
+          "from_path": "/fields",
+          "to_field": "fields"
+        }
+      ]
+    },
+    {
+      "from": "extract",
+      "to": "review",
+      "mapping": [
+        {
+          "from_path": "/fields",
+          "to_field": "fields"
+        }
+      ]
+    },
+    {
+      "from": "validate",
+      "to": "review",
+      "mapping": [
+        {
+          "from_path": "/findings",
+          "to_field": "findings"
+        }
+      ]
+    },
+    {
+      "from": "locate",
+      "to": "review",
+      "mapping": [
+        {
+          "from_path": "/evidence",
+          "to_field": "evidence"
+        }
+      ]
+    },
+    {
+      "from": "review",
+      "to": "export",
+      "mapping": [
+        {
+          "from_path": "/reviewed_fields",
+          "to_field": "reviewed_fields"
+        },
+        {
+          "from_path": "/decision",
+          "to_field": "decision"
+        }
+      ]
+    },
+    {
+      "from": "validate",
+      "to": "export",
+      "mapping": [
+        {
+          "from_path": "/findings",
+          "to_field": "findings"
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "export_id",
+      "from_node": "export",
+      "from_path": "/export_id"
+    },
+    {
+      "name": "decision",
+      "from_node": "review",
+      "from_path": "/decision"
+    }
+  ],
+  "budget": {
+    "max_duration_ms": 600000,
+    "max_llm_tokens": 60000,
+    "max_cost_jpy": 50
+  },
+  "requires_human_approval": true
+}

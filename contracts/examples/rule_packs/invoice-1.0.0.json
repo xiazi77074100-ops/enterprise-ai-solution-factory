@@ -1,0 +1,116 @@
+{
+  "schema_version": "1",
+  "rule_pack_id": "invoice",
+  "version": "1.0.0",
+  "name": "請求書の確認ルール（合成）",
+  "notice": "合成データ用の検証ルールです。実際の会計・税務の判断には使えません。",
+  "reference_tables": {
+    "registered_payees": [
+      {
+        "vendor_name": "TEST ONLY 例示商事株式会社",
+        "payee_account": "TEST-0000000"
+      }
+    ]
+  },
+  "rules": [
+    {
+      "rule_id": "INV-001",
+      "title": "合計が小計＋消費税と一致する",
+      "severity": "critical",
+      "check": {
+        "op": "abs_diff_le",
+        "left": {
+          "field": "/total"
+        },
+        "right": {
+          "add": [
+            {
+              "field": "/subtotal"
+            },
+            {
+              "field": "/tax"
+            }
+          ]
+        },
+        "tolerance": 0
+      },
+      "on_missing": "uncertain",
+      "evidence_fields": [
+        "/total",
+        "/subtotal",
+        "/tax"
+      ]
+    },
+    {
+      "rule_id": "INV-002",
+      "title": "登録番号が記載されている",
+      "severity": "major",
+      "check": {
+        "op": "present",
+        "field": "/registration_no"
+      },
+      "on_missing": "fail",
+      "evidence_fields": [
+        "/registration_no"
+      ]
+    },
+    {
+      "rule_id": "INV-003",
+      "title": "登録番号の形式が正しい（T＋13 桁）",
+      "severity": "major",
+      "check": {
+        "op": "format",
+        "field": "/registration_no",
+        "format": "jp_invoice_registration_no"
+      },
+      "on_missing": "uncertain",
+      "evidence_fields": [
+        "/registration_no"
+      ]
+    },
+    {
+      "rule_id": "INV-004",
+      "title": "振込先が登録済みの振込先と一致する",
+      "severity": "critical",
+      "check": {
+        "op": "matches_reference",
+        "field": "/payee_account",
+        "table": "registered_payees",
+        "key_field": "/vendor_name",
+        "match_field": "vendor_name",
+        "value_field": "payee_account"
+      },
+      "on_missing": "uncertain",
+      "evidence_fields": [
+        "/payee_account",
+        "/vendor_name"
+      ]
+    },
+    {
+      "rule_id": "INV-005",
+      "title": "支払期日が記載されている",
+      "severity": "major",
+      "check": {
+        "op": "present",
+        "field": "/due_date"
+      },
+      "on_missing": "fail",
+      "evidence_fields": [
+        "/due_date"
+      ]
+    },
+    {
+      "rule_id": "INV-006",
+      "title": "請求書番号が案件内で重複していない",
+      "severity": "major",
+      "check": {
+        "op": "unique_in_project",
+        "field": "/invoice_no"
+      },
+      "on_missing": "uncertain",
+      "evidence_fields": [
+        "/invoice_no"
+      ]
+    }
+  ]
+}

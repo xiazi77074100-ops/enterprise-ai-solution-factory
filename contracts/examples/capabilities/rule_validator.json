@@ -1,0 +1,116 @@
+{
+  "schema_version": "1",
+  "capability_id": "document.rule_validator",
+  "version": "1.0.0",
+  "kind": "local",
+  "name": "Rule Validator",
+  "description": "Rule pack の規則で pass / fail / uncertain を判定する。",
+  "input_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "fields",
+      "field_status"
+    ],
+    "properties": {
+      "fields": {
+        "type": "object",
+        "maxProperties": 100,
+        "description": "Extracted values keyed by field_spec name; null when not found."
+      },
+      "field_status": {
+        "type": "object"
+      }
+    }
+  },
+  "output_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "findings",
+      "requires_review"
+    ],
+    "properties": {
+      "findings": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rule_id",
+            "severity",
+            "result",
+            "message"
+          ],
+          "properties": {
+            "rule_id": {
+              "type": "string",
+              "pattern": "^[A-Z]{2,8}-[0-9]{3}$"
+            },
+            "severity": {
+              "enum": [
+                "critical",
+                "major",
+                "minor"
+              ]
+            },
+            "result": {
+              "enum": [
+                "pass",
+                "fail",
+                "uncertain"
+              ]
+            },
+            "message": {
+              "type": "string",
+              "maxLength": 500
+            }
+          }
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    }
+  },
+  "configuration_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "rule_pack_id",
+      "rule_pack_version"
+    ],
+    "properties": {
+      "rule_pack_id": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "rule_pack_version": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+      }
+    }
+  },
+  "implementation": {
+    "ref": "rule_validator.v1"
+  },
+  "tags": [
+    "document"
+  ],
+  "provenance": {
+    "source": "independent_poc",
+    "license": "internal_poc",
+    "author": "easf"
+  },
+  "evaluation_profile": "document-v1",
+  "timeout_ms": 10000,
+  "retry": {
+    "max_attempts": 2,
+    "idempotent": true
+  },
+  "side_effects": false
+}

@@ -1,0 +1,112 @@
+{
+  "schema_version": "1",
+  "capability_id": "document.parser",
+  "version": "1.0.0",
+  "kind": "local",
+  "name": "Document Parser",
+  "description": "PDF・画像からページごとのテキストを取り出す。",
+  "input_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "document_ref"
+    ],
+    "properties": {
+      "document_ref": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "output_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "document_id",
+      "pages",
+      "document_sha256"
+    ],
+    "properties": {
+      "document_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "pages": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 30,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "page",
+            "text",
+            "extraction_method"
+          ],
+          "properties": {
+            "page": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 50000
+            },
+            "extraction_method": {
+              "enum": [
+                "text_layer",
+                "ocr_tesseract",
+                "ocr_llm"
+              ]
+            }
+          }
+        }
+      },
+      "document_sha256": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    }
+  },
+  "configuration_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "ocr"
+    ],
+    "properties": {
+      "ocr": {
+        "enum": [
+          "none",
+          "tesseract",
+          "llm"
+        ]
+      },
+      "llm_profile": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      }
+    }
+  },
+  "implementation": {
+    "ref": "document_parser.v1"
+  },
+  "tags": [
+    "document"
+  ],
+  "provenance": {
+    "source": "independent_poc",
+    "license": "internal_poc",
+    "author": "easf"
+  },
+  "evaluation_profile": "document-v1",
+  "timeout_ms": 60000,
+  "retry": {
+    "max_attempts": 2,
+    "idempotent": true
+  },
+  "side_effects": false
+}

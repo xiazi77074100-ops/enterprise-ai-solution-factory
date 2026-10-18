@@ -1,0 +1,54 @@
+# config/llm_profiles.yaml の見本（スキーマ：contracts/llm_profile.schema.json）
+# 実 API は D-004 により無効。有効にする前に ADR-002 の確認（料金・データの扱い）を行い、pricing に出所と確認日を入れる。
+# model は各社の公式のモデル一覧で確かめて設定する（CHANGE_ME のままでは起動時に拒否する）。
+schema_version: "1"
+daily_budget_jpy: 0
+profiles:
+  - name: extractor_default
+    provider: mock
+    enabled: true
+    model: fixture-v1
+    timeout_ms: 30000
+    max_output_tokens: 4000
+    temperature: 0
+
+  - name: extractor_claude
+    provider: anthropic
+    enabled: false
+    model: CHANGE_ME
+    api_key_env: EASF_LLM_ANTHROPIC_API_KEY
+    timeout_ms: 60000
+    max_output_tokens: 4000
+    temperature: 0
+    accepts_images: true
+
+  - name: extractor_openai
+    provider: openai
+    enabled: false
+    model: CHANGE_ME
+    api_key_env: EASF_LLM_OPENAI_API_KEY
+    timeout_ms: 60000
+    max_output_tokens: 4000
+    temperature: 0
+
+  - name: extractor_azure
+    provider: azure_openai
+    enabled: false
+    model: CHANGE_ME
+    api_key_env: EASF_LLM_AZURE_OPENAI_API_KEY
+    azure:
+      endpoint: https://example-resource.openai.azure.com
+      api_version: v1
+      region: japaneast
+    timeout_ms: 60000
+    max_output_tokens: 4000
+    temperature: 0
+
+  - name: extractor_gemini
+    provider: gemini
+    enabled: false
+    model: CHANGE_ME
+    api_key_env: EASF_LLM_GEMINI_API_KEY
+    timeout_ms: 60000
+    max_output_tokens: 4000
+    temperature: 0

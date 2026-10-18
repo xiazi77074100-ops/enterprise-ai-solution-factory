@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:easf:contract:llm-profiles:1",
+  "title": "LLM profiles v1 (config/llm_profiles.yaml)",
+  "description": "Provider-neutral model profiles referenced by node config (llm_profile). Loaded from a config file only; never created or changed through the API. Real providers stay disabled until approved (DECISIONS D-004).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profiles"],
+  "properties": {
+    "schema_version": { "const": "1" },
+    "daily_budget_jpy": { "type": "integer", "minimum": 0, "maximum": 5000 },
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": { "$ref": "#/$defs/profile" }
+    }
+  },
+  "$defs": {
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "provider", "enabled", "model", "timeout_ms", "max_output_tokens"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+        "provider": { "enum": ["anthropic", "openai", "azure_openai", "gemini", "mock"] },
+        "enabled": { "type": "boolean" },
+        "model": {
+          "description": "Model name (anthropic/openai/gemini), deployment name (azure_openai), or fixture set name (mock).",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        },
+        "api_key_env": {
+          "description": "Name of the environment variable holding the key. Restricted prefix so a profile cannot read unrelated secrets.",
+          "type": "string",
+          "pattern": "^EASF_LLM_[A-Z0-9_]{1,60}$"
+        },
+        "azure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["endpoint", "api_version", "region"],
+          "properties": {
+            "endpoint": {
+              "type": "string",
+              "pattern": "^https://[a-z0-9][a-z0-9-]{1,62}\\.openai\\.azure\\.com/?$"
+            },
+            "api_version": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}(-preview)?$|^v1$" },
+            "region": { "type": "string", "maxLength": 40 }
+          }
+        },
+        "timeout_ms": { "type": "integer", "minimum": 1000, "maximum": 120000 },
+        "max_output_tokens": { "type": "integer", "minimum": 1, "maximum": 32000 },
+        "temperature": { "type": ["number", "null"], "minimum": 0, "maximum": 2 },
+        "accepts_images": { "type": "boolean", "default": false },
+        "pricing": {
+          "description": "Must be copied from the provider's official pricing page; cost is null when absent.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["currency", "input_per_million_tokens", "output_per_million_tokens", "source_url", "verified_at"],
+          "properties": {
+            "currency": { "enum": ["USD", "JPY"] },
+            "input_per_million_tokens": { "type": "number", "minimum": 0 },
+            "output_per_million_tokens": { "type": "number", "minimum": 0 },
+            "fx_rate_jpy": { "type": "number", "minimum": 0 },
+            "source_url": { "type": "string", "pattern": "^https://" },
+            "verified_at": { "type": "string", "format": "date" }
+          }
+        },
+        "data_handling_note": {
+          "description": "Retention / training-use terms checked on verified date (ADR-002).",
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "provider": { "const": "azure_openai" } } },
+          "then": { "required": ["azure", "api_key_env"] }
+        },
+        {
+          "if": { "properties": { "provider": { "enum": ["anthropic", "openai", "gemini"] } } },
+          "then": { "required": ["api_key_env"], "not": { "required": ["azure"] } }
+        },
+        {
+          "if": { "properties": { "provider": { "const": "mock" } } },
+          "then": { "not": { "anyOf": [{ "required": ["api_key_env"] }, { "required": ["azure"] }, { "required": ["pricing"] }] } }
+        }
+      ]
+    }
+  }
+}
