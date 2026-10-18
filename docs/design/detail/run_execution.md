@@ -3,6 +3,7 @@
 | 版 | 日付 | 変更内容 | 作成者 |
 |---|---|---|---|
 | 0.1 | 2026-10-18 | 初版（P2-00） | Claude Code |
+| 0.2 | 2026-10-18 | P2-01 の実装に合わせる：検査結果の項目名、実装がない Capability の扱い、承認の条件 | Claude Code |
 
 前提：ADR-001（自前の型付き DAG、DB をキュー、1 プロセスのワーカー）、ADR-002（LlmPort、mock のみ）、ADR-005（MCP）、契約 v1.0.1。API の形は `contracts/openapi.yaml` が正で、ここは内部の動きを書く。
 
@@ -19,7 +20,7 @@ draft ──validate(ok)──▶ validated ──approve──▶ approved
 | 作成（createSolution） | solution_architect。要件の版は同じ案件のもの | `draft`。`workflow_hash` は作成時から計算する |
 | 更新（updateSolutionDraft） | `draft` か `validated`。`If-Match` が現在の ETag と一致（違えば 412） | `draft`、ハッシュを再計算。`approved`・`archived` は 409 |
 | 検証（validateSolution） | 任意の状態で実行できる（副作用は `draft` → `validated` だけ） | Composer の結果。エラーなしで `draft` なら `validated` |
-| 承認（approveSolution） | solution_lead、作成者以外、`validated` で、承認の直前にもう一度検証してエラーなし | `approved`。`workflow` と `workflow_hash` は以後変更不可（アプリと DB トリガー） |
+| 承認（approveSolution） | solution_lead、作成者以外、`validated` で、承認の直前にもう一度検証してエラーなし、要件の版が承認済み | `approved`。`workflow` と `workflow_hash` は以後変更不可（アプリと DB トリガー。削除も不可） |
 
 - `workflow_hash` は RFC 8785（JCS）の正規形の SHA-256（Catalog と同じ関数）。
 - ETag は `"<workflow_hash>:<更新回数>"`。
@@ -27,14 +28,14 @@ draft ──validate(ok)──▶ validated ──approve──▶ approved
 
 ## 2. Composer の検証
 
-順に検査し、見つけた問題をすべて `ValidationIssue`（`code`・`path`・`message`）で返す。スキーマ違反があれば以降の検査はしない。
+順に検査し、見つけた問題をすべて `ValidationIssue`（`code`・`message`・`location`〔JSON Pointer〕）で返す。スキーマ違反があれば以降の検査はしない。
 
 | # | 検査 | code |
 |---|---|---|
 | 1 | `workflow.schema.json` に合う | `schema` |
 | 2 | `node_id` が一意、`edges`・`inputs[].to`・`outputs[].from_node` の参照先が存在 | `duplicate_node`・`unknown_node` |
 | 3 | 各ノードの `capability_id@capability_version` が Catalog に登録済み | `unknown_capability_version` |
-| 4 | 実装キーが許可リストにあり、`available=True`（コードがある） | `implementation_unavailable`（**警告**。検証は通るが、承認と実行は不可） |
+| 4 | 実装キーが許可リストにあり、`available=True`（コードがある） | `implementation_unavailable`（**警告**。検証・承認はできるが、実行の開始は 409） |
 | 5 | `config` が版の `configuration_schema` に合う | `config_schema` |
 | 6 | `timeout_ms` ≤ 版の `timeout_ms` | `timeout_exceeds_capability` |
 | 7 | 循環がない（標準ライブラリ `graphlib`） | `cycle` |

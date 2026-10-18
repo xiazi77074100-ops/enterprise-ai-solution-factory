@@ -1,10 +1,11 @@
 openapi: 3.1.0
 info:
   title: EASF API
-  version: 1.0.1
+  version: 1.0.2
   description: |
     Enterprise AI Solution Factory API contract v1 (frozen at G0 on 2026-10-18, DECISIONS D-014).
     1.0.1 (D-022): login declares 403 for a missing/foreign Origin (login CSRF protection that the description already required).
+    1.0.2 (D-025): validateSolution, exportRunResult, listReviewTasks and listDatasetVersions declare 403 (required by their x-easf-roles).
     - All endpoints except /health and /ready require an authenticated session cookie.
     - State-changing requests require the X-CSRF-Token header and a same-origin Origin header.
     - Errors use the Error object. Timestamps are ISO-8601 UTC. IDs are UUIDs.
@@ -426,6 +427,7 @@ paths:
       responses:
         "200": { description: "Composer validation (pinned versions, config schemas, edge type compatibility, acyclicity, budget).", content: { application/json: { schema: { $ref: "#/components/schemas/ValidationReport" } } } }
         "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
   /api/v1/solutions/{solution_id}/approve:
     post:
@@ -520,6 +522,7 @@ paths:
             application/json: { schema: { type: object } }
             text/csv: { schema: { type: string } }
         "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
 
@@ -536,6 +539,7 @@ paths:
       responses:
         "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/ReviewTaskPage" } } } }
         "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
   /api/v1/runs/{run_id}/reviews/{review_id}:
     get:
       tags: [reviews]
@@ -576,6 +580,7 @@ paths:
       responses:
         "200": { description: Registered dataset versions (manifest hashes; no holdout labels)., content: { application/json: { schema: { type: array, maxItems: 100, items: { $ref: "#/components/schemas/DatasetVersion" } } } } }
         "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
   /api/v1/evaluations:
     get:
       tags: [evaluations]

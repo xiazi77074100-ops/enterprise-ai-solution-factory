@@ -37,11 +37,10 @@ OPENAPI: dict[str, Any] = yaml.safe_load((ROOT / "contracts" / "openapi.yaml").r
 EXAMPLES = ROOT / "contracts" / "examples"
 METHODS = ("get", "post", "put", "delete", "patch")
 
-# Contract operations implemented in later phases (Phase 2: runs/reviews/trace; Phase 3+: documents,
-# evaluations, reuse, solutions, llm). Removing an entry here is part of implementing it.
+# Contract operations implemented in later phases (Phase 2: runs/reviews/trace; Phase 3+: documents, export,
+# evaluations, reuse, llm). Removing an entry here is part of implementing it.
 PENDING = {
     "listDocuments", "uploadDocument", "downloadDocument",
-    "createSolution", "getSolution", "updateSolutionDraft", "validateSolution", "approveSolution", "listSolutions",
     "startRun", "listRuns", "getRun", "listNodeRuns", "getRunTrace", "exportRunResult",
     "listReviewTasks", "getReviewTask", "decideReviewTask",
     "listDatasetVersions", "startEvaluation", "getEvaluation", "listEvaluations",
@@ -112,8 +111,11 @@ def assert_matches_contract(op_id: str, res: Response) -> None:
 @dataclass
 class World:
     project_id: str
-    revision_id: str
+    revision_id: str  # not approved (approveRequirementRevision)
     member_ids: dict[str, str]
+    approved_revision_id: str = ""
+    solution_id: str = ""  # validated, created by the architect
+    solution_etag: str = ""
 
 
 @dataclass
@@ -122,10 +124,41 @@ class Call:
     path: str
     body: Callable[[World], Any] | None = None
     project_scoped: bool = False
+    headers: Callable[[World], dict[str, str]] | None = None
 
 
 def _example(kind: str, name: str) -> Any:
     return json.loads((EXAMPLES / kind / name).read_text(encoding="utf-8"))
+
+
+def _single_node_workflow() -> dict[str, Any]:
+    return {
+        "schema_version": "1",
+        "workflow_id": "contract-test",
+        "version": 1,
+        "name": "契約テスト",
+        "inputs": [{"name": "doc", "type": "document_ref", "to": [{"node_id": "parse", "field": "document_ref"}]}],
+        "nodes": [
+            {
+                "node_id": "parse",
+                "capability_id": "document.parser",
+                "capability_version": "1.0.0",
+                "config": {"ocr": "none"},
+            }
+        ],
+        "edges": [],
+        "outputs": [{"name": "document_id", "from_node": "parse", "from_path": "/document_id"}],
+        "budget": {"max_duration_ms": 60000, "max_llm_tokens": 0, "max_cost_jpy": 0},
+        "requires_human_approval": True,
+    }
+
+
+def _solution_create(w: World) -> dict[str, Any]:
+    return {
+        "project_id": w.project_id,
+        "requirement_revision_id": w.approved_revision_id,
+        "workflow": _single_node_workflow(),
+    }
 
 
 def _members(w: World) -> list[dict[str, Any]]:
@@ -163,14 +196,27 @@ CALLS: dict[str, Call] = {
         "POST", "/api/v1/rule-packs", lambda w: _example("rule_packs", "invoice-1.0.0.json")
     ),
     "getRulePackVersion": Call("GET", "/api/v1/rule-packs/invoice/versions/1.0.0"),
+    "createSolution": Call("POST", "/api/v1/solutions", _solution_create, project_scoped=True),
+    "getSolution": Call("GET", "/api/v1/solutions/{solution}", project_scoped=True),
+    "updateSolutionDraft": Call(
+        "PUT",
+        "/api/v1/solutions/{solution}",
+        lambda w: {"workflow": _single_node_workflow() | {"name": "更新"}},
+        project_scoped=True,
+        headers=lambda w: {"If-Match": w.solution_etag},
+    ),
+    "validateSolution": Call("POST", "/api/v1/solutions/{solution}/validate", project_scoped=True),
+    "approveSolution": Call("POST", "/api/v1/solutions/{solution}/approve", project_scoped=True),
+    "listSolutions": Call("GET", "/api/v1/projects/{project}/solutions", project_scoped=True),
 }
 SPECIAL = {"login", "logout"}  # covered by test_session_operations_match_contract
 
 
 def _send(client: TestClient, call: Call, w: World, headers: dict[str, str]) -> Response:
-    path = call.path.format(project=w.project_id, revision=w.revision_id)
+    path = call.path.format(project=w.project_id, revision=w.revision_id, solution=w.solution_id)
     body = call.body(w) if call.body else None
-    res: Response = client.request(call.method, path, json=body, headers=headers)
+    extra = call.headers(w) if call.headers else {}
+    res: Response = client.request(call.method, path, json=body, headers={**headers, **extra})
     return res
 
 
@@ -210,7 +256,17 @@ def world(db: Session, db_url: str) -> World:  # noqa: F811
         ).status_code
         == 201
     )
-    return World(project_id=project_id, revision_id=revision.json()["id"], member_ids=ids)
+    approved = arch_client.post(
+        f"/api/v1/projects/{project_id}/requirements", json={"content": "承認済みの要件"}, headers=arch_headers
+    ).json()["id"]
+    assert client.post(f"/api/v1/requirements/{approved}/approve", headers=headers).status_code == 200
+    w = World(project_id=project_id, revision_id=revision.json()["id"], member_ids=ids, approved_revision_id=approved)
+    created = arch_client.post("/api/v1/solutions", json=_solution_create(w), headers=arch_headers)
+    assert created.status_code == 201, created.text
+    w.solution_id, w.solution_etag = created.json()["id"], created.headers["etag"]
+    report = arch_client.post(f"/api/v1/solutions/{w.solution_id}/validate", headers=arch_headers).json()
+    assert report["valid"], report
+    return w
 
 
 ROLE_USER = {"solution_lead": "lead", "solution_architect": "arch", "business_reviewer": "reviewer", "admin": "admin"}
@@ -281,3 +337,14 @@ def test_session_operations_match_contract(world: World, db_url: str) -> None:
     again = client.delete("/api/v1/session", headers=headers)
     assert again.status_code == 401
     assert_matches_contract("logout", again)
+
+
+def test_role_restricted_operations_declare_403() -> None:
+    """D-025: an operation limited to specific roles must declare the 403 it returns to other members."""
+    open_roles = {"public", "any_authenticated", "project_member"}
+    missing = [
+        op_id
+        for op_id, (_, _, op) in CONTRACT.items()
+        if set(op["x-easf-roles"]) - open_roles and "403" not in op["responses"]
+    ]
+    assert missing == []

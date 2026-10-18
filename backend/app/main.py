@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api import catalog, projects, session, system
+from app.api import catalog, projects, session, solutions, system
 from app.core.config import Settings, get_settings
 from app.core.db import make_session_factory
 from app.core.errors import install_error_handlers
@@ -12,7 +12,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     docs = settings.expose_docs
     app = FastAPI(
         title="EASF API",
-        version="1.0.0",
+        version="1.0.2",  # contracts/openapi.yaml
         docs_url="/docs" if docs else None,
         redoc_url=None,
         openapi_url="/openapi.json" if docs else None,
@@ -28,4 +28,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(session.router)
     app.include_router(projects.router)
     app.include_router(catalog.router)
+    app.include_router(solutions.router)
     return app

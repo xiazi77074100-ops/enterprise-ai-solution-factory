@@ -39,7 +39,7 @@ def content_sha256(document: dict[str, Any]) -> str:
     return hashlib.sha256(rfc8785.dumps(document)).hexdigest()
 
 
-def _schema_issues(name: str, document: Any) -> list[Issue]:
+def schema_issues(name: str, document: Any) -> list[Issue]:
     return [
         Issue("schema_violation", err.message[:300], "/" + "/".join(str(p) for p in err.absolute_path))
         for err in sorted(_validator(name).iter_errors(document), key=lambda e: list(map(str, e.absolute_path)))[:100]
@@ -60,7 +60,7 @@ def _external_refs(node: Any, path: str = "") -> list[Issue]:
 
 
 def validate_capability(contract: Any) -> list[Issue]:
-    issues = _schema_issues("capability", contract)
+    issues = schema_issues("capability", contract)
     if not isinstance(contract, dict) or issues:
         return issues
     issues += _external_refs(contract)
@@ -82,7 +82,7 @@ def _depth(expr: Any) -> int:
 
 
 def validate_rule_pack(pack: Any) -> list[Issue]:
-    issues = _schema_issues("rule_pack", pack)
+    issues = schema_issues("rule_pack", pack)
     if not isinstance(pack, dict) or issues:
         return issues
     tables = set(pack.get("reference_tables", {}))

@@ -24,6 +24,7 @@ BACKEND = Path(__file__).resolve().parents[2]
 ORIGIN = {"Origin": "http://testserver"}
 PASSWORD = "correct horse battery staple"
 TABLES = (
+    "solution",
     "capability_version",
     "rule_pack_version",
     "requirement_revision",
