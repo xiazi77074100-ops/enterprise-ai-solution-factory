@@ -4,7 +4,7 @@
 |---|---|---|---|
 | 0.1 | 2026-10-18 | 初版（RV-G0-003） | Claude Code |
 
-正本は `contracts/openapi.yaml` の各操作の `x-easf-roles`。この表はそれを人が読む形にしたもの（`spec-sync`）。認可のテストは OpenAPI の `x-easf-roles` から期待値表を作り、全操作 × 全ロールで確かめる。
+正本は `contracts/openapi.yaml` の各操作の `x-easf-roles`。この表はそれを人が読む形にしたもの（`spec-sync`）。認可のテストは OpenAPI の `x-easf-roles` から期待値表を作り、全操作 × 全ロールで確かめる（`backend/tests/contract/test_openapi_contract.py`：未ログイン 401、非メンバー 404〔案件に属する操作〕／403〔全体の操作〕、ロールのないメンバー 403、ロールのあるメンバーは成功。全応答を契約の応答スキーマで検証）。
 
 ## 1. ロールの種類
 

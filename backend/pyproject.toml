@@ -25,6 +25,8 @@ dev = [
     "bandit",
     "pip-audit",
     "types-jsonschema>=4.26.0.20261006",
+    "pyyaml>=6.0.3",
+    "types-pyyaml>=6.0.12.20260906",
 ]
 
 [tool.uv]

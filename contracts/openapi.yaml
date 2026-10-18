@@ -1,9 +1,10 @@
 openapi: 3.1.0
 info:
   title: EASF API
-  version: 1.0.0
+  version: 1.0.1
   description: |
     Enterprise AI Solution Factory API contract v1 (frozen at G0 on 2026-10-18, DECISIONS D-014).
+    1.0.1 (D-022): login declares 403 for a missing/foreign Origin (login CSRF protection that the description already required).
     - All endpoints except /health and /ready require an authenticated session cookie.
     - State-changing requests require the X-CSRF-Token header and a same-origin Origin header.
     - Errors use the Error object. Timestamps are ISO-8601 UTC. IDs are UUIDs.
@@ -62,6 +63,7 @@ paths:
           description: Logged in. Sets __Host-easf_session (Secure; HttpOnly; SameSite=Lax; Path=/).
           content: { application/json: { schema: { $ref: "#/components/schemas/SessionInfo" } } }
         "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
         "422": { $ref: "#/components/responses/Error" }
         "429": { $ref: "#/components/responses/Error" }
     get:

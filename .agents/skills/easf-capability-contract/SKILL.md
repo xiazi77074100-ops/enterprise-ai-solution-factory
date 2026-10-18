@@ -12,7 +12,7 @@ EASF の価値は「**同じ版の部品を、設定だけ変えて別の業務�
 1. **Capability の版は不変**。登録後は内容を変えない。直したら新しい版。同じ `capability_id@version` の再登録は、内容のハッシュが同じなら冪等、違えば拒否。
 2. **Workflow の全ノードは版を固定**（`capability_version` に範囲指定 `^1.0` を許さない）。解決策（Solution）は構成のハッシュを持ち、実行はそのハッシュを記録する。
 3. **スキーマ検証は 3 か所**：登録時（契約自体が正しいか）、構成時（つながるノードの出力と入力が合うか）、実行時（実際の入出力）。どこかで外れたら失敗で、成功にしない。
-4. **汎用エンジン（catalog・composer・executor・evaluation・observability・reuse）に業務名を書かない**。`invoice` / `contract` / `請求書` / `契約` が `backend/app/{catalog,composer,executor,adapters,evaluation,observability,reuse}` に出たら失敗するテストを置く。業務の違いは Rule pack・抽出プロファイル・Workflow の設定（データ）で表す。
+4. **汎用エンジン（catalog・composer・executor・evaluation・observability・reuse）に業務名を書かない**。`invoice` / `contract_review` / `請求書` / `契約書` が `backend/app/{catalog,composer,executor,adapters,evaluation,observability,reuse}` に出たら失敗する検査（`scripts/validate_contracts.py`）を置く（「契約」だけは Capability の契約の意味でも使うので対象にしない）。業務の違いは Rule pack・抽出プロファイル・Workflow の設定（データ）で表す。
 5. **成功にしてはいけない状態**：必須ノードの失敗、確認待ち、重大ルールのガード失敗、予算超過、時間切れ、出力スキーマ違反。
 6. **証跡は作らない**：根拠は「不変の文書 ID・ページ・文字の開始と終了位置・その範囲のテキストの SHA-256」。元の文書で照合できなければ `unverified`。
 7. **模擬は模擬**：模擬アダプタの結果には `execution_mode: "mock"` を付け、画面・API・報告で区別する。実接続の件数・再利用の実績に数えない。

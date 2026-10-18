@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CONTRACTS = ROOT / "contracts"
 EXAMPLES = CONTRACTS / "examples"
 ENGINE_DIRS = ["catalog", "composer", "executor", "adapters", "evaluation", "observability", "reuse"]
-SCENARIO_WORDS = re.compile(r"invoice|contract_review|請求書|契約")
+SCENARIO_WORDS = re.compile(r"invoice|contract_review|請求書|契約書")  # 契約 alone also means "capability contract"
 ALLOWED_ROLES = {"public", "any_authenticated", "project_member", "admin",
                  "solution_lead", "solution_architect", "qa_evaluator", "business_reviewer"}
 PUBLIC_ROUTES = {"/health", "/ready", "/api/v1/session"}

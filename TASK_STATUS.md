@@ -13,5 +13,5 @@
 | P1-01 FastAPI・PostgreSQL の雛形（健康確認・マイグレーション・CI） | CC | 完了 | `cc/P1-01-scaffold` | pytest 15 passed（実 PostgreSQL）、ruff・mypy strict・bandit・pip-audit 問題なし | 2026-10-18 |
 | P1-02 Capability Catalog（不変の版・検証） | CC | 完了 | `cc/P1-02-catalog` | pytest 44 passed（見本 6 件の登録・冪等・409・外部 $ref・実装の許可リスト・DB トリガー・Rule pack）、静的検査問題なし | 2026-10-18 |
 | P1-03 日本語 UI の枠と共通部品 | CC | 完了 | `cc/P1-03-ui-shell` | lint・typecheck・vitest 6 passed・build（ソースマップなし）・npm audit 0 件・Playwright 2 passed（1440px・390px、横スクロールなし、想定外のコンソールエラーなし） | 2026-10-18 |
-| P1-04 契約テスト・否定テスト | CC | 未着手 | `cc/P1-04-contract-tests` | — | 2026-10-18 |
+| P1-04 契約テスト・否定テスト | CC | 完了 | `cc/P1-04-contract-tests` | 実装と契約の一致、x-easf-roles からの認可の全件表（実装済み 20 操作）、全応答の応答スキーマ検証。pytest 65 passed。契約の欠落 1 件を検出し 1.0.1 で修正（D-022） | 2026-10-18 |
 | P1-05 認証・セッション・案件・メンバー・要件の版 | CC | 完了 | `cc/P1-05-auth-projects` | pytest 30 passed（ログイン・固定化・列挙・ロック・CSRF/Origin・IDOR・一括代入・自己承認を含む）、ruff・mypy・bandit・pip-audit 問題なし | 2026-10-18 |
