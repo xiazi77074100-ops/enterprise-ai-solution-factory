@@ -43,8 +43,8 @@
 | 3 | モジュール境界と所有表 | `docs/design/basic/architecture.md` | CC | **作成済み** |
 | 4 | 契約 v1（OpenAPI・Capability・Workflow・Rule pack・イベント・LLM プロファイル）と例 | `contracts/`、`contracts/examples/` | CC | **作成済み**（`scripts/validate_contracts.py` で検査。凍結は G0） |
 | 5 | 脅威モデル（STRIDE＋LLM）とセキュリティ設計 | `docs/design/security.md` | CC | **作成済み** |
-| 6 | 合成データ計画（層・件数・生成器・manifest の書式） | `docs/design/fixture_plan.md` | CC（D-011） | 作成中 |
-| 7 | ベースライン実験の事前登録 | `docs/experiment/preregistration.md` | CC（D-011）→ 人の承認 | 作成中 |
+| 6 | 合成データ計画（層・件数・生成器・manifest の書式） | `docs/design/fixture_plan.md` | CC（D-011） | **作成済み** |
+| 7 | ベースライン実験の事前登録 | `docs/experiment/preregistration.md` | CC（D-011）→ 人の承認 | **作成済み（承認待ち）** |
 | 8 | 見積と台帳 | `docs/phase0/estimates.md`、`DECISIONS.md`、`TASK_STATUS.md`、`CHANGELOG.md`、`COST_LEDGER.csv`、`HUMAN_TIME_LOG.csv` | CC | **作成済み** |
 | 9 | G0 レビュー（敵対的な自己レビュー） | `reviews/G0_REVIEW.md` | CC（D-011・D-012） | 作成中 |
 | 10 | G0 ゲート報告 | `reports/gate_G0.md` | CC | 最後 |
