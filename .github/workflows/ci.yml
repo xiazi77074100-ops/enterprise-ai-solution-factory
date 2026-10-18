@@ -37,7 +37,8 @@ jobs:
       EASF_SECRET_KEY: ci-only-secret-key-0123456789-abcdefghij
       EASF_MIGRATION_DATABASE_URL: postgresql+psycopg://easf_owner:ci-owner-password@127.0.0.1:5432/easf
       EASF_DATABASE_URL: postgresql+psycopg://easf_app:ci-app-password@127.0.0.1:5432/easf
-      EASF_TEST_DATABASE_URL: postgresql+psycopg://easf_app:ci-app-password@127.0.0.1:5432/easf
+      EASF_TEST_DATABASE_URL: postgresql+psycopg://easf_app:ci-app-password@127.0.0.1:5432/easf_test
+      EASF_TEST_MIGRATION_DATABASE_URL: postgresql+psycopg://easf_owner:ci-owner-password@127.0.0.1:5432/easf_test
     defaults:
       run:
         working-directory: backend

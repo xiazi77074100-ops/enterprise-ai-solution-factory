@@ -35,10 +35,18 @@ uv run python -m app.admin create-user --login-id admin --display-name "管理�
 ## 3. テストと検査（CI と同じ）
 
 ```sh
-export EASF_TEST_DATABASE_URL="$EASF_DATABASE_URL"   # 未設定だと DB のテストは skipped になる（成功ではない）
+# .env の EASF_TEST_DATABASE_URL・EASF_TEST_MIGRATION_DATABASE_URL（easf_test）を使う。未設定だと DB のテストは skipped（成功ではない）
+set -a && . ../.env && set +a
 uv run ruff check . && uv run ruff format --check . && uv run mypy app tests
 uv run bandit -q -r app && uv run pip-audit
 uv run pytest -q
+```
+
+テストは表を空にし、マイグレーションを戻すため、**開発用の DB（`easf`）ではなく `easf_test` だけを使う**（P2-00）。DB 名が `_test` で終わらない URL を渡すとテストは止まる。`easf_test` は `docker/postgres/01-app-role.sh` が初回起動時に作る。既存のボリュームでは一度だけ次を実行する：
+
+```sh
+docker compose exec -T db psql -U easf_owner -d easf -c "CREATE DATABASE easf_test OWNER easf_owner" -c "REVOKE CONNECT ON DATABASE easf_test FROM PUBLIC"
+docker compose exec -T db psql -U easf_owner -d easf_test -c "GRANT CONNECT ON DATABASE easf_test TO easf_app" -c "GRANT USAGE ON SCHEMA public TO easf_app"   -c "ALTER DEFAULT PRIVILEGES FOR ROLE easf_owner IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO easf_app"   -c "ALTER DEFAULT PRIVILEGES FOR ROLE easf_owner IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO easf_app" -c "REVOKE CREATE ON SCHEMA public FROM PUBLIC"
 ```
 
 ## 4. 画面（frontend）

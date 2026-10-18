@@ -35,18 +35,15 @@ TABLES = (
 
 
 @pytest.fixture(scope="module")
-def migrated() -> None:
-    url = os.environ.get("EASF_MIGRATION_DATABASE_URL")
-    if not url or not os.environ.get("EASF_TEST_DATABASE_URL"):
-        pytest.skip("database URLs are not set")
-    env = {**os.environ, "EASF_MIGRATION_DATABASE_URL": url}
+def migrated(migration_url: str, db_url: str) -> None:
+    env = {**os.environ, "EASF_MIGRATION_DATABASE_URL": migration_url}
     subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], cwd=BACKEND, env=env, check=True)  # noqa: S603  # nosec B603
 
 
 @pytest.fixture
-def db(migrated: None, db_url: str) -> Iterator[Session]:
+def db(migrated: None, db_url: str, migration_url: str) -> Iterator[Session]:
     # The owner role truncates (versioned rows are immutable: DELETE is rejected by trigger).
-    with create_engine(os.environ["EASF_MIGRATION_DATABASE_URL"]).begin() as owner:
+    with create_engine(migration_url).begin() as owner:
         owner.execute(text(f"TRUNCATE {', '.join(TABLES)} CASCADE"))  # nosec B608 - fixed table names
     with make_session_factory(make_settings(database_url=db_url))() as session:
         yield session

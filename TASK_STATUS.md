@@ -16,3 +16,9 @@
 | P1-04 契約テスト・否定テスト | CC | 完了 | `cc/P1-04-contract-tests` | 実装と契約の一致、x-easf-roles からの認可の全件表（実装済み 20 操作）、全応答の応答スキーマ検証。pytest 65 passed。契約の欠落 1 件を検出し 1.0.1 で修正（D-022） | 2026-10-18 |
 | P1-05 認証・セッション・案件・メンバー・要件の版 | CC | 完了 | `cc/P1-05-auth-projects` | pytest 30 passed（ログイン・固定化・列挙・ロック・CSRF/Origin・IDOR・一括代入・自己承認を含む）、ruff・mypy・bandit・pip-audit 問題なし | 2026-10-18 |
 | G1a 前の脆弱性自己診断 | CC | 完了 | `cc/G1a-vuln-assessment` | 高 0・中 1・低 4（すべて対応・再診断済み）。SAST・SCA・gitleaks・trivy 0 件、ZAP（未ログイン・認証付き）失敗 0。pytest 71 passed。報告書 `reports/security/2026-10-18/report.md` | 2026-10-18 |
+| G1a ゲート報告 | CC | 完了・**承認済み**（D-024） | `cc/G1a-gate-report` | `reports/gate_G1a.md` | 2026-10-18 |
+| P2-00 Phase 2 計画・詳細設計・テスト専用 DB | CC | 完了 | `cc/P2-00-plan` | `docs/phase2/PHASE2_PLAN.md`、`docs/design/detail/run_execution.md`。テストは `easf_test` だけを使い、`_test` 以外の DB 名では停止。pytest 71 passed、開発用 DB の利用者数は実行前後で同じ | 2026-10-18 |
+| P2-01 Composer と Solution の API | CC | 未着手 | `cc/P2-01-composer` | — | — |
+| P2-02 Executor・アダプタ・Run と確認の API・トレース | CC | 未着手 | `cc/P2-02-executor` | — | — |
+| P2-04 Executor の敵対的テスト | CC | 未着手 | `cc/P2-04-adversarial` | — | — |
+| P2-03 実行・確認の画面 | CC | 未着手 | `cc/P2-03-run-ui` | — | — |
