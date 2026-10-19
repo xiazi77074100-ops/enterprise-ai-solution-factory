@@ -39,6 +39,9 @@ services:
     volumes:
       - easf_documents:/data/documents  # uploaded documents; never served
     read_only: true
+    # VA-G2-001: multipart uploads over 1 MB are spooled to a temporary file; keep the root read-only.
+    tmpfs:
+      - /tmp:size=64m,mode=1777
     security_opt: ["no-new-privileges:true"]
     cap_drop: ["ALL"]
 

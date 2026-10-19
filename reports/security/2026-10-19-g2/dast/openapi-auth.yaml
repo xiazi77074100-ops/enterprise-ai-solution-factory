@@ -1,0 +1,2631 @@
+openapi: 3.1.0
+info:
+  title: EASF API
+  version: 1.0.2
+  description: 'Enterprise AI Solution Factory API contract v1 (frozen at G0 on 2026-10-18,
+    DECISIONS D-014).
+
+    1.0.1 (D-022): login declares 403 for a missing/foreign Origin (login CSRF protection
+    that the description already required).
+
+    1.0.2 (D-025): validateSolution, exportRunResult, listReviewTasks and listDatasetVersions
+    declare 403 (required by their x-easf-roles).
+
+    - All endpoints except /health and /ready require an authenticated session cookie.
+
+    - State-changing requests require the X-CSRF-Token header and a same-origin Origin
+    header.
+
+    - Errors use the Error object. Timestamps are ISO-8601 UTC. IDs are UUIDs.
+
+    - Objects the caller cannot access return 404 (same as non-existent).
+
+    - In non-dev environments the server does not expose /docs or /openapi.json; this
+    file is the contract.
+
+    '
+servers:
+- url: /
+security:
+- sessionCookie: []
+tags:
+- name: system
+- name: session
+- name: projects
+- name: documents
+- name: catalog
+- name: solutions
+- name: runs
+- name: reviews
+- name: evaluations
+- name: reuse
+- name: llm
+paths:
+  /health:
+    get:
+      tags:
+      - system
+      operationId: getHealth
+      x-easf-roles:
+      - public
+      security: []
+      responses:
+        '200':
+          description: Process is alive.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /ready:
+    get:
+      tags:
+      - system
+      operationId: getReady
+      x-easf-roles:
+      - public
+      security: []
+      responses:
+        '200':
+          description: Dependencies reachable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '503':
+          $ref: '#/components/responses/Error'
+  /api/v1/session:
+    post:
+      tags:
+      - session
+      operationId: login
+      x-easf-roles:
+      - public
+      security: []
+      description: Issues a new session cookie (rotated on every login). Failure message
+        is identical for unknown user and wrong password. No CSRF token exists yet,
+        so the Origin header must match the site (login CSRF protection).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Logged in. Sets __Host-easf_session (Secure; HttpOnly; SameSite=Lax;
+            Path=/).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionInfo'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+        '429':
+          $ref: '#/components/responses/Error'
+    get:
+      tags:
+      - session
+      operationId: getSession
+      x-easf-roles:
+      - any_authenticated
+      responses:
+        '200':
+          description: Current user and CSRF token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionInfo'
+        '401':
+          $ref: '#/components/responses/Error'
+  /api/v1/projects:
+    get:
+      tags:
+      - projects
+      operationId: listProjects
+      x-easf-roles:
+      - any_authenticated
+      parameters:
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      - name: sort
+        in: query
+        schema:
+          type: string
+          enum:
+          - updated_at
+          - -updated_at
+          - name
+          - -name
+          default: -updated_at
+      - name: q
+        in: query
+        schema:
+          type: string
+          maxLength: 100
+      responses:
+        '200':
+          description: Projects the caller is a member of.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectPage'
+        '401':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+    post:
+      tags:
+      - projects
+      operationId: createProject
+      x-easf-roles:
+      - solution_lead
+      - admin
+      parameters:
+      - $ref: '#/components/parameters/CsrfToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreate'
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/projects/{project_id}:
+    get:
+      tags:
+      - projects
+      operationId: getProject
+      x-easf-roles:
+      - project_member
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/projects/{project_id}/requirements:
+    get:
+      tags:
+      - projects
+      operationId: listRequirementRevisions
+      x-easf-roles:
+      - project_member
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: All revisions, newest first.
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 200
+                items:
+                  $ref: '#/components/schemas/RequirementRevision'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+    post:
+      tags:
+      - projects
+      operationId: createRequirementRevision
+      x-easf-roles:
+      - solution_lead
+      - solution_architect
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/CsrfToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequirementCreate'
+      responses:
+        '201':
+          description: Created (unapproved).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequirementRevision'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/projects/{project_id}/members:
+    get:
+      tags:
+      - projects
+      operationId: getProjectMembers
+      x-easf-roles:
+      - project_member
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: Members and their project roles.
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 100
+                items:
+                  $ref: '#/components/schemas/ProjectMember'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+    put:
+      tags:
+      - projects
+      operationId: putProjectMembers
+      x-easf-roles:
+      - solution_lead
+      description: Replaces the member list. Users themselves are created only through
+        the admin CLI. The caller cannot remove their own solution_lead role.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/CsrfToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 1
+              maxItems: 100
+              items:
+                $ref: '#/components/schemas/ProjectMember'
+      responses:
+        '200':
+          description: Updated.
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 100
+                items:
+                  $ref: '#/components/schemas/ProjectMember'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/projects/{project_id}/solutions:
+    get:
+      tags:
+      - solutions
+      operationId: listSolutions
+      x-easf-roles:
+      - project_member
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolutionPage'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/projects/{project_id}/reuse-records:
+    post:
+      tags:
+      - reuse
+      operationId: createReuseRecord
+      x-easf-roles:
+      - solution_lead
+      - qa_evaluator
+      description: Records the reuse classification of a capability version in this
+        project. evidence_run_ids must be succeeded runs of this project that executed
+        that version; adaptation_minutes must come from HUMAN_TIME_LOG (null if not
+        recorded).
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/CsrfToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReuseRecordCreate'
+      responses:
+        '201':
+          description: Recorded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReuseRecord'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/requirements/{revision_id}/approve:
+    post:
+      tags:
+      - projects
+      operationId: approveRequirementRevision
+      x-easf-roles:
+      - solution_lead
+      parameters:
+      - name: revision_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/CsrfToken'
+      responses:
+        '200':
+          description: Approved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequirementRevision'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '409':
+          $ref: '#/components/responses/Error'
+  /api/v1/projects/{project_id}/documents:
+    get:
+      tags:
+      - documents
+      operationId: listDocuments
+      x-easf-roles:
+      - project_member
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentPage'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+    post:
+      tags:
+      - documents
+      operationId: uploadDocument
+      x-easf-roles:
+      - solution_lead
+      - solution_architect
+      - qa_evaluator
+      description: PDF/PNG/JPEG only; extension, declared type and magic bytes must
+        agree. Max 10 MB, 30 pages. Stored under a server-generated UUID.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/CsrfToken'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - file
+              - data_origin
+              properties:
+                file:
+                  type: string
+                  format: binary
+                data_origin:
+                  type: string
+                  enum:
+                  - synthetic
+                  description: Only synthetic data is accepted in the POC.
+      responses:
+        '201':
+          description: Stored.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '413':
+          $ref: '#/components/responses/Error'
+        '415':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/documents/{document_id}/content:
+    get:
+      tags:
+      - documents
+      operationId: downloadDocument
+      x-easf-roles:
+      - project_member
+      parameters:
+      - name: document_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Original file. Content-Disposition attachment (RFC 5987), X-Content-Type-Options
+            nosniff, Cache-Control no-store.
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/capabilities:
+    get:
+      tags:
+      - catalog
+      operationId: listCapabilities
+      x-easf-roles:
+      - any_authenticated
+      parameters:
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      - name: tag
+        in: query
+        schema:
+          type: string
+          pattern: ^[a-z][a-z0-9_-]{0,31}$
+      - name: kind
+        in: query
+        schema:
+          type: string
+          enum:
+          - local
+          - rest
+          - mcp_tool
+          - llm
+      - name: q
+        in: query
+        schema:
+          type: string
+          maxLength: 100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapabilityVersionPage'
+        '401':
+          $ref: '#/components/responses/Error'
+    post:
+      tags:
+      - catalog
+      operationId: registerCapabilityVersion
+      x-easf-roles:
+      - solution_architect
+      - admin
+      description: Registers an immutable version. Same id@version with identical
+        content hash is idempotent (200); different content is 409.
+      parameters:
+      - $ref: '#/components/parameters/CsrfToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapabilityContract'
+      responses:
+        '200':
+          description: Already registered with identical content.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapabilityVersion'
+        '201':
+          description: Registered.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapabilityVersion'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '409':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/capabilities/validate:
+    post:
+      tags:
+      - catalog
+      operationId: validateCapabilityContract
+      x-easf-roles:
+      - solution_architect
+      - admin
+      parameters:
+      - $ref: '#/components/parameters/CsrfToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapabilityContract'
+      responses:
+        '200':
+          description: Validation result (no side effects).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationReport'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /api/v1/capabilities/{capability_id}/versions/{version}:
+    get:
+      tags:
+      - catalog
+      operationId: getCapabilityVersion
+      x-easf-roles:
+      - any_authenticated
+      parameters:
+      - name: capability_id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 64
+      - name: version
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Semver'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapabilityVersion'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/rule-packs:
+    get:
+      tags:
+      - catalog
+      operationId: listRulePacks
+      x-easf-roles:
+      - any_authenticated
+      parameters:
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RulePackVersionPage'
+        '401':
+          $ref: '#/components/responses/Error'
+    post:
+      tags:
+      - catalog
+      operationId: registerRulePackVersion
+      x-easf-roles:
+      - solution_architect
+      - admin
+      parameters:
+      - $ref: '#/components/parameters/CsrfToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RulePack'
+      responses:
+        '200':
+          description: Already registered with identical content.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RulePackVersion'
+        '201':
+          description: Registered.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RulePackVersion'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '409':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/rule-packs/{rule_pack_id}/versions/{version}:
+    get:
+      tags:
+      - catalog
+      operationId: getRulePackVersion
+      x-easf-roles:
+      - any_authenticated
+      parameters:
+      - name: rule_pack_id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 64
+      - name: version
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Semver'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RulePackVersion'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/solutions:
+    post:
+      tags:
+      - solutions
+      operationId: createSolution
+      x-easf-roles:
+      - solution_architect
+      parameters:
+      - $ref: '#/components/parameters/CsrfToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SolutionCreate'
+      responses:
+        '201':
+          description: Created in draft state.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Solution'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/solutions/{solution_id}:
+    get:
+      tags:
+      - solutions
+      operationId: getSolution
+      x-easf-roles:
+      - project_member
+      parameters:
+      - $ref: '#/components/parameters/SolutionId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Solution'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+    put:
+      tags:
+      - solutions
+      operationId: updateSolutionDraft
+      x-easf-roles:
+      - solution_architect
+      description: Only draft solutions can be updated. Approved solutions are immutable;
+        create a new revision instead.
+      parameters:
+      - $ref: '#/components/parameters/SolutionId'
+      - $ref: '#/components/parameters/CsrfToken'
+      - name: If-Match
+        in: header
+        required: true
+        schema:
+          type: string
+          maxLength: 128
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SolutionUpdate'
+      responses:
+        '200':
+          description: Updated.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Solution'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '409':
+          $ref: '#/components/responses/Error'
+        '412':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/solutions/{solution_id}/validate:
+    post:
+      tags:
+      - solutions
+      operationId: validateSolution
+      x-easf-roles:
+      - solution_architect
+      parameters:
+      - $ref: '#/components/parameters/SolutionId'
+      - $ref: '#/components/parameters/CsrfToken'
+      responses:
+        '200':
+          description: Composer validation (pinned versions, config schemas, edge
+            type compatibility, acyclicity, budget).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationReport'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/solutions/{solution_id}/approve:
+    post:
+      tags:
+      - solutions
+      operationId: approveSolution
+      x-easf-roles:
+      - solution_lead
+      description: Requires a valid solution and an approver other than the author.
+        Freezes workflow_hash.
+      parameters:
+      - $ref: '#/components/parameters/SolutionId'
+      - $ref: '#/components/parameters/CsrfToken'
+      responses:
+        '200':
+          description: Approved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Solution'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '409':
+          $ref: '#/components/responses/Error'
+  /api/v1/solutions/{solution_id}/runs:
+    post:
+      tags:
+      - runs
+      operationId: startRun
+      x-easf-roles:
+      - solution_lead
+      - solution_architect
+      - qa_evaluator
+      parameters:
+      - $ref: '#/components/parameters/SolutionId'
+      - $ref: '#/components/parameters/CsrfToken'
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunCreate'
+      responses:
+        '202':
+          description: Run accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Run'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '409':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/runs:
+    get:
+      tags:
+      - runs
+      operationId: listRuns
+      x-easf-roles:
+      - project_member
+      parameters:
+      - name: project_id
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: status
+        in: query
+        schema:
+          $ref: '#/components/schemas/RunStatus'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunPage'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/runs/{run_id}:
+    get:
+      tags:
+      - runs
+      operationId: getRun
+      x-easf-roles:
+      - project_member
+      parameters:
+      - $ref: '#/components/parameters/RunId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Run'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/runs/{run_id}/nodes:
+    get:
+      tags:
+      - runs
+      operationId: listNodeRuns
+      x-easf-roles:
+      - project_member
+      parameters:
+      - $ref: '#/components/parameters/RunId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 30
+                items:
+                  $ref: '#/components/schemas/NodeRun'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/runs/{run_id}/trace:
+    get:
+      tags:
+      - runs
+      operationId: getRunTrace
+      x-easf-roles:
+      - project_member
+      parameters:
+      - $ref: '#/components/parameters/RunId'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: Redacted events.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventPage'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/runs/{run_id}/export:
+    get:
+      tags:
+      - runs
+      operationId: exportRunResult
+      x-easf-roles:
+      - solution_lead
+      - qa_evaluator
+      - business_reviewer
+      description: Only for succeeded runs. CSV cells starting with = + - @ tab CR
+        are prefixed with a quote.
+      parameters:
+      - $ref: '#/components/parameters/RunId'
+      - name: format
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+          - csv
+      responses:
+        '200':
+          description: Export file (attachment).
+          content:
+            application/json:
+              schema:
+                type: object
+            text/csv:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '409':
+          $ref: '#/components/responses/Error'
+  /api/v1/reviews:
+    get:
+      tags:
+      - reviews
+      operationId: listReviewTasks
+      x-easf-roles:
+      - solution_lead
+      - business_reviewer
+      parameters:
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - pending
+          - completed
+      - name: assigned_to_me
+        in: query
+        schema:
+          type: boolean
+          default: true
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewTaskPage'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /api/v1/runs/{run_id}/reviews/{review_id}:
+    get:
+      tags:
+      - reviews
+      operationId: getReviewTask
+      x-easf-roles:
+      - project_member
+      parameters:
+      - $ref: '#/components/parameters/RunId'
+      - $ref: '#/components/parameters/ReviewId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewTask'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/runs/{run_id}/reviews/{review_id}/decision:
+    post:
+      tags:
+      - reviews
+      operationId: decideReviewTask
+      x-easf-roles:
+      - business_reviewer
+      description: Only the assigned business_reviewer. A completed task cannot be
+        decided again (409); the same idempotency key returns the original result.
+      parameters:
+      - $ref: '#/components/parameters/RunId'
+      - $ref: '#/components/parameters/ReviewId'
+      - $ref: '#/components/parameters/CsrfToken'
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewDecision'
+      responses:
+        '200':
+          description: Decision recorded; run resumes or stops.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewTask'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '409':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/datasets:
+    get:
+      tags:
+      - evaluations
+      operationId: listDatasetVersions
+      x-easf-roles:
+      - solution_lead
+      - qa_evaluator
+      responses:
+        '200':
+          description: Registered dataset versions (manifest hashes; no holdout labels).
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 100
+                items:
+                  $ref: '#/components/schemas/DatasetVersion'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /api/v1/evaluations:
+    get:
+      tags:
+      - evaluations
+      operationId: listEvaluations
+      x-easf-roles:
+      - project_member
+      parameters:
+      - name: solution_id
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationPage'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+    post:
+      tags:
+      - evaluations
+      operationId: startEvaluation
+      x-easf-roles:
+      - qa_evaluator
+      parameters:
+      - $ref: '#/components/parameters/CsrfToken'
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvaluationCreate'
+      responses:
+        '202':
+          description: Accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evaluation'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '422':
+          $ref: '#/components/responses/Error'
+  /api/v1/evaluations/{evaluation_id}:
+    get:
+      tags:
+      - evaluations
+      operationId: getEvaluation
+      x-easf-roles:
+      - project_member
+      parameters:
+      - name: evaluation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evaluation'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/projects/{project_id}/reuse-evidence:
+    get:
+      tags:
+      - reuse
+      operationId: getProjectReuseEvidence
+      x-easf-roles:
+      - project_member
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 500
+                items:
+                  $ref: '#/components/schemas/ReuseRecord'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+  /api/v1/reuse/summary:
+    get:
+      tags:
+      - reuse
+      operationId: getReuseSummary
+      x-easf-roles:
+      - any_authenticated
+      description: Capability versions executed in more than one project the caller
+        can see, with trace-linked run IDs.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 500
+                items:
+                  $ref: '#/components/schemas/ReuseSummaryItem'
+        '401':
+          $ref: '#/components/responses/Error'
+  /api/v1/llm-profiles:
+    get:
+      tags:
+      - llm
+      operationId: listLlmProfiles
+      x-easf-roles:
+      - any_authenticated
+      description: Read-only view of config/llm_profiles.yaml. Never returns keys,
+        key variable names, or endpoints.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 20
+                items:
+                  $ref: '#/components/schemas/LlmProfileView'
+        '401':
+          $ref: '#/components/responses/Error'
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-easf_session
+  headers:
+    ETag:
+      schema:
+        type: string
+        maxLength: 128
+  parameters:
+    CsrfToken:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 32
+        maxLength: 128
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        format: uuid
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 50
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+        maxLength: 200
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SolutionId:
+      name: solution_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    RunId:
+      name: run_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ReviewId:
+      name: review_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - message
+      - trace_id
+      properties:
+        code:
+          type: string
+          pattern: ^[a-z][a-z0-9_]{0,63}$
+        message:
+          type: string
+          maxLength: 500
+          description: Japanese, user-facing. Never contains stack traces, SQL or
+            input values.
+        trace_id:
+          type: string
+          pattern: ^[0-9a-f]{32}$
+        details:
+          type: array
+          maxItems: 50
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - field
+            - reason
+            properties:
+              field:
+                type: string
+                maxLength: 200
+              reason:
+                type: string
+                maxLength: 200
+    Health:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - ok
+          - degraded
+    Semver:
+      type: string
+      pattern: ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$
+    ExecutionMode:
+      type: string
+      enum:
+      - real
+      - mock
+    Role:
+      type: string
+      enum:
+      - admin
+      - solution_lead
+      - solution_architect
+      - qa_evaluator
+      - business_reviewer
+    PageInfo:
+      type: object
+      additionalProperties: false
+      required:
+      - total
+      - next_cursor
+      properties:
+        total:
+          type: integer
+          minimum: 0
+        next_cursor:
+          type:
+          - string
+          - 'null'
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - login_id
+      - password
+      properties:
+        login_id:
+          type: string
+          minLength: 1
+          maxLength: 64
+        password:
+          type: string
+          minLength: 1
+          maxLength: 128
+    SessionInfo:
+      type: object
+      additionalProperties: false
+      required:
+      - user
+      - csrf_token
+      - expires_at
+      properties:
+        user:
+          type: object
+          additionalProperties: false
+          required:
+          - id
+          - display_name
+          - roles
+          properties:
+            id:
+              type: string
+              format: uuid
+            display_name:
+              type: string
+              maxLength: 100
+            roles:
+              type: array
+              items:
+                $ref: '#/components/schemas/Role'
+        csrf_token:
+          type: string
+          minLength: 32
+          maxLength: 128
+        expires_at:
+          type: string
+          format: date-time
+    ProjectCreate:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - business_domain
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        business_domain:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Free text label for people. The engine never branches on it.
+        description:
+          type: string
+          maxLength: 1000
+    Project:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - business_domain
+      - owner_id
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        business_domain:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        owner_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    ProjectPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        page:
+          $ref: '#/components/schemas/PageInfo'
+    RequirementCreate:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 20000
+    RequirementRevision:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - project_id
+      - revision
+      - content
+      - ai_suggestions
+      - approved_by
+      - approved_at
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        revision:
+          type: integer
+          minimum: 1
+        content:
+          type: string
+        ai_suggestions:
+          type:
+          - object
+          - 'null'
+          description: Labeled AI draft (goals, fields, rules, risks, unknowns). Never
+            auto-applied.
+        approved_by:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        approved_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+    Document:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - project_id
+      - display_name
+      - media_type
+      - size_bytes
+      - page_count
+      - sha256
+      - data_origin
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        display_name:
+          type: string
+          maxLength: 255
+        media_type:
+          type: string
+          enum:
+          - application/pdf
+          - image/png
+          - image/jpeg
+        size_bytes:
+          type: integer
+          minimum: 1
+        page_count:
+          type: integer
+          minimum: 1
+          maximum: 30
+        sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        data_origin:
+          type: string
+          enum:
+          - synthetic
+        created_at:
+          type: string
+          format: date-time
+    DocumentPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        page:
+          $ref: '#/components/schemas/PageInfo'
+    CapabilityContract:
+      description: See contracts/capability.schema.json (validated in full by the
+        Catalog).
+      type: object
+    CapabilityVersion:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - capability_id
+      - version
+      - kind
+      - name
+      - content_sha256
+      - contract
+      - registered_by
+      - registered_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        capability_id:
+          type: string
+        version:
+          $ref: '#/components/schemas/Semver'
+        kind:
+          type: string
+          enum:
+          - local
+          - rest
+          - mcp_tool
+          - llm
+        name:
+          type: string
+        content_sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        contract:
+          $ref: '#/components/schemas/CapabilityContract'
+        registered_by:
+          type: string
+          format: uuid
+        registered_at:
+          type: string
+          format: date-time
+    CapabilityVersionPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CapabilityVersion'
+        page:
+          $ref: '#/components/schemas/PageInfo'
+    RulePack:
+      description: See contracts/rule_pack.schema.json.
+      type: object
+    RulePackVersion:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - rule_pack_id
+      - version
+      - content_sha256
+      - rule_pack
+      - registered_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        rule_pack_id:
+          type: string
+        version:
+          $ref: '#/components/schemas/Semver'
+        content_sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        rule_pack:
+          $ref: '#/components/schemas/RulePack'
+        registered_at:
+          type: string
+          format: date-time
+    RulePackVersionPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RulePackVersion'
+        page:
+          $ref: '#/components/schemas/PageInfo'
+    Workflow:
+      description: See contracts/workflow.schema.json.
+      type: object
+    SolutionCreate:
+      type: object
+      additionalProperties: false
+      required:
+      - project_id
+      - requirement_revision_id
+      - workflow
+      properties:
+        project_id:
+          type: string
+          format: uuid
+        requirement_revision_id:
+          type: string
+          format: uuid
+        workflow:
+          $ref: '#/components/schemas/Workflow'
+    SolutionUpdate:
+      type: object
+      additionalProperties: false
+      required:
+      - workflow
+      properties:
+        workflow:
+          $ref: '#/components/schemas/Workflow'
+    Solution:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - project_id
+      - requirement_revision_id
+      - state
+      - workflow
+      - workflow_hash
+      - created_by
+      - approved_by
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        requirement_revision_id:
+          type: string
+          format: uuid
+        state:
+          type: string
+          enum:
+          - draft
+          - validated
+          - approved
+          - archived
+        workflow:
+          $ref: '#/components/schemas/Workflow'
+        workflow_hash:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        created_by:
+          type: string
+          format: uuid
+        approved_by:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+    ValidationReport:
+      type: object
+      additionalProperties: false
+      required:
+      - valid
+      - errors
+      - warnings
+      properties:
+        valid:
+          type: boolean
+        errors:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/ValidationIssue'
+        warnings:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/ValidationIssue'
+    ValidationIssue:
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - message
+      - location
+      properties:
+        code:
+          type: string
+          pattern: ^[a-z][a-z0-9_]{0,63}$
+        message:
+          type: string
+          maxLength: 500
+        location:
+          type: string
+          maxLength: 300
+          description: JSON Pointer into the submitted document.
+    RunCreate:
+      type: object
+      additionalProperties: false
+      required:
+      - inputs
+      properties:
+        inputs:
+          type: object
+          maxProperties: 10
+          propertyNames:
+            pattern: ^[a-z][a-z0-9_]{0,63}$
+          additionalProperties:
+            type:
+            - string
+            - integer
+            - boolean
+          description: Keys match workflow.inputs[].name. document_ref values are
+            document UUIDs of the same project.
+    RunStatus:
+      type: string
+      enum:
+      - pending
+      - running
+      - waiting_review
+      - succeeded
+      - rejected
+      - failed
+      - cancelled
+      description: rejected = a human reviewer rejected the result; downstream nodes
+        are skipped and nothing is exported. Only succeeded runs can be exported or
+        used as reuse evidence.
+    Run:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - solution_id
+      - project_id
+      - workflow_hash
+      - status
+      - execution_mode
+      - trace_id
+      - input_sha256
+      - started_at
+      - finished_at
+      - usage
+      properties:
+        id:
+          type: string
+          format: uuid
+        solution_id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        workflow_hash:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        status:
+          $ref: '#/components/schemas/RunStatus'
+        execution_mode:
+          type: string
+          enum:
+          - real
+          - mock
+          - mixed
+          description: mixed if any node ran through a mock adapter. Mixed/mock runs
+            never count as real integration.
+        trace_id:
+          type: string
+          pattern: ^[0-9a-f]{32}$
+        input_sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        failure_code:
+          type:
+          - string
+          - 'null'
+          pattern: ^[a-z][a-z0-9_]{0,63}$
+        started_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        finished_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        usage:
+          $ref: '#/components/schemas/Usage'
+    RunPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Run'
+        page:
+          $ref: '#/components/schemas/PageInfo'
+    Usage:
+      type: object
+      additionalProperties: false
+      required:
+      - llm_input_tokens
+      - llm_output_tokens
+      - cost_jpy
+      - cost_known
+      properties:
+        llm_input_tokens:
+          type: integer
+          minimum: 0
+        llm_output_tokens:
+          type: integer
+          minimum: 0
+        cost_jpy:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        cost_known:
+          type: boolean
+          description: false when any call lacked verified pricing.
+    NodeRun:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - node_id
+      - capability_id
+      - capability_version
+      - capability_version_id
+      - status
+      - execution_mode
+      - attempt
+      - duration_ms
+      - input_sha256
+      - output_sha256
+      - error_code
+      properties:
+        id:
+          type: string
+          format: uuid
+        node_id:
+          type: string
+        capability_id:
+          type: string
+        capability_version:
+          $ref: '#/components/schemas/Semver'
+        capability_version_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - waiting_review
+          - succeeded
+          - failed
+          - skipped
+        execution_mode:
+          $ref: '#/components/schemas/ExecutionMode'
+        attempt:
+          type: integer
+          minimum: 1
+          maximum: 3
+        duration_ms:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        input_sha256:
+          type:
+          - string
+          - 'null'
+          pattern: ^[0-9a-f]{64}$
+        output_sha256:
+          type:
+          - string
+          - 'null'
+          pattern: ^[0-9a-f]{64}$
+        output_summary:
+          type:
+          - object
+          - 'null'
+          description: Redacted summary safe to display.
+        llm:
+          type:
+          - object
+          - 'null'
+          description: provider, model, usage, cost_jpy, latency_ms (ADR-002)
+        error_code:
+          type:
+          - string
+          - 'null'
+    EventPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - page
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            description: See contracts/events.schema.json.
+        page:
+          $ref: '#/components/schemas/PageInfo'
+    Evidence:
+      type: object
+      additionalProperties: false
+      required:
+      - document_id
+      - page
+      - start
+      - end
+      - text_sha256
+      - status
+      properties:
+        document_id:
+          type: string
+          format: uuid
+        page:
+          type: integer
+          minimum: 1
+        start:
+          type: integer
+          minimum: 0
+        end:
+          type: integer
+          minimum: 0
+        text_sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        status:
+          type: string
+          enum:
+          - verified
+          - unverified
+    ReviewItem:
+      type: object
+      additionalProperties: false
+      required:
+      - path
+      - label
+      - proposed_value
+      - origin
+      - evidence
+      - flags
+      properties:
+        path:
+          type: string
+          maxLength: 256
+        label:
+          type: string
+          maxLength: 100
+        proposed_value:
+          description: Value before review (AI draft or rule output).
+        origin:
+          type: string
+          enum:
+          - ai_draft
+          - rule
+          - parser
+        evidence:
+          type: array
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/Evidence'
+        flags:
+          type: array
+          maxItems: 20
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - rule_id
+            - severity
+            - result
+            properties:
+              rule_id:
+                type: string
+                pattern: ^[A-Z]{2,8}-[0-9]{3}$
+              severity:
+                type: string
+                enum:
+                - critical
+                - major
+                - minor
+              result:
+                type: string
+                enum:
+                - pass
+                - fail
+                - uncertain
+    ReviewTask:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - run_id
+      - node_id
+      - status
+      - assigned_to
+      - items
+      - decision
+      - decided_by
+      - decided_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        run_id:
+          type: string
+          format: uuid
+        node_id:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - completed
+        assigned_to:
+          type: string
+          format: uuid
+        items:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/ReviewItem'
+        decision:
+          type:
+          - string
+          - 'null'
+          enum:
+          - approved
+          - approved_with_corrections
+          - rejected
+          - null
+        decided_by:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        decided_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+    ReviewTaskPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewTask'
+        page:
+          $ref: '#/components/schemas/PageInfo'
+    ReviewDecision:
+      type: object
+      additionalProperties: false
+      required:
+      - decision
+      properties:
+        decision:
+          type: string
+          enum:
+          - approved
+          - approved_with_corrections
+          - rejected
+        corrections:
+          type: array
+          maxItems: 200
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - path
+            - corrected_value
+            properties:
+              path:
+                type: string
+                maxLength: 256
+              corrected_value:
+                type:
+                - string
+                - number
+                - boolean
+                - 'null'
+              comment:
+                type: string
+                maxLength: 1000
+        comment:
+          type: string
+          maxLength: 2000
+      allOf:
+      - if:
+          properties:
+            decision:
+              const: approved_with_corrections
+        then:
+          required:
+          - corrections
+          properties:
+            corrections:
+              minItems: 1
+      - if:
+          properties:
+            decision:
+              const: rejected
+        then:
+          required:
+          - comment
+          properties:
+            comment:
+              minLength: 1
+    DatasetVersion:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - split
+      - manifest_sha256
+      - frozen
+      - sample_count
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 100
+        split:
+          type: string
+          enum:
+          - dev
+          - holdout
+        manifest_sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        frozen:
+          type: boolean
+        sample_count:
+          type: integer
+          minimum: 0
+    EvaluationCreate:
+      type: object
+      additionalProperties: false
+      required:
+      - solution_id
+      - dataset_version_id
+      properties:
+        solution_id:
+          type: string
+          format: uuid
+        dataset_version_id:
+          type: string
+          format: uuid
+    Evaluation:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - solution_id
+      - workflow_hash
+      - dataset_version_id
+      - manifest_sha256
+      - status
+      - metrics
+      - critical_failures
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        solution_id:
+          type: string
+          format: uuid
+        workflow_hash:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        dataset_version_id:
+          type: string
+          format: uuid
+        manifest_sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+        metrics:
+          type:
+          - object
+          - 'null'
+          description: Field/rule/evidence/review metrics per ADR-007, with sample
+            counts.
+        critical_failures:
+          type: integer
+          minimum: 0
+        examples:
+          type:
+          - array
+          - 'null'
+          maxItems: 200
+          items:
+            type: object
+          description: Concrete false positives/negatives (dev only; holdout details
+            are not shown to AI agents).
+        created_at:
+          type: string
+          format: date-time
+    ReuseRecord:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - project_id
+      - capability_version_id
+      - capability_id
+      - capability_version
+      - reuse_kind
+      - adaptation_minutes
+      - evidence_run_ids
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        capability_version_id:
+          type: string
+          format: uuid
+        capability_id:
+          type: string
+        capability_version:
+          $ref: '#/components/schemas/Semver'
+        reuse_kind:
+          type: string
+          enum:
+          - unchanged
+          - config_only
+          - adapter_modification
+          - new_code
+        adaptation_minutes:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          description: From HUMAN_TIME_LOG; null if not recorded (never estimated).
+        evidence_run_ids:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            type: string
+            format: uuid
+        note:
+          type:
+          - string
+          - 'null'
+          maxLength: 1000
+    ReuseSummaryItem:
+      type: object
+      additionalProperties: false
+      required:
+      - capability_version_id
+      - capability_id
+      - capability_version
+      - project_ids
+      - real_run_count
+      - mock_run_count
+      properties:
+        capability_version_id:
+          type: string
+          format: uuid
+        capability_id:
+          type: string
+        capability_version:
+          $ref: '#/components/schemas/Semver'
+        project_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+        real_run_count:
+          type: integer
+          minimum: 0
+        mock_run_count:
+          type: integer
+          minimum: 0
+    ProjectMember:
+      type: object
+      additionalProperties: false
+      required:
+      - user_id
+      - roles
+      properties:
+        user_id:
+          type: string
+          format: uuid
+        display_name:
+          type: string
+          maxLength: 100
+          readOnly: true
+        roles:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - solution_lead
+            - solution_architect
+            - qa_evaluator
+            - business_reviewer
+    SolutionPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Solution'
+        page:
+          $ref: '#/components/schemas/PageInfo'
+    EvaluationPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evaluation'
+        page:
+          $ref: '#/components/schemas/PageInfo'
+    ReuseRecordCreate:
+      type: object
+      additionalProperties: false
+      required:
+      - capability_version_id
+      - reuse_kind
+      - evidence_run_ids
+      properties:
+        capability_version_id:
+          type: string
+          format: uuid
+        reuse_kind:
+          type: string
+          enum:
+          - unchanged
+          - config_only
+          - adapter_modification
+          - new_code
+        adaptation_minutes:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        evidence_run_ids:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            type: string
+            format: uuid
+        note:
+          type: string
+          maxLength: 1000
+    LlmProfileView:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - provider
+      - model
+      - enabled
+      - execution_mode
+      - pricing_verified_at
+      properties:
+        name:
+          type: string
+        provider:
+          type: string
+          enum:
+          - anthropic
+          - openai
+          - azure_openai
+          - gemini
+          - mock
+        model:
+          type: string
+        enabled:
+          type: boolean
+        execution_mode:
+          $ref: '#/components/schemas/ExecutionMode'
+        pricing_verified_at:
+          type:
+          - string
+          - 'null'
+          format: date

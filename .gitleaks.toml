@@ -1,0 +1,11 @@
+# gitleaks settings (jp-vuln-assessment, I-07). Default rules plus one path allowlist.
+# Scanner outputs under reports/security/*/{dast,container}/ quote URLs such as http://api:8000/... and the
+# public GPG key id of the Python base image; the generic-api-key rule reads those as keys. These files are
+# tool output, never hand-written, and contain no credentials (tokens are redacted by the scan scripts).
+# Fingerprints in .gitleaksignore broke when commits were rewritten, so paths are allowlisted instead.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Security scanner output (DAST / container reports)"
+paths = ['''^reports/security/[^/]+/(dast|container)/[^/]+\.json$''']

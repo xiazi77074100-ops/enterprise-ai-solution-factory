@@ -1,0 +1,248 @@
+{
+  "dataset": "invoice",
+  "split": "dev",
+  "samples": 28,
+  "manifest_sha256": "bbbae8e47c7c497ec0bc453645b57b1cff17143a8ce2ce10a9b37c24332d41a3",
+  "workflow": {
+    "workflow_id": "invoice-poc",
+    "version": 2
+  },
+  "rule_pack": "invoice@1.1.0",
+  "metrics": {
+    "field_macro_normalized_match": 0.9265134865134865,
+    "field_status_agreement": 0.8511904761904762,
+    "critical_fields_wrong_but_found": 0,
+    "critical_rule_recall": 1.0,
+    "critical_rule_positives": 8,
+    "evidence_position_accuracy": 1.0,
+    "evidence_spans": 278,
+    "unverified_evidence_never_positioned": true
+  },
+  "per_field_match": {
+    "due_date": 0.92,
+    "invoice_no": 0.9285714285714286,
+    "issue_date": 0.9285714285714286,
+    "payee_account": 0.9285714285714286,
+    "payee_bank": 0.9285714285714286,
+    "payee_branch": 0.9285714285714286,
+    "registration_no": 0.92,
+    "subtotal": 0.9285714285714286,
+    "tax": 0.9285714285714286,
+    "total": 0.9230769230769231,
+    "vendor_name": 0.9285714285714286
+  },
+  "rule_confusion": {
+    "INV-001": {
+      "pass->pass": 20,
+      "pass->uncertain": 1,
+      "fail->fail": 4,
+      "uncertain->uncertain": 2,
+      "fail->uncertain": 1
+    },
+    "INV-002": {
+      "pass->pass": 23,
+      "pass->fail": 2,
+      "fail->fail": 3
+    },
+    "INV-003": {
+      "pass->pass": 21,
+      "pass->uncertain": 2,
+      "uncertain->uncertain": 3,
+      "fail->fail": 2
+    },
+    "INV-004": {
+      "pass->pass": 23,
+      "pass->uncertain": 2,
+      "fail->fail": 3
+    },
+    "INV-005": {
+      "pass->pass": 23,
+      "pass->fail": 2,
+      "fail->fail": 3
+    },
+    "INV-006": {
+      "pass->pass": 24,
+      "pass->uncertain": 2,
+      "fail->fail": 2
+    }
+  },
+  "missed_critical_rules": [],
+  "field_errors": [
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "vendor_name",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "はなぶさ精機株式会社"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "invoice_no",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "2025-7102"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "issue_date",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "2025-10-30"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "due_date",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "2025-11-29"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "subtotal",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "8400"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "tax",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "840"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "total",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "9240"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "registration_no",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "T9000974814804"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "payee_bank",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "こもれび信用金庫"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "payee_branch",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "駅前支店"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "payee_account",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "2345670"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "vendor_name",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "株式会社やまびこ運輸"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "invoice_no",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "2025-2222"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "issue_date",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "2025-07-19"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "due_date",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "2025-09-17"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "subtotal",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "84000"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "tax",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "8400"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "total",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "92500"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "registration_no",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "T2000893580237"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "payee_bank",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "ゆうなぎ銀行"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "payee_branch",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "中央支店"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "payee_account",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "1111103"
+    }
+  ]
+}

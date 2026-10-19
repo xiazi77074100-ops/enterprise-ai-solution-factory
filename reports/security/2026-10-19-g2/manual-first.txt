@@ -1,0 +1,26 @@
+OK  E-01 HTML named .pdf: 415 (expected 415) {"code":"unsupported_media_type","message":"PDF・PNG・JPEG のファイルだけを登録できます。","trace
+OK  E-01 SVG named .png: 415 (expected 415) {"code":"unsupported_media_type","message":"PDF・PNG・JPEG のファイルだけを登録できます。","trace
+OK  E-01 EXE named .pdf: 415 (expected 415) {"code":"unsupported_media_type","message":"PDF・PNG・JPEG のファイルだけを登録できます。","trace
+OK  E-01 PDF declared as text/html: 415 (expected 415) {"code":"unsupported_media_type","message":"PDF・PNG・JPEG のファイルだけを登録できます。","trace
+NG  E-01 PNG with .jpg extension: 500 (expected 415) {"code": "internal_error", "message": "処理中にエラーが発生しました。（trace_id: 73f0d07ceac24c5
+OK  E-01 .html extension: 415 (expected 415) {"code":"unsupported_media_type","message":"PDF・PNG・JPEG のファイルだけを登録できます。","trace
+NG  E-02 exactly 10 MB (PDF + padding): 500 (expected 201) {"code": "internal_error", "message": "処理中にエラーが発生しました。（trace_id: 257505ef29074fd
+NG  E-02 10 MB + 1 byte: 500 (expected 413) {"code": "internal_error", "message": "処理中にエラーが発生しました。（trace_id: e16b514ddb464b4
+OK  E-02 30 pages: 201 (expected 201) 
+OK  E-02 31 pages: 422 (expected 422) {"code":"too_many_pages","message":"ページ数が上限（30 ページ）を超えています。","trace_id":"bb56caa
+OK  E-03 30000x30000 PNG header: 422 (expected 422) {"code":"image_too_large","message":"画像の画素数が上限を超えています。","trace_id":"51f697167df0
+OK  E-03 deeply nested PDF: 422 (expected 422) {"code":"document_unreadable","message":"ファイルを読み取れません。","trace_id":"4f2a603ac823
+OK  E-03 flate bomb PDF: 422 (expected 422) {"code":"document_unreadable","message":"ファイルを読み取れません。","trace_id":"3d71d3d79856
+OK  A-07 extra form field: 422 (expected 422) {"code":"validation_error","message":"入力内容に誤りがあります。","trace_id":"90fb7e8d735243a
+OK  A-07 data_origin=real: 422 (expected 422) {"code":"validation_error","message":"入力内容に誤りがあります。","trace_id":"75cced751bb2456
+OK  D-01 upload without CSRF: 403 (expected 403) {"code":"forbidden","message":"この操作を行う権限がありません。","trace_id":"ab8dc741deb04b9baad
+E-04 download status 200 | CD: attachment; filename="___%0D%0AX-Evil: 1.pdf"; filename*=UTF-8''%E8%AB%8B%E6%B1%82%E6%9B%B8%250D%250AX-Evil%3A%201.pdf | nosniff: nosniff | cache: no-store | type: application/pdf | same bytes: True
+E-04 header injection absent: True
+E-04 not served: /data/documents/ 404
+E-04 not served: /data/documents/ee9b7cc1-fee3-42b5-a554-e7c3abd71651 404
+E-04 not served: /var/documents/ 404
+E-04 not served: /documents/ee9b7cc1-fee3-42b5-a554-e7c3abd71651 404
+E-04 not served: /api/v1/documents/ee9b7cc1-fee3-42b5-a554-e7c3abd71651 404
+E-04 traversal in id: 404
+C-01 anonymous download: 401
+health after uploads: 200
