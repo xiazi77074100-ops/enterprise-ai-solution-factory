@@ -33,11 +33,15 @@ services:
       EASF_DATABASE_URL: postgresql+psycopg://easf_app:${EASF_APP_DB_PASSWORD}@db:5432/easf
       EASF_SECRET_KEY: ${EASF_SECRET_KEY:?set in .env}
       EASF_SITE_ORIGIN: ${EASF_SITE_ORIGIN:-http://localhost:5173}
+      EASF_STORAGE_DIR: /data/documents
     ports:
       - "127.0.0.1:8001:8000"
+    volumes:
+      - easf_documents:/data/documents  # uploaded documents; never served
     read_only: true
     security_opt: ["no-new-privileges:true"]
     cap_drop: ["ALL"]
 
 volumes:
   easf_db:
+  easf_documents:

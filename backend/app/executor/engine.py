@@ -22,6 +22,7 @@ from app.adapters.base import TRANSIENT, AdapterResult, Handler
 from app.catalog.models import CapabilityVersion
 from app.catalog.validation import content_sha256
 from app.core.errors import ApiError
+from app.documents.models import Document
 from app.executor.events import append_event
 from app.executor.models import ZERO_USAGE, NodeRun, ReviewTask, Run
 from app.project.models import ProjectMember
@@ -96,14 +97,28 @@ def _workflow_contracts(db: Session, workflow: dict[str, Any]) -> dict[str, Capa
     return rows
 
 
-def _check_inputs(workflow: dict[str, Any], inputs: dict[str, Any]) -> None:
+def _is_project_document(db: Session, project_id: uuid.UUID, value: Any) -> bool:
+    """document_ref values must be documents of the run's project (others look the same as non-existent)."""
+    try:
+        document_id = uuid.UUID(value) if isinstance(value, str) and len(value) == 36 else None
+    except ValueError:
+        return False
+    if document_id is None:
+        return False
+    document = db.get(Document, document_id)
+    return document is not None and document.project_id == project_id
+
+
+def _check_inputs(db: Session, project_id: uuid.UUID, workflow: dict[str, Any], inputs: dict[str, Any]) -> None:
     declared = {item["name"]: item["type"] for item in workflow["inputs"]}
     if set(inputs) != set(declared):
         raise ApiError("invalid_run_inputs", "入力の項目が解決策の定義と一致しません。", 422)
     for name, kind in declared.items():
         value = inputs[name]
         if kind == "document_ref":
-            raise ApiError("documents_not_available", "文書の入力はまだ利用できません（Phase 3）。", 422)
+            if not _is_project_document(db, project_id, value):
+                raise ApiError("invalid_run_inputs", f"入力 {name} の文書が見つかりません。", 422)
+            continue
         ok = {
             "string": isinstance(value, str),
             "integer": isinstance(value, int) and not isinstance(value, bool),
@@ -142,7 +157,7 @@ def start_run(
     contracts = _workflow_contracts(db, workflow)
     if not all(is_available(_key(c.contract), handlers) for c in contracts.values()):
         raise ApiError("implementation_unavailable", "実装がまだない Capability を含むため実行できません。", 409)
-    _check_inputs(workflow, inputs)
+    _check_inputs(db, solution.project_id, workflow, inputs)
 
     sorter: graphlib.TopologicalSorter[str] = graphlib.TopologicalSorter(
         {n["node_id"]: set() for n in workflow["nodes"]}

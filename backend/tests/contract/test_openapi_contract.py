@@ -40,12 +40,12 @@ from tests.integration.test_auth_projects import (  # noqa: F401  # shared fixtu
 ROOT = Path(__file__).resolve().parents[3]
 OPENAPI: dict[str, Any] = yaml.safe_load((ROOT / "contracts" / "openapi.yaml").read_text(encoding="utf-8"))
 EXAMPLES = ROOT / "contracts" / "examples"
+PDF = (ROOT / "fixtures" / "dev" / "documents" / "inv-0001.pdf").read_bytes()
 METHODS = ("get", "post", "put", "delete", "patch")
 
 # Contract operations implemented in later phases (Phase 2: runs/reviews/trace; Phase 3+: documents, export,
 # evaluations, reuse, llm). Removing an entry here is part of implementing it.
 PENDING = {
-    "listDocuments", "uploadDocument", "downloadDocument",
     "exportRunResult",
     "listDatasetVersions", "startEvaluation", "getEvaluation", "listEvaluations",
     "getProjectReuseEvidence", "getReuseSummary", "createReuseRecord",
@@ -123,6 +123,7 @@ class World:
     runnable_solution_id: str = ""  # approved testkit workflow
     run_id: str = ""  # waiting for review
     review_id: str = ""  # assigned to "reviewer"
+    document_id: str = ""  # uploaded by the lead
 
 
 @dataclass
@@ -132,6 +133,7 @@ class Call:
     body: Callable[[World], Any] | None = None
     project_scoped: bool = False
     headers: Callable[[World], dict[str, str]] | None = None
+    multipart: bool = False  # body is sent as form fields with a PDF file
 
 
 def _example(kind: str, name: str) -> Any:
@@ -190,6 +192,15 @@ CALLS: dict[str, Call] = {
     "approveRequirementRevision": Call("POST", "/api/v1/requirements/{revision}/approve", project_scoped=True),
     "getProjectMembers": Call("GET", "/api/v1/projects/{project}/members", project_scoped=True),
     "putProjectMembers": Call("PUT", "/api/v1/projects/{project}/members", _members, project_scoped=True),
+    "listDocuments": Call("GET", "/api/v1/projects/{project}/documents", project_scoped=True),
+    "uploadDocument": Call(
+        "POST",
+        "/api/v1/projects/{project}/documents",
+        lambda w: {"data_origin": "synthetic"},
+        project_scoped=True,
+        multipart=True,
+    ),
+    "downloadDocument": Call("GET", "/api/v1/documents/{document}/content", project_scoped=True),
     "listCapabilities": Call("GET", "/api/v1/capabilities"),
     "registerCapabilityVersion": Call(
         "POST", "/api/v1/capabilities", lambda w: _example("capabilities", "document_parser.json")
@@ -247,10 +258,15 @@ def _send(client: TestClient, call: Call, w: World, headers: dict[str, str]) -> 
         runnable=w.runnable_solution_id,
         run=w.run_id,
         review=w.review_id,
+        document=w.document_id,
     )
     body = call.body(w) if call.body else None
     extra = call.headers(w) if call.headers else {}
-    res: Response = client.request(call.method, path, json=body, headers={**headers, **extra})
+    if call.multipart:
+        files = {"file": ("contract.pdf", PDF, "application/pdf")}
+        res: Response = client.request(call.method, path, data=body, files=files, headers={**headers, **extra})
+    else:
+        res = client.request(call.method, path, json=body, headers={**headers, **extra})
     return res
 
 
@@ -324,6 +340,9 @@ def world(db: Session, db_url: str, monkeypatch: pytest.MonkeyPatch) -> World:  
     reviewer_client, _ = _session(db_url, "reviewer")
     tasks = reviewer_client.get("/api/v1/reviews").json()["items"]
     w.review_id = next(t["id"] for t in tasks if t["run_id"] == w.run_id)
+    uploaded = _send(client, CALLS["uploadDocument"], w, headers)
+    assert uploaded.status_code == 201, uploaded.text
+    w.document_id = uploaded.json()["id"]
     return w
 
 

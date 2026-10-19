@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api import catalog, projects, runs, session, solutions, system
+from app.api import catalog, documents, projects, runs, session, solutions, system
 from app.core.config import Settings, get_settings
 from app.core.db import make_session_factory
 from app.core.errors import install_error_handlers
@@ -31,6 +31,7 @@ def create_app(settings: Settings | None = None, handlers: HandlerTable | None =
     app.include_router(session.public_router)
     app.include_router(session.router)
     app.include_router(projects.router)
+    app.include_router(documents.router)
     app.include_router(catalog.router)
     app.include_router(solutions.router)
     app.include_router(runs.router)

@@ -3,6 +3,7 @@
 | 版 | 日付 | 変更内容 | 作成者 |
 |---|---|---|---|
 | 0.1 | 2026-10-18 | 初版（P1-01） | Claude Code |
+| 0.2 | 2026-10-19 | 文書の保存先、ロックファイルの更新の仕方（P3-01a） | Claude Code |
 
 前提：Docker Desktop、Python 3.12、uv、Node.js 22（画面は P1-03 から）。
 
@@ -31,6 +32,10 @@ uv run python -m app.admin create-user --login-id admin --display-name "管理�
 ```
 
 `--no-server-header` を必ず付ける（`Server: uvicorn` を出さない。`jp-secure-coding`）。
+
+アップロードした文書は `EASF_STORAGE_DIR`（既定 `var/documents`、`backend/` からの相対。`.gitignore` 済み）に保存される。テストは一時フォルダを使う（`backend/tests/conftest.py`）。
+
+依存を足したら、ロックファイルの書式を変えないよう Dockerfile と同じ版の uv で固定する：`uvx --from uv==0.6.17 uv lock`（新しい uv の `uv add` はロックファイル全体を書き換える）。
 
 ## 3. テストと検査（CI と同じ）
 

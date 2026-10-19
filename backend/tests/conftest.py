@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 import pytest
 from fastapi.testclient import TestClient
@@ -7,6 +8,9 @@ from sqlalchemy.engine import make_url
 from app.core.config import Settings
 from app.main import create_app
 
+# Uploaded documents of the whole test session (never the dev storage directory).
+STORAGE_DIR = tempfile.mkdtemp(prefix="easf-test-documents-")
+
 
 def make_settings(**overrides: object) -> Settings:
     values: dict[str, object] = {
@@ -14,6 +18,7 @@ def make_settings(**overrides: object) -> Settings:
         "database_url": os.environ.get("EASF_TEST_DATABASE_URL", "postgresql+psycopg://unused@127.0.0.1:1/unused"),
         "secret_key": "test-secret-key-0123456789-abcdefghijklmnop",
         "site_origin": "http://testserver",
+        "storage_dir": STORAGE_DIR,
     }
     values.update(overrides)
     return Settings(**values)  # type: ignore[arg-type]

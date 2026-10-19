@@ -12,6 +12,7 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from app.core.config import Settings
 from app.core.errors import new_trace_id, trace_id_var
+from app.documents.storage import MAX_DOCUMENT_BYTES
 
 logger = logging.getLogger("easf.errors")
 
@@ -24,6 +25,12 @@ CSP = (
 # VA-004: PostgreSQL text/jsonb cannot store NUL, so reject it up front (422) instead of failing in the DB (500).
 # In JSON a NUL is the escape \u0000 preceded by an even number of backslashes (\\u0000 is literal text).
 _JSON_NUL = re.compile(rb"(?<!\\)(?:\\\\)*\\u0000")
+
+
+# uploadDocument is the only request allowed past max_request_bytes: one 10 MB file plus the multipart framing.
+# The handler enforces the exact file limit (MAX_DOCUMENT_BYTES).
+_UPLOAD_PATH = re.compile(r"^/api/v1/projects/[^/]+/documents$")
+UPLOAD_REQUEST_BYTES = MAX_DOCUMENT_BYTES + 64 * 1024
 
 
 def _has_nul(scope: Scope, body: bytes) -> bool:
@@ -88,9 +95,12 @@ class SecurityMiddleware:
             trace_id_var.reset(token)
 
     async def _read_body(self, scope: Scope, receive: Receive) -> bytes | None:
-        """Read the whole body up to the limit (None when exceeded). Bounded by max_request_bytes."""
+        """Read the whole body up to the limit (None when exceeded). Bounded by max_request_bytes (uploads: 10 MB)."""
+        limit = self.limit
+        if scope["method"] == "POST" and _UPLOAD_PATH.match(scope["path"]):
+            limit = max(limit, UPLOAD_REQUEST_BYTES)
         declared = dict(scope.get("headers", [])).get(b"content-length")
-        if declared is not None and (not declared.isdigit() or int(declared) > self.limit):
+        if declared is not None and (not declared.isdigit() or int(declared) > limit):
             return None
         chunks: list[bytes] = []
         size = 0
@@ -100,7 +110,7 @@ class SecurityMiddleware:
                 break
             chunk = message.get("body", b"")
             size += len(chunk)
-            if size > self.limit:
+            if size > limit:
                 return None
             chunks.append(chunk)
             if not message.get("more_body", False):

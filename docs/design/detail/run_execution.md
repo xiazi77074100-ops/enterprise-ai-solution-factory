@@ -5,6 +5,7 @@
 | 0.1 | 2026-10-18 | 初版（P2-00） | Claude Code |
 | 0.2 | 2026-10-18 | P2-01 の実装に合わせる：検査結果の項目名、実装がない Capability の扱い、承認の条件 | Claude Code |
 | 0.3 | 2026-10-18 | P2-02 の実装に合わせる：再試行の回数、予算の時間、確認の項目、実行の方式の判定、出力の保存 | Claude Code |
+| 0.4 | 2026-10-19 | `document_ref` の入力を受け付ける（P3-01a） | Claude Code |
 
 前提：ADR-001（自前の型付き DAG、DB をキュー、1 プロセスのワーカー）、ADR-002（LlmPort、mock のみ）、ADR-005（MCP）、契約 v1.0.1。API の形は `contracts/openapi.yaml` が正で、ここは内部の動きを書く。
 
@@ -72,7 +73,7 @@ NodeRun: pending ─▶ running ─▶ succeeded
 
 ## 4. 実行の流れ
 
-1. **開始（startRun）**：Solution が実行できる状態（`requires_human_approval` なら `approved`、そうでなければ `validated` 以上）か確かめる。入力を `workflow.inputs` の型で検証（名前の過不足・型。`document_ref` は Phase 2 では文書が無いので 422）。`Idempotency-Key` が同じ利用者・同じ Solution で既にあれば元の Run を返す（本文が違えば 409）。Run（`pending`）と全ノードの NodeRun（`pending`）を作り、`run.started` を記録して 202。
+1. **開始（startRun）**：Solution が実行できる状態（`requires_human_approval` なら `approved`、そうでなければ `validated` 以上）か確かめる。入力を `workflow.inputs` の型で検証（名前の過不足・型。`document_ref` は同じ案件の文書の ID だけ。それ以外は 422、`documents.md` §1）。`Idempotency-Key` が同じ利用者・同じ Solution で既にあれば元の Run を返す（本文が違えば 409）。Run（`pending`）と全ノードの NodeRun（`pending`）を作り、`run.started` を記録して 202。
 2. **ワーカー**：`SELECT … FOR UPDATE SKIP LOCKED` で、`pending`・`running` かつリース切れの Run を 1 件取り、リース（`lease_until`）を延ばしながら進める。
 3. **次のノード**：`graphlib.TopologicalSorter` の順で、依存がすべて `succeeded` のノードを 1 つずつ実行する（並列にしない）。
 4. **入力の組み立て**：ワークフローの入力と、依存ノードの出力から JSON Pointer で取り出した値。**入力スキーマで検証**（1 か所目）。違えば NodeRun `failed`（`invalid_input`）。

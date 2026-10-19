@@ -5,6 +5,7 @@
 | 0.1 | 2026-10-18 | 初版（RV-G0-003） | Claude Code |
 | 0.2 | 2026-10-18 | 解決策の承認の条件、ロールで制限する操作の 403（契約 1.0.2、D-025） | Claude Code |
 | 0.3 | 2026-10-18 | 実行の開始・確認の一覧・確認の決定の規則（P2-02） | Claude Code |
+| 0.4 | 2026-10-19 | 文書の登録・ダウンロードの規則、`startRun` の文書の入力（P3-01a） | Claude Code |
 
 正本は `contracts/openapi.yaml` の各操作の `x-easf-roles`。この表はそれを人が読む形にしたもの（`spec-sync`）。認可のテストは OpenAPI の `x-easf-roles` から期待値表を作り、全操作 × 全ロールで確かめる（`backend/tests/contract/test_openapi_contract.py`：未ログイン 401、非メンバー 404〔案件に属する操作〕／403〔全体の操作〕、ロールのないメンバー 403、ロールのあるメンバーは成功。全応答を契約の応答スキーマで検証）。
 
@@ -32,7 +33,9 @@
 | ロールで制限する全操作 | ロールのないメンバー・利用者には 403（契約 1.0.2 で宣言をそろえ、契約テストで全件を確認） |
 | `approveRequirementRevision` | 作成者本人は承認できない（403） |
 | `decideReviewTask` | 割り当てられた確認者だけ（ほかの確認者・ロールのない人は 403、案件外は 404）。決定済みは 409、同じ冪等キーと同じ内容は最初の結果を返す。修正は `/fields/<名前>` だけ（ほかは 422） |
-| `startRun` | 解決策が承認済み（`requires_human_approval: false` なら検証済みでも可）。実装のない Capability を含むと 409。同じ利用者・同じ冪等キーは最初の Run を返し、内容が違えば 409 |
+| `startRun` | 解決策が承認済み（`requires_human_approval: false` なら検証済みでも可）。実装のない Capability を含むと 409。同じ利用者・同じ冪等キーは最初の Run を返し、内容が違えば 409。`document_ref` の入力は同じ案件の文書だけ（他の案件の文書は無い文書と同じ 422） |
+| `uploadDocument` | 形式・大きさ・ページ数・ファイル名のチェックは `docs/design/detail/documents.md` §2 |
+| `downloadDocument` | 文書の案件のメンバーだけ（それ以外は文書が無いときと同じ 404） |
 | `listReviewTasks` | どれかの案件で solution_lead か business_reviewer でなければ 403。`assigned_to_me=false` のときは、そのロールを持つ案件の確認タスク |
 | `login` | CSRF トークンは無いが `Origin` の照合は必須（ログイン CSRF 対策） |
 | 状態を変える全操作 | `X-CSRF-Token` と `Origin` の照合 |

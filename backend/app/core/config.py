@@ -1,6 +1,7 @@
 """Settings from environment variables (prefix EASF_). Secrets are SecretStr and never logged."""
 
 from functools import lru_cache
+from pathlib import Path
 from typing import Literal
 
 from pydantic import Field, SecretStr, model_validator
@@ -21,6 +22,7 @@ class Settings(BaseSettings):
     session_absolute_hours: int = Field(default=8, ge=1, le=72)
     login_max_failures: int = Field(default=5, ge=1, le=20)
     login_lock_minutes: int = Field(default=15, ge=1, le=1440)
+    storage_dir: Path = Field(default=Path("var/documents"), description="Uploaded documents (never served).")
 
     @model_validator(mode="after")
     def _prod_requires_secure_cookie(self) -> "Settings":

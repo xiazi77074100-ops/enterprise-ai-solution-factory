@@ -29,6 +29,7 @@ TABLES = (
     "node_run",
     "run",
     "solution",
+    "document",
     "capability_version",
     "rule_pack_version",
     "requirement_revision",

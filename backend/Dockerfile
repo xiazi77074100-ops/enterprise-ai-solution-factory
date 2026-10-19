@@ -7,7 +7,8 @@ RUN uv sync --locked --no-dev --no-install-project
 
 FROM python:3.12-alpine
 # Patch OS packages and drop pip (not used at runtime) so the image carries no known fixable CVEs.
-RUN apk upgrade --no-cache && python -m pip uninstall -y pip && adduser -S -D -H -u 10001 easf
+RUN apk upgrade --no-cache && python -m pip uninstall -y pip && adduser -S -D -H -u 10001 easf \
+    && mkdir -p /data/documents && chown easf /data/documents && chmod 700 /data/documents
 WORKDIR /app/backend
 COPY --from=build /app/backend/.venv /app/backend/.venv
 COPY backend/app ./app
