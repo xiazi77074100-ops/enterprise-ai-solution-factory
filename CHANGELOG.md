@@ -38,3 +38,4 @@
 - 追加：根拠の照合（自作のローカル MCP サーバ、stdio。外部連携ではない）、結果の出力（JSON・CSV、CSV インジェクション対策）と exportRunResult。依存：mcp 2.3.0（P3-01c、D-031）
 - 追加：請求書の Workflow（設定だけ、Rule pack invoice@1.1.0）を本番の部品で端から端まで動かすテスト。画面に文書の一覧・登録・ダウンロード、実行の文書の入力、結果の出力（CSV・JSON）を追加（P3-01d）
 - 追加：dev の評価（app.evaluation.offline）と結果。G2 前の脆弱性の自己診断：VA-G2-001（読み取り専用のコンテナで 1 MB を超えるアップロードが 500）を /tmp の tmpfs で修正。gitleaks の誤検知の除外をパスで（P3-03、D-032）
+- 追加：スキャン画像・テキスト層の無い PDF のページの OCR（Tesseract・日本語）。OCR 由来の根拠は未確認。請求書の Workflow v3。ホールドアウトの手順の修正（P3-04、D-033・D-034）

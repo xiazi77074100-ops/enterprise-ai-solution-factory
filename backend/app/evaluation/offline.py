@@ -46,6 +46,7 @@ def _same(predicted: Any, gold: Any) -> bool:
 def evaluate(workflow: dict[str, Any], pack: dict[str, Any], manifest_path: Path, split: str) -> dict[str, Any]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     base = manifest_path.parent
+    parse_cfg = _config(workflow, "document.parser")
     extract_cfg = _config(workflow, "document.rule_extractor")
     locate_cfg = _config(workflow, "document.evidence_locator")
     critical = {f["name"] for f in extract_cfg["field_spec"] if f["critical"]}
@@ -57,7 +58,7 @@ def evaluate(workflow: dict[str, Any], pack: dict[str, Any], manifest_path: Path
     silent_critical: list[dict[str, Any]] = []
     rule_rows: list[dict[str, Any]] = []
     spans_total = spans_correct = 0
-    unverified_shown = True
+    ocr_spans = ocr_spans_unverified = 0
     examples: list[dict[str, Any]] = []
     samples = [s for s in manifest["samples"] if s["split"] == split]
     if not samples:
@@ -73,7 +74,7 @@ def evaluate(workflow: dict[str, Any], pack: dict[str, Any], manifest_path: Path
         parsed = parse_document(
             {"data": data, "media_type": MEDIA[Path(sample["source_file"]).suffix.lower()], "document_id": document_id,
              "sha256": hashlib.sha256(data).hexdigest()},
-            {},
+            parse_cfg,
         )  # fmt: skip
         extracted = extract_by_labels({"document_id": document_id, "pages": parsed["pages"]}, extract_cfg)
         fields, status = extracted["fields"], extracted["field_status"]
@@ -103,11 +104,14 @@ def evaluate(workflow: dict[str, Any], pack: dict[str, Any], manifest_path: Path
             rule_rows.append({"sample_id": document_id, "rule_id": finding["rule_id"],
                               "severity": severity.get(finding["rule_id"], finding["severity"]),
                               "gold": finding["result"], "predicted": predicted})  # fmt: skip
+        ocr_pages = {p["page"] for p in parsed["pages"] if p["extraction_method"] != "text_layer"}
         for name, spans in located.items():
             gold_spans = label.get("gold_evidence", {}).get(name, [])
             for span in spans:
+                if span["page"] in ocr_pages:
+                    ocr_spans += 1
+                    ocr_spans_unverified += span["status"] == "unverified"
                 if span["status"] != "verified":
-                    unverified_shown = False  # the locator never returns unverified spans as positions
                     continue
                 spans_total += 1
                 spans_correct += any(
@@ -142,7 +146,8 @@ def evaluate(workflow: dict[str, Any], pack: dict[str, Any], manifest_path: Path
             "critical_rule_positives": len(critical_rules),
             "evidence_position_accuracy": spans_correct / spans_total if spans_total else None,
             "evidence_spans": spans_total,
-            "unverified_evidence_never_positioned": unverified_shown,
+            "ocr_evidence_spans": ocr_spans,
+            "ocr_evidence_all_unverified": ocr_spans == ocr_spans_unverified,
         },
         "per_field_match": per_field,
         "rule_confusion": {k: dict(v) for k, v in sorted(by_rule.items())},

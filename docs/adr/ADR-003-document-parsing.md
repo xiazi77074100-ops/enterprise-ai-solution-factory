@@ -30,3 +30,6 @@
 
 ## 確かめた資料
 版・保守状況は Phase 3 の着手時に確認して追記する。
+
+- 2026-10-19（D-028）：テキスト層は pypdfium2 5.14.0 に決定。
+- 2026-10-19（D-033、P3-04）：OCR は Tesseract 5.5.2（Alpine 3.24 の `tesseract-ocr`、日本語データ `tesseract-ocr-data-jpn`、どちらも Apache-2.0）。CI は Ubuntu の `tesseract-ocr`・`tesseract-ocr-jpn`。Python の包み（pytesseract など）は使わず、実行ファイルを直接呼ぶ。精度の評価は dev で行い（ホールドアウトの凍結後）、LLM の画像入力は試していない（D-004）。

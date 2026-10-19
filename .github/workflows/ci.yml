@@ -50,6 +50,8 @@ jobs:
           sudo apt-get install -y -q postgresql-client >/dev/null
           PGPASSWORD=ci-owner-password POSTGRES_USER=easf_owner POSTGRES_DB=easf EASF_APP_DB_PASSWORD=ci-app-password \
             PGHOST=127.0.0.1 sh ../docker/postgres/01-app-role.sh
+      - name: Tesseract with Japanese data (OCR tests, D-033)
+        run: sudo apt-get install -y -q tesseract-ocr tesseract-ocr-jpn >/dev/null
       - run: uv sync --locked --python 3.12
       - run: uv run ruff check . ../fixtures
       - run: uv run ruff format --check . ../fixtures

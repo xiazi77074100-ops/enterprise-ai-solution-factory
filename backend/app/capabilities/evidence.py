@@ -3,6 +3,7 @@
 Evidence is never invented: a span is returned only when the page text at [start, end) is one of the printed
 forms of the value, and it carries the SHA-256 of exactly those characters. A value with no such span gets no
 evidence (shown as unconfirmed). Offsets index the parser's page texts (app/capabilities/pdf_text.py).
+A span found in OCR text is `unverified` (ADR-003): the OCR text is not the document's own text layer.
 """
 
 from typing import Any
@@ -22,6 +23,10 @@ def _forms(value: Any, match: str) -> list[str]:
         return [text]
     forms = [text, nfkc(text), *date_forms(text), *amount_forms(text)]
     return sorted({f for f in forms if len(f) >= MIN_CHARS}, key=len, reverse=True)  # longest first
+
+
+def _status(page: dict[str, Any]) -> str:
+    return "verified" if page.get("extraction_method") == "text_layer" else "unverified"
 
 
 def _whole_number(text: str, start: int, end: int) -> bool:
@@ -48,7 +53,7 @@ def locate(document_id: str, pages: list[dict[str, Any]], fields: dict[str, Any]
                         taken.append((page["page"], start, end))
                         spans.append(
                             {"document_id": document_id, "page": page["page"], "start": start, "end": end,
-                             "text_sha256": span_sha256(text, start, end), "status": "verified"}
+                             "text_sha256": span_sha256(text, start, end), "status": _status(page)}
                         )  # fmt: skip
                     start = end
         evidence[name] = sorted(spans, key=lambda s: (s["page"], s["start"]))

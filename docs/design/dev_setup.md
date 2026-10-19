@@ -5,6 +5,7 @@
 | 0.1 | 2026-10-18 | 初版（P1-01） | Claude Code |
 | 0.2 | 2026-10-19 | 文書の保存先、ロックファイルの更新の仕方（P3-01a） | Claude Code |
 | 0.3 | 2026-10-19 | E2E の接続先の上書き（P3-01d） | Claude Code |
+| 0.4 | 2026-10-19 | OCR（Tesseract）（P3-04） | Claude Code |
 
 前提：Docker Desktop、Python 3.12、uv、Node.js 22（画面は P1-03 から）。
 
@@ -80,3 +81,8 @@ Node.js は 22 系（jsdom 29 は 22.13 以上）。
 ## 5. LLM の API キー（D-015）
 
 `.env` の `EASF_LLM_GEMINI_API_KEY` に入れる。値をコミット・ログに出さない。Gemini のプロファイルを有効にするのは、ADR-002 の確認（無料枠のデータの扱い・制限）を済ませてから（Phase 2 以降）。
+
+## 6. OCR（Tesseract、D-033・D-034）
+
+コンテナと CI には Tesseract（日本語）が入っている。Windows の開発環境に無い場合、OCR のテストは飛ばされ（skipped）、`ocr: tesseract` のノードは失敗する。OCR を含めて確かめるときは Linux の Docker で実行する（`docs/HANDOFF.md` §3）。テスト用のコンテナでは `apt-get install -y tesseract-ocr tesseract-ocr-jpn`。
+

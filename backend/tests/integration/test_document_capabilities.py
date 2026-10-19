@@ -1,6 +1,7 @@
 """P3-01b capabilities through the real handlers and the Executor: upload → parse → extract → validate."""
 
 import json
+import shutil
 import uuid
 from pathlib import Path
 from typing import Any
@@ -13,6 +14,7 @@ from app.capabilities.document_parser import parse_document
 from app.capabilities.rule_validator import validate_rules
 from app.core.db import make_session_factory
 from app.executor.handlers import production_handlers
+from app.executor.models import NodeRun
 from tests.conftest import STORAGE_DIR, make_settings
 from tests.integration.test_auth_projects import db, migrated  # noqa: F401  # shared fixtures
 from tests.integration.test_runs import Env, build_env
@@ -30,7 +32,7 @@ FIELD_SPEC = [
 ]
 
 
-def _workflow(extractor: tuple[str, dict[str, Any]]) -> dict[str, Any]:
+def _workflow(extractor: tuple[str, dict[str, Any]], ocr: str = "none") -> dict[str, Any]:
     capability_id, config = extractor
     return {
         "schema_version": "1",
@@ -40,7 +42,7 @@ def _workflow(extractor: tuple[str, dict[str, Any]]) -> dict[str, Any]:
         "inputs": [{"name": "document", "type": "document_ref", "to": [{"node_id": "parse", "field": "document_ref"}]}],
         "nodes": [
             {"node_id": "parse", "capability_id": "document.parser", "capability_version": "1.0.0",
-             "config": {"ocr": "none"}},
+             "config": {"ocr": ocr}},
             {"node_id": "extract", "capability_id": capability_id, "capability_version": "1.0.0", "config": config},
             {"node_id": "validate", "capability_id": "document.rule_validator", "capability_version": "1.0.0",
              "config": {"rule_pack_id": "invoice", "rule_pack_version": "1.1.0"}},
@@ -81,9 +83,9 @@ def env(db: Session, db_url: str, monkeypatch: pytest.MonkeyPatch) -> Env:  # no
     return e
 
 
-def _upload(e: Env, name: str) -> str:
+def _upload(e: Env, name: str, data: bytes | None = None) -> str:
     client, h = e.as_("lead")
-    data = (DEV / "documents" / name).read_bytes()
+    data = data if data is not None else (DEV / "documents" / name).read_bytes()
     media = "application/pdf" if name.endswith(".pdf") else "image/png"
     res = client.post(
         f"/api/v1/projects/{e.project_id}/documents",
@@ -152,3 +154,21 @@ def test_unresolvable_references_fail_without_retry(env: Env) -> None:
         {"fields": {}, "field_status": {}}, {"rule_pack_id": "nothing", "rule_pack_version": "1.0.0"}, 10
     )
     assert (no_pack.status, no_pack.error_code) == ("unavailable", "rule_pack_not_found")
+
+
+@pytest.mark.skipif(shutil.which("tesseract") is None, reason="tesseract is not installed")
+def test_ocr_runs_through_the_worker_handler(env: Env) -> None:
+    """D-033: the parser child (with its memory cap) runs Tesseract; evidence from OCR text is not verified."""
+    from tests.unit.test_ocr import _bytes, _page_image  # noqa: PLC0415
+
+    run, nodes = _run(
+        env, _workflow(RULE_EXTRACTOR, ocr="tesseract"), _upload(env, "scan.png", _bytes(_page_image(), "PNG"))
+    )
+    assert run["status"] == "succeeded", (run, nodes)
+    with make_session_factory(make_settings(database_url=env.db_url))() as session:
+        parse = session.get(NodeRun, uuid.UUID(nodes["parse"]["id"]))
+        assert parse is not None and parse.output is not None
+        assert parse.output["pages"][0]["extraction_method"] == "ocr_tesseract"
+        extract = session.get(NodeRun, uuid.UUID(nodes["extract"]["id"]))
+        assert extract is not None and extract.output is not None
+        assert extract.output["fields"]["invoice_no"] == "2025-0001"

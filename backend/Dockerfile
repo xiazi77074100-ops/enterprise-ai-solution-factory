@@ -7,7 +7,9 @@ RUN uv sync --locked --no-dev --no-install-project
 
 FROM python:3.12-alpine
 # Patch OS packages and drop pip (not used at runtime) so the image carries no known fixable CVEs.
-RUN apk upgrade --no-cache && python -m pip uninstall -y pip && adduser -S -D -H -u 10001 easf \
+# Tesseract with Japanese data reads scanned documents (ADR-003, D-033; Apache-2.0).
+RUN apk upgrade --no-cache && apk add --no-cache tesseract-ocr tesseract-ocr-data-jpn \
+    && python -m pip uninstall -y pip && adduser -S -D -H -u 10001 easf \
     && mkdir -p /data/documents && chown easf /data/documents && chmod 700 /data/documents
 WORKDIR /app/backend
 COPY --from=build /app/backend/.venv /app/backend/.venv

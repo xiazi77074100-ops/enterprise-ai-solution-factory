@@ -19,7 +19,7 @@ def test_dev_evaluation_reports_every_metric() -> None:
     metrics = result["metrics"]
     assert set(metrics) >= {
         "field_macro_normalized_match", "critical_rule_recall", "evidence_position_accuracy",
-        "critical_fields_wrong_but_found", "unverified_evidence_never_positioned",
+        "critical_fields_wrong_but_found", "ocr_evidence_all_unverified",
     }  # fmt: skip
     assert all(0 <= metrics[k] <= 1 for k in ("field_macro_normalized_match", "evidence_position_accuracy"))
 

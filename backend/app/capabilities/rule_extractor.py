@@ -4,6 +4,8 @@ Which labels to look for comes from the node config (`field_spec[].labels`), nev
 version serves any document type. For each field, every "label：value" line on every page is a candidate:
 one distinct value -> found, several different values -> uncertain (value null), none -> missing.
 Types this method cannot read (arrays, booleans) are reported as uncertain so a person checks them.
+A value read from an OCR page (`extraction_method` other than text_layer) is never `found`: OCR misreads
+characters such as ¥ and separators, so the value is kept as a draft but reported as uncertain (D-034).
 """
 
 import re
@@ -35,7 +37,7 @@ def _read(kind: str, raw: str) -> str | int | None:
 
 
 def extract_by_labels(inputs: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
-    texts = [nfkc(page["text"]) for page in inputs["pages"]]
+    texts = [(nfkc(page["text"]), page["extraction_method"] != "text_layer") for page in inputs["pages"]]
     fields: dict[str, Any] = {}
     status: dict[str, str] = {}
     for spec in config["field_spec"]:
@@ -44,18 +46,19 @@ def extract_by_labels(inputs: dict[str, Any], config: dict[str, Any]) -> dict[st
             fields[name], status[name] = None, "uncertain"
             continue
         candidates: list[str | int] = []
-        unreadable = False
+        unreadable = from_ocr = False
         for label in spec["labels"]:
             pattern = _pattern(label)
-            for text in texts:
+            for text, ocr_page in texts:
                 for match in pattern.finditer(text):
                     value = _read(kind, match["value"])
+                    from_ocr = from_ocr or ocr_page
                     if value is None:
                         unreadable = True
                     elif value not in candidates:
                         candidates.append(value)
         if len(candidates) == 1:
-            fields[name], status[name] = candidates[0], "found"
+            fields[name], status[name] = candidates[0], ("uncertain" if from_ocr else "found")
         elif candidates or unreadable:
             fields[name], status[name] = None, "uncertain"
         else:

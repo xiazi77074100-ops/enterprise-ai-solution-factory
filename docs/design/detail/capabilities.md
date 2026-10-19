@@ -4,6 +4,7 @@
 |---|---|---|---|
 | 0.1 | 2026-10-19 | 初版（P3-01b） | Claude Code |
 | 0.2 | 2026-10-19 | 根拠の照合（MCP）・結果の出力（P3-01c） | Claude Code |
+| 0.3 | 2026-10-19 | OCR（Tesseract）、OCR 由来の根拠は未確認（P3-04） | Claude Code |
 
 Capability の契約（入出力・設定のスキーマ）は `contracts/examples/capabilities/` が正。ここは実装の動きを書く。どの部品も業務名を持たず、業務の違いはノードの設定（`field_spec`・Rule pack）で表す（`easf-capability-contract` §1-4）。
 
@@ -23,7 +24,11 @@ Capability の契約（入出力・設定のスキーマ）は `contracts/exampl
 ## 2. 解析（document_parser.v1）
 
 - PDF：テキスト層（pypdfium2、`backend/app/capabilities/pdf_text.py`）のページごとのテキスト。根拠の文字の番号はこの文字列を指す。
-- 画像（PNG・JPEG）：OCR は POC では未対応。空のテキストの 1 ページを返し、抽出はすべて `missing` → 人の確認へ。`extraction_method` は `text_layer`（契約の選択肢に「OCR なし」がないため。OCR を足すときは `ocr_tesseract`）。
+- 設定 `ocr`（ノードの設定）：
+  - `tesseract`：画像（PNG・JPEG）と、テキスト層の無い（空白だけの）PDF のページを Tesseract（日本語、`--psm 6`）で読み、`extraction_method: ocr_tesseract`。PDF のページは 300 dpi で画像にしてから読む。Tesseract は PATH の実行ファイル（コンテナに同梱、Alpine の `tesseract-ocr` 5.5.2・`tesseract-ocr-data-jpn`）を絶対パスで、引数のリスト・`shell=False`・自分で作った一時ファイルだけで呼ぶ（`backend/app/capabilities/ocr.py`）。OCR の出力は NFKC にし（丸数字・全角の数字も数字に）、日本語の文字どうしの間の空白を除く（Tesseract 5.5 は「請 求 書」のように空白を入れる）。根拠の文字の番号はこの正規化後のテキストを指す。1 ページ 40 秒まで。Tesseract が無ければノードを失敗にする（`exception_ocrunavailableerror`。空のテキストでごまかさない）。
+  - `none`：画像は空のテキストの 1 ページ、テキスト層の無い PDF のページも空。抽出は missing → 人の確認。
+  - `llm`：未対応（D-004）。ノードを失敗にする。
+- テキスト層のある PDF のページは、`tesseract` でも OCR しない。
 - 1 ページが 50,000 文字を超えたら失敗（切り詰めると根拠の位置がずれるため）。
 - 出力：`document_id`・`document_sha256`（登録時のハッシュ）・`pages`。
 
@@ -36,6 +41,7 @@ Capability の契約（入出力・設定のスキーマ）は `contracts/exampl
 3. 型ごとに読む：`date`（西暦・和暦〔令和・平成、R・H〕→ ISO 8601）、`decimal`（`¥`・`￥`・`円`・桁区切りを除いた数字の文字列）、`integer`、`string`（前後の空白を除き 200 文字まで）。
 4. 結果：異なる値が 1 つ → `found`、2 つ以上 → `uncertain`（値は null）、見出しはあるが読めない → `uncertain`、見出しが無い → `missing`。
 5. `array`・`boolean` はこの方式では読まないので `uncertain`（人が確認）。
+6. OCR で読んだページ（`extraction_method` が `text_layer` でない）から拾った値は、1 つに決まっても `found` にせず `uncertain`（値は下書きとして残す）。OCR は `¥` や区切りを読み違える（例：`¥104,060` → `\104,.060` → `104`）ため、誤った値を確定に見せない（D-034）。
 
 文書の中の文は、どれもデータとして扱う（指示として解釈しない。LLM を使わない）。
 
@@ -72,7 +78,7 @@ Rule pack（`contracts/rule_pack.schema.json`）の式を、決まった演算�
 - 実際の MCP プロトコル（公式 SDK `mcp` 2.3.0、stdio）で呼ぶが、サーバは EASF 内の自作のローカルサーバ（`python -m app.mcp_server`、固定のコマンド）。**外部の実連携ではない**。
 - ツールの引数は「Capability の入力 ＋ ノードの設定」。ツールのスキーマは `backend/app/mcp_tools/locate_evidence.json`（入力 ＝ 契約の `input_schema` に `configuration_schema` の項目を合わせたもの、出力 ＝ 契約の `output_schema`）。`mcp_tool` の版の登録時に Catalog が一致を確かめ、違えば `tool_schema_mismatch` で拒否する（`backend/app/catalog/validation.py`）。
 - アダプタは許可リストのツール名だけを呼び、サーバが広告していなければ呼ばない（`mcp_tool_not_advertised`、再試行しない）。時間切れは `timeout`、サーバの起動失敗・プロトコルの異常は例外の型名だけを `mcp_<型名>` で記録する。
-- 照合：項目の値の「印字の形」（`match: exact` は値そのまま、`normalized` は値・NFKC・日付の書き方〔西暦・和暦・スラッシュ〕・金額の書き方〔`¥`・`￥`・`円`・桁区切り〕）をページのテキストで探す。見つかった範囲だけを `verified` で返し、その範囲の SHA-256 を付ける。数の途中で切れる範囲（「¥104,060」の中の「¥1」など）・重なる範囲は使わない。1 項目 10 件まで、1 文字の値は探さない。見つからない値は根拠なし（空の配列。画面では「未確認」）。根拠を作らない（`easf-capability-contract` §1-6）。
+- 照合：項目の値の「印字の形」（`match: exact` は値そのまま、`normalized` は値・NFKC・日付の書き方〔西暦・和暦・スラッシュ〕・金額の書き方〔`¥`・`￥`・`円`・桁区切り〕）をページのテキストで探す。見つかった範囲を返し、その範囲の SHA-256 を付ける。状態は、テキスト層のページなら `verified`、OCR で読んだページなら `unverified`（OCR の文字は文書そのものの文字ではないため、ADR-003）。数の途中で切れる範囲（「¥104,060」の中の「¥1」など）・重なる範囲は使わない。1 項目 10 件まで、1 文字の値は探さない。見つからない値は根拠なし（空の配列。画面では「未確認」）。根拠を作らない（`easf-capability-contract` §1-6）。
 
 ## 8. 結果の出力（result_exporter.v1 と exportRunResult）
 

@@ -92,3 +92,8 @@
 - 自己診断であり、第三者診断・独立診断の代わりではない（D-024）。
 - ZAP は API だけ。画面の DAST は未実施。ZAP は契約の例の ID で叩くため、状態を持つ流れ（実行・確認・出力）は自動テストで確認した。
 - ワーカー（実行の処理）はコンテナにしていない。ワーカーでの子プロセス・MCP サーバの起動は Windows と Linux（CI・Docker の結合テスト）で確認した。
+
+## 9. 追記（2026-10-19、P3-04）
+
+イメージに Tesseract（`tesseract-ocr` 5.5.2・`tesseract-ocr-data-jpn`）を追加した後、trivy 0.76.0 image を再実行：0 件（全重大度・秘密情報なし、`container/trivy-image-ocr.json`）。Tesseract は解析の子プロセスから絶対パス・引数のリスト・`shell=False`・自分で作った一時ファイルだけで呼ぶ（ruff S・bandit 0 件）。読み取り専用・非 root・`cap_drop: ALL` のコンテナの中で OCR が動くことを確認（一時ファイルは /tmp の tmpfs）。
+
