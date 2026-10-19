@@ -17,7 +17,7 @@
    - 出力先がリポジトリの中なら止まる。種が無ければ止まる。
    - `fixtures/manifest.holdout.json`（各文書・ラベルの SHA-256 だけ）がリポジトリに書かれる。
 3. 出力したフォルダを AES-256 の暗号化 ZIP にし（パスワードは人だけ）、元のフォルダを消す。
-4. 重大ラベル（層 `total_mismatch`・`payee_changed`・`ambiguous`・`injected_instruction`）を 1 件ずつ目で確かめ、ラベルの `reviewed_by` に名前を書く（ZIP を作る前に）。
+4. 重大ラベル（層 `total_mismatch`・`payee_changed`・`ambiguous`・`injected_instruction`）を 1 件ずつ目で確かめる（ZIP を作る前に）。**ラベルのファイルは編集しない**（手順 2 で `label_sha256` を記録済みのため、編集するとハッシュが合わなくなる）。確かめた人・日付・`sample_id` は手順 5 の `DECISIONS.md` の行に書く。誤りを見つけたら、フォルダを消して手順 2 からやり直し、CC に生成器の不具合として（文書の中身は伝えずに）知らせる。
 5. `fixtures/manifest.json` と `fixtures/manifest.holdout.json` の SHA-256 を計算し、`DECISIONS.md` に記録する（**凍結**）。以後、閾値・ホールドアウト・成功の定義を変えない。
 
    ```sh

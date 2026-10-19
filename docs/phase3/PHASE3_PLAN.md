@@ -3,6 +3,7 @@
 | 版 | 日付 | 変更内容 | 作成者 |
 |---|---|---|---|
 | 0.1 | 2026-10-19 | 初版 | Claude Code |
+| 0.2 | 2026-10-19 | P3-04（OCR）を追加、G2 の進め方（D-033） | Claude Code |
 
 ## 1. 着手前の確認（easf-phase-gate §1）
 
@@ -51,6 +52,7 @@
 | P3-01b | `document_parser.v1`・`rule_based_extractor.v1`・`structured_extractor.v1`（mock）・`rule_validator.v1` | Capability の契約テスト、dev での抽出の結果 |
 | P3-01c | 根拠の照合（MCP）・`result_exporter.v1`・`exportRunResult` | 根拠の照合、CSV インジェクション |
 | P3-01d | 請求書の Workflow を実際に流す（アップロード → 解析 → 抽出 → 検証 → 根拠 → 確認 → 出力）、画面の追加（文書・出力） | 端から端まで、画面の E2E |
+| P3-04 | スキャン画像の OCR（Tesseract・日本語）。OCR 由来の根拠は「未確認」（ADR-003）。順序：ホールドアウトの凍結 → OCR の実装と dev での調整 → 最終の版でホールドアウトを 1 回評価 → G2 の判定（D-033） | OCR のテスト、dev の再評価 |
 | P3-03 | dev での評価、凍結（人のホールドアウトの生成のあと）、G2 前の診断（アップロード E-01〜E-04 を必須）、G2 報告 | `reports/gate_G2.md` |
 
 ## 5. 人にお願いすること（時期が来たら知らせる）
