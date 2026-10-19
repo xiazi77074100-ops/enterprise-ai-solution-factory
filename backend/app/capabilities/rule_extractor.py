@@ -22,8 +22,19 @@ def _pattern(label: str) -> re.Pattern[str]:
     return re.compile(re.escape(nfkc(label)) + _NOTE + r"\s*[：:]\s*(?P<value>[^\r\n]*)")
 
 
-def _read(kind: str, raw: str) -> str | int | None:
-    raw = raw.strip()
+# OCR clean-up (D-036). Tesseract reads the yen thousands separator "," as "." ("8,400" -> "8.400"), and a
+# value cell may be followed by a column gap and table rules ("こもれび信用金庫      -").
+_OCR_THOUSANDS = re.compile(r"(?<=\d)\.(?=\d{3}(?!\d))")
+_OCR_COLUMN_GAP = re.compile(r"\s{2,}.*$")
+
+
+def _clean_ocr(raw: str) -> str:
+    raw = _OCR_THOUSANDS.sub(",", _OCR_COLUMN_GAP.sub("", raw.strip()))
+    return raw.strip(" -_|")
+
+
+def _read(kind: str, raw: str, ocr_page: bool = False) -> str | int | None:
+    raw = _clean_ocr(raw) if ocr_page else raw.strip()
     if kind == "date":
         return parse_date(raw)
     if kind == "decimal":
@@ -51,7 +62,7 @@ def extract_by_labels(inputs: dict[str, Any], config: dict[str, Any]) -> dict[st
             pattern = _pattern(label)
             for text, ocr_page in texts:
                 for match in pattern.finditer(text):
-                    value = _read(kind, match["value"])
+                    value = _read(kind, match["value"], ocr_page)
                     from_ocr = from_ocr or ocr_page
                     if value is None:
                         unreadable = True

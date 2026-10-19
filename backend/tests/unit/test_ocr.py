@@ -100,3 +100,29 @@ def test_values_from_ocr_pages_are_never_found() -> None:
     spec = [{"name": "total", "type": "decimal", "label_ja": "合計", "critical": True, "labels": ["合計金額"]}]
     out = extract_by_labels({"document_id": "d", "pages": pages}, {"field_spec": spec})
     assert out["field_status"]["total"] == "uncertain"  # a misread "104" must not look confirmed
+
+
+@pytest.mark.parametrize(
+    ("kind", "text", "value"),
+    [
+        ("decimal", "小計：8.400", "8400"),  # thousands separator read as a dot
+        ("decimal", "小計：1.234.567円", "1234567"),
+        ("string", "振込先：こもれび信用金庫          -", "こもれび信用金庫"),  # column gap and a table rule
+        ("string", "振込先：-       -", None),
+        ("date", "請求日：R7.10.30", "2025-10-30"),
+    ],
+)
+def test_ocr_values_are_cleaned(kind: str, text: str, value: str | None) -> None:
+    label = text.split("：")[0]
+    spec = [{"name": "x", "type": kind, "label_ja": label, "critical": False, "labels": [label]}]
+    pages = [{"page": 1, "text": text, "extraction_method": "ocr_tesseract"}]
+    out = extract_by_labels({"document_id": "d", "pages": pages}, {"field_spec": spec})
+    assert out["fields"]["x"] == value
+    assert out["field_status"]["x"] == "uncertain"
+
+
+def test_text_layer_values_are_not_rewritten() -> None:
+    spec = [{"name": "x", "type": "decimal", "label_ja": "単価", "critical": False, "labels": ["単価"]}]
+    pages = [{"page": 1, "text": "単価：8.400", "extraction_method": "text_layer"}]
+    out = extract_by_labels({"document_id": "d", "pages": pages}, {"field_spec": spec})
+    assert out["fields"]["x"] == "8.400"  # a real decimal on a text layer stays as printed

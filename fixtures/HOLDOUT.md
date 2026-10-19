@@ -26,6 +26,17 @@
 
 6. `fixtures/manifest.holdout.json` をコミットする（ハッシュだけなので AI が見てよい）。
 
-## 評価のとき
+## 評価のとき（人が実行する）
 
-ホールドアウトでの評価は人が実行し、AI には集計値（項目ごとの正解率・ルールの適合率と再現率など）だけを渡す。誤りの具体例は人が見て、必要なら dev に似た例を足す（ホールドアウトの文書そのものは渡さない）。
+1. 暗号化 ZIP をリポジトリの外に展開する（例：`%USERPROFILE%\easf-holdout\invoice` に `documents\`・`labels\`）。
+2. Docker Desktop を起動し、リポジトリの直下で（PowerShell）：
+
+   ```powershell
+   pwsh scripts/eval_holdout.ps1          # 別の場所なら -HoldoutDir <フォルダ>
+   ```
+
+   - Linux（Docker）で Tesseract を入れて、最終の版（`fixtures/workflows/invoice-v3.json`、Rule pack `invoice@1.1.0`）を実行する。フォルダは読み取り専用でつなぐ。
+   - すべての文書とラベルの SHA-256 を `fixtures/manifest.holdout.json` と照合し、1 つでも違えば止まる。
+   - 出力は `reports/eval/holdout/result.json` の**集計値だけ**（件数・割合・ルールごとの件数。sample_id・値・誤りの例は書かない）。AI が読んでよいのはこのファイルだけ。
+3. 展開したフォルダを消す。
+4. CC に「終わった」と伝える。誤りの具体例は人が見て、必要なら dev に似た例を足す（ホールドアウトの文書そのものは渡さない）。ホールドアウトの評価は 1 回だけ（何度も回して版を選ばない）。

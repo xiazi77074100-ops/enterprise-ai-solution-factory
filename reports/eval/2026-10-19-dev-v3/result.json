@@ -1,0 +1,165 @@
+{
+  "dataset": "invoice",
+  "split": "dev",
+  "samples": 28,
+  "manifest_sha256": "bbbae8e47c7c497ec0bc453645b57b1cff17143a8ce2ce10a9b37c24332d41a3",
+  "workflow": {
+    "workflow_id": "invoice-poc",
+    "version": 3
+  },
+  "rule_pack": "invoice@1.1.0",
+  "metrics": {
+    "field_macro_normalized_match": 0.9606493506493506,
+    "field_status_agreement": 0.8511904761904762,
+    "critical_fields_wrong_but_found": 0,
+    "critical_rule_recall": 1.0,
+    "critical_rule_positives": 8,
+    "evidence_position_accuracy": 1.0,
+    "evidence_spans": 278,
+    "ocr_evidence_spans": 9,
+    "ocr_evidence_all_unverified": true
+  },
+  "per_field_match": {
+    "due_date": 0.96,
+    "invoice_no": 0.9642857142857143,
+    "issue_date": 0.9285714285714286,
+    "payee_account": 0.9285714285714286,
+    "payee_bank": 0.9642857142857143,
+    "payee_branch": 0.9285714285714286,
+    "registration_no": 1.0,
+    "subtotal": 0.9642857142857143,
+    "tax": 1.0,
+    "total": 1.0,
+    "vendor_name": 0.9285714285714286
+  },
+  "rule_confusion": {
+    "INV-001": {
+      "pass->pass": 21,
+      "fail->fail": 4,
+      "uncertain->uncertain": 2,
+      "fail->uncertain": 1
+    },
+    "INV-002": {
+      "pass->pass": 25,
+      "fail->fail": 3
+    },
+    "INV-003": {
+      "pass->pass": 23,
+      "uncertain->uncertain": 3,
+      "fail->fail": 2
+    },
+    "INV-004": {
+      "pass->pass": 23,
+      "pass->uncertain": 2,
+      "fail->fail": 3
+    },
+    "INV-005": {
+      "pass->pass": 25,
+      "fail->fail": 3
+    },
+    "INV-006": {
+      "pass->pass": 25,
+      "pass->uncertain": 1,
+      "fail->fail": 2
+    }
+  },
+  "missed_critical_rules": [],
+  "field_errors": [
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "vendor_name",
+      "predicted": "はなぶさ精機株式全社",
+      "predicted_status": "uncertain",
+      "gold": "はなぶさ精機株式会社"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "invoice_no",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "2025-7102"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "issue_date",
+      "predicted": null,
+      "predicted_status": "uncertain",
+      "gold": "2025-10-30"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "due_date",
+      "predicted": "2025-01-29",
+      "predicted_status": "uncertain",
+      "gold": "2025-11-29"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "payee_branch",
+      "predicted": null,
+      "predicted_status": "uncertain",
+      "gold": "駅前支店"
+    },
+    {
+      "sample_id": "inv-0008",
+      "stratum": "normal",
+      "field": "payee_account",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "2345670"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "vendor_name",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "株式会社やまびこ運輸"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "issue_date",
+      "predicted": null,
+      "predicted_status": "uncertain",
+      "gold": "2025-07-19"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "subtotal",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "84000"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "payee_bank",
+      "predicted": "ゆうなぎ銀生",
+      "predicted_status": "uncertain",
+      "gold": "ゆうなぎ銀行"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "payee_branch",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "中央支店"
+    },
+    {
+      "sample_id": "inv-0038",
+      "stratum": "injected_instruction",
+      "field": "payee_account",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "1111103"
+    }
+  ]
+}

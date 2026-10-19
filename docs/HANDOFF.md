@@ -4,7 +4,7 @@
 |---|---|
 | 更新日 | 2026-10-19 |
 | 書いた人 | Claude Code（統合責任者） |
-| main の最新 | P3-04（OCR）まで。各タスクは CI の成功を確かめてから main に入れた |
+| main の最新 | P3-04（OCR・凍結・dev v3・ホールドアウトの評価の道具）まで。各タスクは CI の成功を確かめてから main に入れた |
 
 新しいセッションは、まずこの文書、`AGENTS.md`、`TASK_STATUS.md`、`DECISIONS.md` の最後の数行を読む。
 
@@ -12,7 +12,7 @@
 
 - **Phase 3（G2、請求書の POC）の実装は完了し、G2 の判定待ち。** 報告は `reports/gate_G2.md`（自己判定 **BLOCKED（一部）**：AC-05・AC-09・セキュリティは PASS、**AC-08 のホールドアウトの評価が未実施**）。
 - 完了：P3-00、P3-02a、P3-01a（文書の API）、P3-01b（解析・抽出・検証、D-030）、P3-01c（ローカル MCP の根拠・出力、D-031）、P3-01d（請求書の端から端まで・画面）、P3-03 の一部（dev の評価・G2 前の診断・報告、D-032）。
-- **人の作業待ち**：ホールドアウト 12 件の生成と凍結（`fixtures/HOLDOUT.md`。AI は実行しない・見ない）。G2 報告 §10 の回答は D-033：ホールドアウトは今すぐ凍結、G2 はホールドアウトの評価を待って判定（条件付き承認なし）、OCR は Phase 3 で行う（P3-04）、人の作業時間は後で。
+- **人の作業待ち**：ホールドアウトの評価（`pwsh scripts/eval_holdout.ps1`、`fixtures/HOLDOUT.md`「評価のとき」）。ホールドアウトは凍結済み（D-035）、最終の版は `fixtures/workflows/invoice-v3.json`（D-036。評価まで抽出・ルールを変えない）。人の作業時間の記録は後で決める（D-033）。
 - **止まる地点**：G2 の承認前に Phase 4（契約書）のコードを書かない。dev の結果を見た抽出の調整は、ホールドアウトの凍結を人に確かめてから。
 
 | ゲート | 状態 | 報告 |
@@ -78,8 +78,8 @@
 
 ## 5. 次にやること
 
-1. **P3-04 OCR は実装済み**（D-033・D-034、`fixtures/workflows/invoice-v3.json` が `ocr: tesseract`）。**ホールドアウトの凍結が DECISIONS に記録されたら**、v3 で dev を再評価し（`python -m app.evaluation.offline --workflow ../fixtures/workflows/invoice-v3.json …`。Windows には Tesseract が無いので Linux の Docker で）、必要なら調整する。凍結の前は dev を評価しない。
-2. 最終の版で、人がホールドアウトを 1 回評価し（AI には集計値だけ）、`reports/gate_G2.md` に追記して G2 を判定する。**AI はホールドアウトの文書・ラベルを開かない。**
+1. 人がホールドアウトを評価したら、`reports/eval/holdout/result.json`（集計値だけ）を読み、ADR-007 の閾値で判定して `reports/gate_G2.md` §2・§6 を更新し、G2 の判定を人に求める。**AI はホールドアウトの文書・ラベルを開かない。** 評価は 1 回だけ（結果を見て版を変え、評価し直すことはしない。変えるなら新しいホールドアウトが要る）。
+2. dev の評価は `reports/eval/2026-10-19-dev-v3/`（OCR あり、0.961）。
 3. G2 の承認後に Phase 4（契約書）の計画（P4-00）。エンジンのコードは変えず、Workflow の設定・Rule pack・field_spec で表すのが原則（`easf-capability-contract`）。
 4. 気になっている小さなこと：Windows で全テストが遅い・時間切れになる（子プロセスの再利用を ADR で検討）、実行の文書の選択が 200 件まで、ワーカーのコンテナ化。
 

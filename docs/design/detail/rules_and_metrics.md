@@ -4,12 +4,13 @@
 |---|---|---|---|
 | 0.1 | 2026-10-19 | 初版：評価の指標の計算式（P3-03） | Claude Code |
 | 0.2 | 2026-10-19 | OCR の根拠の指標、解析の設定は Workflow から（P3-04） | Claude Code |
+| 0.3 | 2026-10-19 | ホールドアウトの評価（ハッシュの照合・集計値だけ）（D-036） | Claude Code |
 
 ルールの判定（3 値・on_missing・演算子）は `capabilities.md` §5。閾値は ADR-007（事前登録。ホールドアウトの評価後に変えない）。ここは `backend/app/evaluation/offline.py` の計算式を書く。
 
 ## 1. 評価の実行
 
-- 対象：正解ラベルがリポジトリにある分割（dev）だけ。ラベルの無い分割（holdout）は止まる。ホールドアウトは人が実行し、AI には集計値だけを渡す（easf-eval-integrity）。
+- 対象：dev はリポジトリの `fixtures/` から。ホールドアウトは人が `--split holdout --data-dir <展開したフォルダ>` で実行する（`scripts/eval_holdout.ps1`）。文書とラベルの SHA-256 を `fixtures/manifest.holdout.json` と照合し、違えば止まる。出力は集計値だけ（`dataset`・`split`・`samples`・`manifest_sha256`・`workflow`・`rule_pack`・`metrics`・`per_field_match`・`rule_confusion`。sample_id・値・誤りの例は出さない）。
 - 手順：Workflow の設定（解析の `ocr` を含む）で、解析（`document.parser`）→ 抽出（`document.rule_extractor`）→ 検証（`document.rule_validator`）→ 根拠（`document.evidence_locator`）を、本番と同じ関数で順に実行する。人の確認・出力は模擬しない。
 - 案件の文脈（`unique_in_project`）：manifest の順に、前の文書の抽出値（本番は確認後の値）。
 - 記録：manifest の SHA-256、Workflow の ID と版、Rule pack の ID と版。

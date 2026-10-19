@@ -129,3 +129,9 @@ Phase 4（契約書）は G2 の承認まで着手しない。
 3. OCR：Phase 3 で行う（P3-04）。
 4. 人の作業時間：後で決める。
 
+### 進捗（2026-10-19）
+
+- ホールドアウト 12 件を人が生成・凍結（D-035。manifest の SHA-256 は dev `bbbae8e4…`、holdout `9439de44…`）。
+- OCR（P3-04、D-034）を入れ、凍結の後に dev で評価・調整（D-036）：項目 0.961、重大ルールの再現率 1.0、根拠の位置 1.0、重大項目の誤った found 0、OCR の根拠はすべて unverified（`reports/eval/2026-10-19-dev-v3/report.md`）。
+- **最終の版は `fixtures/workflows/invoice-v3.json`。** ホールドアウトの評価は人が `scripts/eval_holdout.ps1` で 1 回実行する（`fixtures/HOLDOUT.md`「評価のとき」）。結果の集計値（`reports/eval/holdout/result.json`）で §2 の AC-08 と ADR-007 の閾値を判定し、本報告を更新する。
+

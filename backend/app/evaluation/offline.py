@@ -5,8 +5,9 @@
 The automatic part of the workflow (parse → extract → validate → locate) is run with the same capability
 functions and the node configs of the workflow file; human review and export are not simulated. Nothing here
 knows a business domain: field names, labels and rules come from the workflow, the Rule pack and the labels.
-Only a split whose labels are in the repository can be evaluated (the holdout labels are not; a person runs
-the holdout and gives the AI the aggregate only).
+The dev split is evaluated from fixtures/. The holdout is evaluated by a person with `--split holdout --data-dir
+<decrypted folder>`: every file must match the frozen manifest's hashes and only aggregates are written (no
+sample ids, values or examples), which is all the AI may see (easf-eval-integrity §2).
 """
 
 import argparse
@@ -43,7 +44,36 @@ def _same(predicted: Any, gold: Any) -> bool:
         return a == b
 
 
-def evaluate(workflow: dict[str, Any], pack: dict[str, Any], manifest_path: Path, split: str) -> dict[str, Any]:
+def _sha256(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def _load(sample: dict[str, Any], base: Path, split: str, data_dir: Path | None) -> tuple[dict[str, Any], bytes, str]:
+    """Label, document bytes and file suffix. With data_dir (the holdout, kept outside the repository), both files
+    must match the frozen manifest's hashes."""
+    if data_dir is None:
+        label_path = base / split / "labels" / f"{sample['sample_id']}.json"
+        if not label_path.exists():
+            raise SystemExit(f"labels for {sample['sample_id']} are not available (holdout labels never are)")
+        label = json.loads(label_path.read_text(encoding="utf-8"))
+        return label, (base / sample["source_file"]).read_bytes(), Path(sample["source_file"]).suffix.lower()
+    label_bytes = (data_dir / "labels" / f"{sample['sample_id']}.json").read_bytes()
+    label = json.loads(label_bytes)
+    data = (data_dir / "documents" / Path(label["source_file"]).name).read_bytes()
+    if _sha256(label_bytes) != sample["label_sha256"] or _sha256(data) != sample["source_file_sha256"]:
+        raise SystemExit(f"{sample['sample_id']}: files do not match the frozen manifest")
+    return label, data, Path(label["source_file"]).suffix.lower()
+
+
+def aggregate_only(result: dict[str, Any]) -> dict[str, Any]:
+    """What a person may give the AI from a holdout run: counts and rates, no sample ids, values or examples."""
+    keys = ("dataset", "split", "samples", "manifest_sha256", "workflow", "rule_pack", "metrics", "per_field_match")
+    return {**{k: result[k] for k in keys}, "rule_confusion": result["rule_confusion"]}
+
+
+def evaluate(
+    workflow: dict[str, Any], pack: dict[str, Any], manifest_path: Path, split: str, data_dir: Path | None = None
+) -> dict[str, Any]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     base = manifest_path.parent
     parse_cfg = _config(workflow, "document.parser")
@@ -65,14 +95,10 @@ def evaluate(workflow: dict[str, Any], pack: dict[str, Any], manifest_path: Path
         raise SystemExit(f"no labeled samples for split {split!r}")
 
     for sample in samples:
-        label_path = base / split / "labels" / f"{sample['sample_id']}.json"
-        if not label_path.exists():
-            raise SystemExit(f"labels for {sample['sample_id']} are not available (holdout labels never are)")
-        label = json.loads(label_path.read_text(encoding="utf-8"))
-        data = (base / sample["source_file"]).read_bytes()
+        label, data, suffix = _load(sample, base, split, data_dir)
         document_id = sample["sample_id"]
         parsed = parse_document(
-            {"data": data, "media_type": MEDIA[Path(sample["source_file"]).suffix.lower()], "document_id": document_id,
+            {"data": data, "media_type": MEDIA[suffix], "document_id": document_id,
              "sha256": hashlib.sha256(data).hexdigest()},
             parse_cfg,
         )  # fmt: skip
@@ -161,15 +187,21 @@ def main() -> None:
     parser.add_argument("--workflow", type=Path, required=True)
     parser.add_argument("--rule-pack", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
-    parser.add_argument("--split", default="dev", choices=["dev"])  # holdout labels are not in the repository
+    parser.add_argument("--split", default="dev", choices=["dev", "holdout"])
+    parser.add_argument("--data-dir", type=Path, help="holdout only: the decrypted folder outside the repository")
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
+    if (args.split == "holdout") != (args.data_dir is not None):
+        raise SystemExit("--data-dir is required for the holdout and only for it")
     result = evaluate(
         json.loads(args.workflow.read_text(encoding="utf-8")),
         json.loads(args.rule_pack.read_text(encoding="utf-8")),
         args.manifest,
         args.split,
+        args.data_dir,
     )
+    if args.split == "holdout":
+        result = aggregate_only(result)  # the AI only ever sees aggregates (easf-eval-integrity §2)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps(result["metrics"], ensure_ascii=False, indent=2))
