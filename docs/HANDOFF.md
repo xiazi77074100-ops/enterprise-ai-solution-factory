@@ -48,6 +48,7 @@
 手順の正本は `docs/design/dev_setup.md`。ここは引っかかりやすい点だけ。
 
 - `.env`（リポジトリ直下、コミットしない）に DB・秘密鍵・テスト用 DB の URL がある。シェルでは `set -a && . ./.env && set +a`。相対パスで読めないことがあるので、`backend/` からは `. ../.env`。
+- 契約の検査（CI の contracts-and-skills と同じ）は、backend の依存に `openapi-spec-validator` がないため `uv run --no-project --python 3.12 --with jsonschema --with pyyaml --with openapi-spec-validator python scripts/validate_contracts.py` で動かす。skill のずれは `python scripts/sync_skills.py --check`。
 - **テストは `easf_test` だけを使う**（`EASF_TEST_DATABASE_URL`・`EASF_TEST_MIGRATION_DATABASE_URL`。DB 名が `_test` で終わらないと止まる）。開発用の `easf` のデータは消えない。
 - バックエンドの全テストは 7〜8 分（Windows の子プロセスの起動が遅い）。`timeout` を長めに。
 - 開発用 DB には管理者が 2 人いる（`admin`、`e2e_admin_184037`）。**パスワードはリポジトリにない**。E2E や画面の確認には、自分で利用者を作る：`cd backend && EASF_NEW_USER_PASSWORD=… uv run python -m app.admin create-user --login-id … --display-name … --admin`。作った ID とパスワードは一時フォルダに置き、コミットしない。
