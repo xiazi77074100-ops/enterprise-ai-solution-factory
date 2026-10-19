@@ -1,0 +1,67 @@
+{
+  "dataset": "invoice",
+  "split": "holdout",
+  "samples": 12,
+  "manifest_sha256": "9439de443027be16f9d2e5dc54a24a3f1ab65506a3ca29a64bab8314ac622ac6",
+  "workflow": {
+    "workflow_id": "invoice-poc",
+    "version": 3
+  },
+  "rule_pack": "invoice@1.1.0",
+  "metrics": {
+    "field_macro_normalized_match": 0.9084022038567493,
+    "field_status_agreement": 0.7013888888888888,
+    "critical_fields_wrong_but_found": 0,
+    "critical_rule_recall": 1.0,
+    "critical_rule_positives": 5,
+    "evidence_position_accuracy": 1.0,
+    "evidence_spans": 98,
+    "ocr_evidence_spans": 15,
+    "ocr_evidence_all_unverified": true
+  },
+  "per_field_match": {
+    "due_date": 1.0,
+    "invoice_no": 0.9166666666666666,
+    "issue_date": 1.0,
+    "payee_account": 0.9166666666666666,
+    "payee_bank": 0.75,
+    "payee_branch": 0.8333333333333334,
+    "registration_no": 1.0,
+    "subtotal": 0.9166666666666666,
+    "tax": 1.0,
+    "total": 0.9090909090909091,
+    "vendor_name": 0.75
+  },
+  "rule_confusion": {
+    "INV-001": {
+      "pass->pass": 7,
+      "pass->fail": 1,
+      "fail->uncertain": 1,
+      "fail->fail": 2,
+      "uncertain->uncertain": 1
+    },
+    "INV-002": {
+      "pass->pass": 11,
+      "fail->fail": 1
+    },
+    "INV-003": {
+      "pass->pass": 10,
+      "uncertain->uncertain": 1,
+      "fail->fail": 1
+    },
+    "INV-004": {
+      "pass->pass": 7,
+      "pass->uncertain": 3,
+      "fail->fail": 2
+    },
+    "INV-005": {
+      "pass->pass": 11,
+      "fail->fail": 1
+    },
+    "INV-006": {
+      "pass->pass": 10,
+      "pass->uncertain": 1,
+      "fail->fail": 1
+    }
+  }
+}

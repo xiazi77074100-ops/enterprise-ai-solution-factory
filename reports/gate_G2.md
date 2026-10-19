@@ -5,7 +5,7 @@
 | コミット | main `1e4709e`（P3-01d まで）＋ `cc/P3-03-eval-g2`（本報告・評価・診断・VA-G2-001 の修正） |
 | 作成日 | 2026-10-19 |
 | 作成 | Claude Code（統合責任者） |
-| 判定（自己） | **BLOCKED（一部）**：AC-05・AC-09・セキュリティは PASS。**AC-08 のホールドアウトの評価が未実施**（ホールドアウト 12 件の生成・凍結が人の作業待ち、`fixtures/HOLDOUT.md`）。dev の評価は参考値として実施（§2）。独立レビューはなし（D-024） |
+| 判定（自己） | **PASS（人の承認待ち）**。ホールドアウト（12 件、1 回）で ADR-007 の必須の閾値をすべて満たした（§2・`reports/eval/holdout/report.md`）。独立レビューはなし（D-024）。初版（同日）では AC-08 が未完了のため BLOCKED（一部）としていた |
 | 人の承認 | [ ] 承認  [ ] 差し戻し　承認者：＿＿＿　日付：＿＿＿ |
 
 G2 の条件（`docs/phase3/PHASE3_PLAN.md` §1）：**請求書の業務が実際の部品の実行・確認・正解での評価まで動き、誤りが見える。** AC-05（解析・抽出・検証・確認・出力）、AC-08（凍結したデータの版と正解で評価）、AC-09（重大な誤りを黙って通さない）。
@@ -27,7 +27,7 @@ G2 の条件（`docs/phase3/PHASE3_PLAN.md` §1）：**請求書の業務が実�
 | 条件 | 確かめ方 | 結果 | 証跡 |
 |---|---|---|---|
 | AC-05 解析・抽出・検証・確認・出力 | 合成の請求書をアップロード → 解析 → 規則ベースの抽出 → ルール（invoice@1.1.0）→ 根拠の照合（ローカル MCP、stdio）→ 人の確認（承認）→ CSV の出力を、本番の実装の表・実 PostgreSQL・実ワーカーで実行 | **PASS**。全ノード `real`、請求書番号の根拠の位置が正解ラベルと一致、CSV に確認後の値 | test_invoice_workflow_end_to_end（Windows・Linux） |
-| AC-08 凍結したデータの版と正解で評価、誤りの詳細 | dev 28 件を manifest の SHA-256 付きで評価し、誤りを全件記録。**ホールドアウトは未生成・未凍結** | **未完了**。dev（参考値）：項目 0.927、重大ルールの再現率 1.0（8 件）、根拠の位置 1.0（278 範囲）、重大項目の誤った found 0。誤り 22 件はすべてスキャン画像 2 件（OCR 未対応 → missing） | `reports/eval/2026-10-19-dev/report.md`・`result.json` |
+| AC-08 凍結したデータの版と正解で評価、誤りの詳細 | 凍結した manifest（D-035）の全ファイルのハッシュを照合し、最終の版（v3）でホールドアウト 12 件を人が 1 回評価。dev の誤りは全件記録、ホールドアウトは集計値だけ AI に | **PASS**。ホールドアウト：重大な誤りの黙認 0、重大ルールの再現率 1.0（5 件）、根拠の位置 1.0（98 範囲）、OCR の根拠はすべて未確認、項目 0.908（目安 0.85）。dev（v3）：項目 0.961 | `reports/eval/holdout/report.md`・`result.json`、`reports/eval/2026-10-19-dev-v3/` |
 | AC-09 重大な誤りを黙って通さない | 同じ請求書の 2 回目は INV-006（案件内の重複）が fail で確認へ。値が無い・比べられない・未知の演算子は pass にしない。Workflow は全件を人の確認へ（`route_when: always`）。確認待ち・却下は成功にならない | **PASS** | test_second_run_on_the_same_invoice_is_flagged_as_duplicate、test_rule_results、test_operators、dev の重大ルールの見逃し 0 |
 | AC-13 実行と模擬の区別 | LLM の抽出（mock）を使う実行は `mixed`。MCP はローカルのサーバと明記（外部連携として数えない） | PASS | test_llm_extractor_is_mock_and_marks_the_run_mixed、capabilities.md §7 |
 | 業務ごとの分岐がない | エンジン（catalog・composer・executor・adapters・evaluation）に業務名なし。請求書の違いは Workflow の設定（見出し・field_spec）と Rule pack だけ | PASS | `scripts/validate_contracts.py`（CI） |
@@ -80,7 +80,8 @@ G2 前の自己診断（`reports/security/2026-10-19-g2/report.md`）：新し�
 
 | データセット | 版 | manifest の SHA-256 | 分割 | 凍結日 |
 |---|---|---|---|---|
-| 請求書（合成） | 生成器 0.1.0、`invoice@1.1.0` | `bbbae8e47c7c497ec0bc453645b57b1cff17143a8ce2ce10a9b37c24332d41a3`（`fixtures/manifest.json`） | dev 28 件（リポジトリ内） | dev は P3-02a で固定。**ホールドアウト 12 件は未生成・未凍結** |
+| 請求書（合成） | 生成器 0.1.0、`invoice@1.1.0` | `bbbae8e47c7c497ec0bc453645b57b1cff17143a8ce2ce10a9b37c24332d41a3`（`fixtures/manifest.json`） | dev 28 件（リポジトリ内） | 2026-10-19（D-035） |
+| 請求書（合成） | 同上 | `9439de443027be16f9d2e5dc54a24a3f1ab65506a3ca29a64bab8314ac622ac6`（`fixtures/manifest.holdout.json`、ハッシュだけ） | ホールドアウト 12 件（リポジトリ外、暗号化 ZIP） | 2026-10-19（D-035） |
 
 dev の結果を見て抽出・ルールを直すことはしていない（凍結前の調整を避けるため）。
 
@@ -95,8 +96,8 @@ dev の結果を見て抽出・ルールを直すことはしていない（凍�
 
 ## 8. 既知の問題・未解決のリスク
 
-1. **ホールドアウトが未生成・未凍結**。AC-08 の合否（ADR-007）はホールドアウトで判定するため、G2 は完了していない。
-2. **スキャン画像は OCR 未対応**（D-030）。dev の誤りはすべてこれ。人の確認に回るので黙って通ることはないが、確認の手間が増える。Tesseract を入れるかは未決。
+1. ~~ホールドアウトが未生成・未凍結~~ → 2026-10-19 に凍結（D-035）・評価済み（末尾の追記）。ホールドアウトは評価に使ったので、版を変えて再評価するなら新しいホールドアウトが要る。
+2. ~~スキャン画像は OCR 未対応~~ → Tesseract を導入（D-034）。OCR の値は uncertain、根拠は unverified で、確認者が必ず見る。
 3. **合成データは 1 つの生成器から**。抽出の見出しは Workflow の設定に書いており、実在の請求書の多様さは表していない。dev の高い値をそのまま実力とみなさない。
 4. **実 LLM の抽出は未評価**（D-004）。mock は全項目 uncertain を返すだけ。
 5. **独立レビューなし**（D-024）。実装・テスト・診断・評価がすべて同じ CC。
@@ -134,4 +135,8 @@ Phase 4（契約書）は G2 の承認まで着手しない。
 - ホールドアウト 12 件を人が生成・凍結（D-035。manifest の SHA-256 は dev `bbbae8e4…`、holdout `9439de44…`）。
 - OCR（P3-04、D-034）を入れ、凍結の後に dev で評価・調整（D-036）：項目 0.961、重大ルールの再現率 1.0、根拠の位置 1.0、重大項目の誤った found 0、OCR の根拠はすべて unverified（`reports/eval/2026-10-19-dev-v3/report.md`）。
 - **最終の版は `fixtures/workflows/invoice-v3.json`。** ホールドアウトの評価は人が `scripts/eval_holdout.ps1` で 1 回実行する（`fixtures/HOLDOUT.md`「評価のとき」）。結果の集計値（`reports/eval/holdout/result.json`）で §2 の AC-08 と ADR-007 の閾値を判定し、本報告を更新する。
+
+### ホールドアウトの評価（2026-10-19）
+
+人が `scripts/eval_holdout.ps1` で 1 回実行（終了コード 0）。結果は `reports/eval/holdout/report.md`。ADR-007 の必須の閾値（重大な誤りの黙認 0、重大ルールの再現率 1.0、根拠の位置 0.9 以上、照合できない根拠は未確認）をすべて満たし、項目抽出も目安（0.85）を上回った（0.908）。確認の記録の完全さは結合テストで確認している。**G2 の判定（自己）を PASS に更新し、人の承認を求める。**
 
