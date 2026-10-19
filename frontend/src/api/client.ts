@@ -64,6 +64,19 @@ export async function api<T>(
   return data as T;
 }
 
+/** multipart/form-data upload (the browser sets the boundary). Same CSRF and error handling as api(). */
+export async function apiUpload<T>(path: string, form: FormData): Promise<T> {
+  const headers: Record<string, string> = { Accept: "application/json" };
+  if (csrfToken) headers["X-CSRF-Token"] = csrfToken;
+  const res = await fetch(buildUrl(path), { method: "POST", headers, credentials: "same-origin", body: form });
+  const data: unknown = await res.json().catch(() => null);
+  if (!res.ok) {
+    const err = (data ?? {}) as Partial<Schemas["Error"]>;
+    throw new ApiError(res.status, err.code ?? "error", err.message ?? "処理できませんでした。", err.trace_id ?? null, err.details ?? []);
+  }
+  return data as T;
+}
+
 /** A fresh Idempotency-Key for one user intent (keep it while the same dialog is open, so a retry is not a new run). */
 export function newIdempotencyKey(): string {
   return crypto.randomUUID();

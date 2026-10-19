@@ -1,4 +1,4 @@
-import { ClipboardCheck, ListTree, ScrollText } from "lucide-react";
+import { ClipboardCheck, Download, ListTree, ScrollText } from "lucide-react";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -6,7 +6,7 @@ import { api, type Schemas } from "../../api/client";
 import { useLoad } from "../../app/useLoad";
 import { EmptyRow, PageHeader, Panel } from "../../components/layout";
 import { Pagination, useCursorPagination } from "../../components/Pagination";
-import { Badge, VersionTag } from "../../components/ui";
+import { Badge, DownloadLink, VersionTag } from "../../components/ui";
 import { formatDateTime } from "../../lib/format";
 import { DECISION, EVENT, failureText, ModeBadge, NodeStatusBadge, shortId, StatusBadge } from "./labels";
 
@@ -57,12 +57,28 @@ export function RunDetailPage() {
   }
   const r = run.data;
   const failure = failureText(r?.failure_code);
+  // exportRunResult: only succeeded runs whose exporter node succeeded (the server checks roles and content).
+  const exportable =
+    r?.status === "succeeded" && (nodes.data ?? []).some((n) => n.capability_id === "result.exporter" && n.status === "succeeded");
+  const exportHref = (format: "csv" | "json") => `/api/v1/runs/${encodeURIComponent(runId)}/export?format=${format}`;
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="shrink-0 border-b border-border bg-background px-4 py-3">
         <PageHeader
           title={r ? `実行 ${shortId(r.id)}` : "読み込み中…"}
           titleVisible
+          actions={
+            exportable && (
+              <span className="flex gap-2">
+                <DownloadLink href={exportHref("csv")} icon={<Download className="size-3.5" />}>
+                  CSV で出力
+                </DownloadLink>
+                <DownloadLink href={exportHref("json")} icon={<Download className="size-3.5" />}>
+                  JSON で出力
+                </DownloadLink>
+              </span>
+            )
+          }
           breadcrumb={{
             label: project.data?.name ?? "プロジェクト",
             to: r ? `/projects/${r.project_id}` : "/projects",

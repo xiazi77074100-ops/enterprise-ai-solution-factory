@@ -29,17 +29,31 @@ export function Button({
       {...props}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      className={clsx(
-        "inline-flex h-8 min-w-8 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border px-3 text-[13px] font-semibold",
-        "transition-[color,background-color,border-color,box-shadow,transform] duration-150 active:scale-[0.98]",
-        "disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none",
-        VARIANTS[variant],
-        className,
-      )}
+      className={buttonClass(variant, className)}
     >
       {loading ? <Loader2 className="size-3.5 animate-spin" aria-hidden="true" /> : icon}
       {children}
     </button>
+  );
+}
+
+function buttonClass(variant: Variant, className?: string): string {
+  return clsx(
+    "inline-flex h-8 min-w-8 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border px-3 text-[13px] font-semibold",
+    "transition-[color,background-color,border-color,box-shadow,transform] duration-150 active:scale-[0.98]",
+    "disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none",
+    VARIANTS[variant],
+    className,
+  );
+}
+
+/** A same-origin file download that looks like a button (the server sends Content-Disposition: attachment). */
+export function DownloadLink({ href, icon, children }: { href: string; icon?: ReactNode; children: ReactNode }) {
+  return (
+    <a href={href} download className={buttonClass("outline")}>
+      {icon}
+      {children}
+    </a>
   );
 }
 

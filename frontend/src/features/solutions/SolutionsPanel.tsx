@@ -150,8 +150,8 @@ export function SolutionsPanel({ projectId, myRoles }: { projectId: string; myRo
 
 function checkInput(input: WorkflowInput, value: string): Check {
   if (input.type === "boolean") return null;
-  if (input.type === "document_ref") return "文書の入力はまだ利用できません。";
   const label = `入力「${input.name}」`;
+  if (input.type === "document_ref") return required(value, `${label}の文書`, "選択");
   const empty = required(value, label);
   if (empty) return empty;
   if (input.type === "integer") return /^-?\d{1,15}$/.test(value.trim()) ? null : `${label}の形式が正しくありません（例：120）。`;
@@ -167,6 +167,16 @@ function StartRunDialog({ solution, onClose }: { solution: Solution; onClose: ()
   const [key] = useState(newIdempotencyKey); // one key per dialog: a retried submit returns the same run
   const start = useApi();
   const navigate = useNavigate();
+  const needsDocument = inputs.some((i) => i.type === "document_ref");
+  const documents = useLoad(
+    () =>
+      needsDocument
+        ? api<Schemas["DocumentPage"]>("GET", `/api/v1/projects/${encodeURIComponent(solution.project_id)}/documents`, {
+            query: { limit: 200 },
+          })
+        : Promise.resolve(null),
+    `${solution.project_id}|${needsDocument}`,
+  );
   const form = useFormCheck(Object.fromEntries(inputs.map((i) => [i.name, firstError(checkInput(i, values[i.name] ?? ""))])));
 
   const payload = Object.fromEntries(
@@ -210,7 +220,20 @@ function StartRunDialog({ solution, onClose }: { solution: Solution; onClose: ()
           <p className="text-[12px] text-muted-foreground">「{doc(solution).name}」を、次の入力で実行します。</p>
           {inputs.map((input) => (
             <Field key={input.name} label={input.name} required={input.type !== "boolean"} {...form.field(input.name, (values[input.name] ?? "") !== "")}>
-              {input.type === "boolean" ? (
+              {input.type === "document_ref" ? (
+                <select
+                  className="field-control"
+                  value={values[input.name]}
+                  onChange={(e) => setValues((v) => ({ ...v, [input.name]: e.target.value }))}
+                >
+                  <option value="">（文書を選択）</option>
+                  {(documents.data?.items ?? []).map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.display_name}（{formatDateTime(d.created_at)}）
+                    </option>
+                  ))}
+                </select>
+              ) : input.type === "boolean" ? (
                 <select
                   className="field-control w-auto"
                   value={values[input.name]}
@@ -223,7 +246,6 @@ function StartRunDialog({ solution, onClose }: { solution: Solution; onClose: ()
                 <input
                   className="field-control"
                   inputMode={input.type === "integer" ? "numeric" : undefined}
-                  disabled={input.type === "document_ref"}
                   value={values[input.name]}
                   onChange={(e) => setValues((v) => ({ ...v, [input.name]: e.target.value }))}
                 />

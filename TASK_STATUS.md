@@ -29,5 +29,5 @@
 | P3-01a 文書の API | CC | 完了 | `cc/P3-01a-documents` | 登録・一覧・ダウンロード、`document` 表（0006）、子プロセスでの構造の確認、`startRun` の `document_ref`。文書のテスト 33 件（形式の偽装 9・危険な内容 8・大きさ・項目・ファイル名・他案件・CSRF）、契約テストに 3 操作を追加（39 件）。ruff・mypy・bandit・pip-audit 問題なし | 2026-10-19 |
 | P3-01b 解析・抽出・検証の Capability | CC | 完了（dev の結果による抽出の調整はしていない。ホールドアウトの凍結待ち） | `cc/P3-01b-capabilities` | `document_parser.v1`・`rule_based_extractor.v1`・`structured_extractor.v1`（mock）・`rule_validator.v1` を結び付け、`project_context`、子プロセスのメモリ上限（POSIX）。単体テスト 40 件（値の読み取り・抽出・ルールの 3 値・入れ子の上限）、結合テスト 4 件（アップロード → 解析 → 抽出 → 検証を実際に実行、mock は mixed、画像、参照の解決失敗）。D-030 | 2026-10-19 |
 | P3-01c 根拠（MCP）・出力 | CC | 完了 | `cc/P3-01c-evidence-export` | 自作のローカル MCP サーバ（stdio）と MCP アダプタ、根拠の照合、`result_exporter.v1`、`exportRunResult`（CSV インジェクション対策・内容の照合）。単体テスト 14 件、結合テスト 4 件（実際の stdio の MCP 呼び出し・CSV/JSON・ロール・409・改ざんの検出）、契約テストに `exportRunResult` を追加。D-031 | 2026-10-19 |
-| P3-01d 請求書の端から端まで・画面 | CC | 未着手 | — | — | — |
+| P3-01d 請求書の端から端まで・画面 | CC | 完了 | `cc/P3-01d-invoice-e2e` | 請求書の Workflow（`fixtures/workflows/invoice-v2.json`、設定だけ）を本番の部品で端から端まで（全ノード real、根拠の位置が正解ラベルと一致、CSV 出力、2 回目の同じ請求書は INV-006 が fail）。画面：文書の一覧・登録・ダウンロード、実行の文書の入力、結果の出力。vitest 10・Playwright 4 passed（模擬 API、1440px・390px） | 2026-10-19 |
 | P3-03 評価・凍結・診断・G2 報告 | CC | 未着手 | — | — | — |

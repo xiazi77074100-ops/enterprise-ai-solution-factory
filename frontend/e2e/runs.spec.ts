@@ -104,6 +104,7 @@ async function mockApi(page: Page, captured: Captured[]) {
       return json([{ user_id: ME, display_name: "試験 太郎", roles: ["solution_lead", "business_reviewer"] }]);
     }
     if (path === `/api/v1/projects/${PROJECT}/requirements`) return json([]);
+    if (path === `/api/v1/projects/${PROJECT}/documents`) return json({ items: [], page: page1(0) });
     if (path === `/api/v1/projects/${PROJECT}/solutions`) {
       return json({ items: [solution(CAP, "validated"), solution(SOLUTION, "approved")], page: page1(2) });
     }

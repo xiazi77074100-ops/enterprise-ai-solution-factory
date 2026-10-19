@@ -4,6 +4,7 @@
 |---|---|---|---|
 | 0.1 | 2026-10-18 | 初版（P1-01） | Claude Code |
 | 0.2 | 2026-10-19 | 文書の保存先、ロックファイルの更新の仕方（P3-01a） | Claude Code |
+| 0.3 | 2026-10-19 | E2E の接続先の上書き（P3-01d） | Claude Code |
 
 前提：Docker Desktop、Python 3.12、uv、Node.js 22（画面は P1-03 から）。
 
@@ -70,6 +71,8 @@ npm run gen:api                  # contracts/openapi.yaml から src/api/schema.
 npx playwright install chromium              # 初回だけ
 # バックエンドと npm run dev を起動しておく。E2E 用の利用者は CLI で作る
 E2E_LOGIN_ID=... E2E_PASSWORD=... npx playwright test
+# 5173 番がほかのプロジェクトで使われているときは別の番号で起動し、接続先を上書きする
+# npx vite --port 5174 --strictPort ; E2E_BASE_URL=http://localhost:5174 npx playwright test e2e/documents.spec.ts e2e/runs.spec.ts
 ```
 
 Node.js は 22 系（jsdom 29 は 22.13 以上）。
