@@ -22,9 +22,9 @@ IMPLEMENTATIONS: dict[tuple[str, str], ImplementationKey] = {
         ImplementationKey("llm", "structured_extractor.v1", available=True),
         ImplementationKey("local", "rule_based_extractor.v1", available=True),
         ImplementationKey("local", "rule_validator.v1", available=True),
-        ImplementationKey("mcp_tool", "easf_local_mcp:locate_evidence", available=False),
+        ImplementationKey("mcp_tool", "easf_local_mcp:locate_evidence", available=True),
         ImplementationKey("local", "human_review.v1", available=True),  # handled by the Executor (P2-02)
-        ImplementationKey("local", "result_exporter.v1", available=False),
+        ImplementationKey("local", "result_exporter.v1", available=True),
     )
 }
 

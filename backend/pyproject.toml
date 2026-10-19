@@ -17,12 +17,13 @@ dependencies = [
     "pypdfium2==5.14.0",
     "pillow>=13.0.0",
     "python-multipart>=0.0.32",
+    "mcp==2.3.0",
 ]
 
 [dependency-groups]
 dev = [
     "pytest",
-    "httpx",
+    "httpx2",
     "ruff",
     "mypy",
     "bandit",

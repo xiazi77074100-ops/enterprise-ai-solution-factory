@@ -249,3 +249,39 @@ def workflow(first: str = "testkit.draft", first_config: dict[str, Any] | None =
         },
         "requires_human_approval": True,
     }
+
+
+def export_workflow() -> dict[str, Any]:
+    """text → draft → human review → result_exporter.v1 (the real exporter; P3-01c)."""
+    wf = workflow()
+    wf["workflow_id"] = "testkit-export"
+    wf["nodes"][2] = {
+        "node_id": "export",
+        "capability_id": "result.exporter",
+        "capability_version": "1.0.0",
+        "config": {"format": "csv", "title_ja": "試験の出力"},
+    }
+    wf["edges"] = [
+        wf["edges"][0],
+        {
+            "from": "review",
+            "to": "export",
+            "mapping": [
+                {"from_path": "/reviewed_fields", "to_field": "reviewed_fields"},
+                {"from_path": "/decision", "to_field": "decision"},
+            ],
+        },
+        {"from": "draft", "to": "export", "mapping": [{"from_path": "/findings", "to_field": "findings"}]},
+    ]
+    wf["outputs"] = [
+        {"name": "export_id", "from_node": "export", "from_path": "/export_id"},
+        {"name": "decision", "from_node": "review", "from_path": "/decision"},
+    ]
+    return wf
+
+
+def exporter_contract() -> dict[str, Any]:
+    contract: dict[str, Any] = json.loads(
+        (EXAMPLES / "capabilities" / "result_exporter.json").read_text(encoding="utf-8")
+    )
+    return contract

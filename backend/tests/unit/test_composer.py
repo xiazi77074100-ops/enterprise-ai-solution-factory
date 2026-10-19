@@ -34,8 +34,8 @@ def codes(workflow: dict[str, Any]) -> set[str]:
 def test_example_workflows_are_valid(name: str) -> None:
     report = validate_workflow(example(name), lookup)
     assert report.errors == []
-    # No implementation code exists yet for the example capabilities (Phase 3): a warning, not an error.
-    assert {w.code for w in report.warnings} == {"implementation_unavailable"}
+    # Every example capability has code bound since P3-01c: no implementation_unavailable warning.
+    assert report.warnings == []
 
 
 def _node(w: dict[str, Any], node_id: str) -> dict[str, Any]:

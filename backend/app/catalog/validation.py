@@ -1,5 +1,6 @@
 """Contract validation at registration time (schema + rules the schema cannot express)."""
 
+import copy
 import hashlib
 import json
 import os
@@ -71,7 +72,32 @@ def validate_capability(contract: Any) -> list[Issue]:
             issues.append(Issue("invalid_embedded_schema", exc.message[:300], f"/{key}"))
     if not is_allowed(contract["kind"], contract["implementation"]["ref"]):
         issues.append(Issue("unknown_implementation", "許可されていない実装の参照です。", "/implementation/ref"))
+    elif contract["kind"] == "mcp_tool" and not _matches_tool(contract):
+        issues.append(
+            Issue("tool_schema_mismatch", "MCP ツールが広告するスキーマと契約が一致しません。", "/implementation/ref")
+        )
     return issues
+
+
+def tool_input_schema(contract: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool arguments are the node inputs plus the node config (ADR-005, capabilities.md)."""
+    merged: dict[str, Any] = copy.deepcopy(contract["input_schema"])
+    config = contract["configuration_schema"]
+    merged["properties"] = {**merged.get("properties", {}), **config.get("properties", {})}
+    merged["required"] = [*merged.get("required", []), *config.get("required", [])]
+    return merged
+
+
+def _matches_tool(contract: dict[str, Any]) -> bool:
+    from app.mcp_server import SERVER_NAME, TOOL_SCHEMAS  # noqa: PLC0415  # only needed for mcp_tool
+
+    server, _, tool = contract["implementation"]["ref"].partition(":")
+    advertised = TOOL_SCHEMAS.get(tool) if server == SERVER_NAME else None
+    return (
+        advertised is not None
+        and advertised["input_schema"] == tool_input_schema(contract)
+        and advertised["output_schema"] == contract["output_schema"]
+    )
 
 
 def _depth(expr: Any) -> int:

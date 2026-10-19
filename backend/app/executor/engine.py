@@ -716,3 +716,10 @@ def decide_review(
         run.status = "running"
         run.lease_until = None
     return task
+
+
+def node_inputs(
+    workflow: dict[str, Any], node_id: str, run_inputs: dict[str, Any], nodes: Mapping[str, NodeRun]
+) -> dict[str, Any]:
+    """The inputs a node received, rebuilt from the run inputs and stored node outputs (used by exports)."""
+    return Executor._inputs(workflow, node_id, run_inputs, nodes)

@@ -6,6 +6,7 @@
 | 0.2 | 2026-10-18 | 解決策の承認の条件、ロールで制限する操作の 403（契約 1.0.2、D-025） | Claude Code |
 | 0.3 | 2026-10-18 | 実行の開始・確認の一覧・確認の決定の規則（P2-02） | Claude Code |
 | 0.4 | 2026-10-19 | 文書の登録・ダウンロードの規則、`startRun` の文書の入力（P3-01a） | Claude Code |
+| 0.5 | 2026-10-19 | `exportRunResult` の規則（P3-01c） | Claude Code |
 
 正本は `contracts/openapi.yaml` の各操作の `x-easf-roles`。この表はそれを人が読む形にしたもの（`spec-sync`）。認可のテストは OpenAPI の `x-easf-roles` から期待値表を作り、全操作 × 全ロールで確かめる（`backend/tests/contract/test_openapi_contract.py`：未ログイン 401、非メンバー 404〔案件に属する操作〕／403〔全体の操作〕、ロールのないメンバー 403、ロールのあるメンバーは成功。全応答を契約の応答スキーマで検証）。
 
@@ -36,6 +37,7 @@
 | `startRun` | 解決策が承認済み（`requires_human_approval: false` なら検証済みでも可）。実装のない Capability を含むと 409。同じ利用者・同じ冪等キーは最初の Run を返し、内容が違えば 409。`document_ref` の入力は同じ案件の文書だけ（他の案件の文書は無い文書と同じ 422） |
 | `uploadDocument` | 形式・大きさ・ページ数・ファイル名のチェックは `docs/design/detail/documents.md` §2 |
 | `downloadDocument` | 文書の案件のメンバーだけ（それ以外は文書が無いときと同じ 404） |
+| `exportRunResult` | 成功した実行で、出力のノードがあるものだけ（それ以外は 409）。`docs/design/detail/exports_and_events.md` |
 | `listReviewTasks` | どれかの案件で solution_lead か business_reviewer でなければ 403。`assigned_to_me=false` のときは、そのロールを持つ案件の確認タスク |
 | `login` | CSRF トークンは無いが `Origin` の照合は必須（ログイン CSRF 対策） |
 | 状態を変える全操作 | `X-CSRF-Token` と `Origin` の照合 |

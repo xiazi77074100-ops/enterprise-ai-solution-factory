@@ -7,9 +7,11 @@ Rule packs) read them in the worker and pass them to the child process (app/adap
 
 from app.adapters.llm import LlmHandler, MockLlm
 from app.adapters.local import LocalHandler
+from app.adapters.mcp import McpToolHandler
 from app.adapters.resources import RulePackHandler, StoredDocumentHandler
 from app.capabilities import mock_extractor
 from app.capabilities.document_parser import parse_document
+from app.capabilities.result_exporter import export_result
 from app.capabilities.rule_extractor import extract_by_labels
 from app.capabilities.rule_validator import validate_rules
 from app.core.config import Settings
@@ -27,4 +29,7 @@ def production_handlers(settings: Settings) -> HandlerTable:
             MockLlm(mock_extractor.mock_response), mock_extractor.INSTRUCTIONS, mock_extractor.output_schema
         ),
         ("local", "rule_validator.v1"): RulePackHandler(validate_rules, session_factory),
+        # ADR-005: EASF's own local MCP server over stdio (real protocol, not an external integration).
+        ("mcp_tool", "easf_local_mcp:locate_evidence"): McpToolHandler("locate_evidence"),
+        ("local", "result_exporter.v1"): LocalHandler(export_result),
     }

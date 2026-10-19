@@ -3,6 +3,7 @@
 | 版 | 日付 | 変更内容 | 作成者 |
 |---|---|---|---|
 | 0.1 | 2026-10-19 | 初版（P3-01b） | Claude Code |
+| 0.2 | 2026-10-19 | 根拠の照合（MCP）・結果の出力（P3-01c） | Claude Code |
 
 Capability の契約（入出力・設定のスキーマ）は `contracts/examples/capabilities/` が正。ここは実装の動きを書く。どの部品も業務名を持たず、業務の違いはノードの設定（`field_spec`・Rule pack）で表す（`easf-capability-contract` §1-4）。
 
@@ -14,6 +15,8 @@ Capability の契約（入出力・設定のスキーマ）は `contracts/exampl
 | `rule_based_extractor.v1` | `document.rule_extractor@1.0.0` | local | `backend/app/capabilities/rule_extractor.py` | 子プロセス |
 | `structured_extractor.v1` | `document.extractor@1.0.0` | llm | `backend/app/capabilities/mock_extractor.py`（mock の応答） | LlmPort の mock（`execution_mode: mock`、D-004） |
 | `rule_validator.v1` | `document.rule_validator@1.0.0` | local | `backend/app/capabilities/rule_validator.py` | ワーカーが Rule pack を読み（`RulePackHandler`）、子プロセスで評価 |
+| `easf_local_mcp:locate_evidence` | `document.evidence_locator@1.0.0` | mcp_tool | `backend/app/capabilities/evidence.py`（`backend/app/mcp_server.py` のツール） | MCP アダプタ（`backend/app/adapters/mcp.py`）が自作のローカル MCP サーバを stdio で起動して呼ぶ |
+| `result_exporter.v1` | `result.exporter@1.0.0` | local | `backend/app/capabilities/result_exporter.py` | 子プロセス |
 
 結び付けは `backend/app/executor/handlers.py`、許可リストの `available` は `backend/app/catalog/registry.py`（一致をテストで確かめる）。ワーカー側の読み出しは `backend/app/adapters/resources.py`。参照が解決できない（文書・Rule pack が無い、保存したファイルのハッシュが違う）ときはノードを失敗にし、再試行しない（`document_not_found`・`document_unreadable`・`rule_pack_not_found`）。
 
@@ -63,3 +66,17 @@ Rule pack（`contracts/rule_pack.schema.json`）の式を、決まった演算�
 ## 6. 案件の文脈（project_context）
 
 入力スキーマに `project_context` を持つ Capability には、Executor が入力を組み立てるときに付ける（辺からは渡さない）。中身は、同じ案件で、この実行より前に作られ成功した実行の、人の確認ノードの出力 `reviewed_fields` の値（文字列・数値だけ、項目ごとに 10,000 件・50 項目まで）。`snapshot_at` はこの実行の作成日時。Capability は DB を読まない（`easf-capability-contract` §1.1）。実装は `backend/app/executor/engine.py`。
+
+## 7. 根拠の照合（easf_local_mcp:locate_evidence、ADR-005）
+
+- 実際の MCP プロトコル（公式 SDK `mcp` 2.3.0、stdio）で呼ぶが、サーバは EASF 内の自作のローカルサーバ（`python -m app.mcp_server`、固定のコマンド）。**外部の実連携ではない**。
+- ツールの引数は「Capability の入力 ＋ ノードの設定」。ツールのスキーマは `backend/app/mcp_tools/locate_evidence.json`（入力 ＝ 契約の `input_schema` に `configuration_schema` の項目を合わせたもの、出力 ＝ 契約の `output_schema`）。`mcp_tool` の版の登録時に Catalog が一致を確かめ、違えば `tool_schema_mismatch` で拒否する（`backend/app/catalog/validation.py`）。
+- アダプタは許可リストのツール名だけを呼び、サーバが広告していなければ呼ばない（`mcp_tool_not_advertised`、再試行しない）。時間切れは `timeout`、サーバの起動失敗・プロトコルの異常は例外の型名だけを `mcp_<型名>` で記録する。
+- 照合：項目の値の「印字の形」（`match: exact` は値そのまま、`normalized` は値・NFKC・日付の書き方〔西暦・和暦・スラッシュ〕・金額の書き方〔`¥`・`￥`・`円`・桁区切り〕）をページのテキストで探す。見つかった範囲だけを `verified` で返し、その範囲の SHA-256 を付ける。数の途中で切れる範囲（「¥104,060」の中の「¥1」など）・重なる範囲は使わない。1 項目 10 件まで、1 文字の値は探さない。見つからない値は根拠なし（空の配列。画面では「未確認」）。根拠を作らない（`easf-capability-contract` §1-6）。
+
+## 8. 結果の出力（result_exporter.v1 と exportRunResult）
+
+- Capability は出力の内容（判定・確認後の項目・ルールの結果）を決め、その内容の SHA-256 から作った UUID（`export_id`）を返す。ファイルは保存しない。
+- `exportRunResult` は、成功した実行で出力のノードが成功しているものだけ（それ以外は 409 `run_not_exportable`）。保存したノードの出力から出力のノードの入力を組み立て直し、同じ関数で内容を作り、`export_id` が一致するときだけ返す（一致しなければ 409 `export_mismatch`）。
+- 列と書式は `exports_and_events.md`。
+

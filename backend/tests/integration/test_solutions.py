@@ -91,7 +91,7 @@ def test_full_lifecycle(setup: dict[str, Any]) -> None:
 
     report = arch.post(f"/api/v1/solutions/{sid}/validate", headers=arch_h).json()
     assert report["valid"] is True and report["errors"] == []
-    assert {w["code"] for w in report["warnings"]} == {"implementation_unavailable"}
+    assert report["warnings"] == []
     assert arch.get(f"/api/v1/solutions/{sid}").json()["state"] == "validated"
 
     # Approval needs an approved requirement revision and an approver other than the author.

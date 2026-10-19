@@ -12,7 +12,7 @@ from urllib.parse import quote
 import pypdfium2 as pdfium
 import pytest
 from fastapi.testclient import TestClient
-from httpx import Response
+from httpx2 import Response
 from PIL import Image
 from reportlab.pdfgen import canvas
 from sqlalchemy.orm import Session

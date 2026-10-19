@@ -1,10 +1,11 @@
 """Runs, node runs, trace and human review (run_execution.md §4・§6・§7, permissions.md)."""
 
+import json
 import uuid
 from datetime import datetime
 from typing import Any, Literal
 
-from fastapi import APIRouter, Depends, Header, Query, Request
+from fastapi import APIRouter, Depends, Header, Query, Request, Response
 from pydantic import BaseModel, Field, model_validator
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -12,13 +13,19 @@ from sqlalchemy.orm import Session
 from app.api.deps import AuthContext, authenticated, forbidden, not_found, project_roles, require_project_role
 from app.api.models import Page, PageInfo, StrictModel, decode_cursor, encode_cursor
 from app.api.solutions import load_solution
+from app.capabilities import result_exporter
 from app.catalog.models import CapabilityVersion
 from app.core.db import get_db
+from app.core.errors import ApiError
 from app.executor import engine
 from app.executor.models import NodeRun, ReviewTask, Run, RunEvent
 from app.project.models import ProjectMember
+from app.solution.models import Solution
 
 router = APIRouter(prefix="/api/v1", dependencies=[Depends(authenticated)])
+
+EXPORTER = ("local", "result_exporter.v1")
+EXPORT_ROLES = {"solution_lead", "qa_evaluator", "business_reviewer"}
 
 RunStatus = Literal["pending", "running", "waiting_review", "succeeded", "rejected", "failed", "cancelled"]
 Scalar = str | int | bool
@@ -281,3 +288,55 @@ def decide_review_task(
     engine.decide_review(db, task, ctx.user.id, body.decision, corrections, body.comment, idempotency_key)
     db.commit()
     return _review_out(task)
+
+
+def _not_exportable() -> ApiError:
+    return ApiError(
+        "run_not_exportable", "出力できる結果がありません（成功した実行で、出力のノードがあるものだけ）。", 409
+    )
+
+
+@router.get("/runs/{run_id}/export", operation_id="exportRunResult")
+def export_run_result(
+    run_id: uuid.UUID,
+    format: Literal["json", "csv"] = Query(),  # noqa: A002  # contract parameter name
+    ctx: AuthContext = Depends(authenticated),  # noqa: B008
+    db: Session = Depends(get_db),  # noqa: B008
+) -> Response:
+    """Re-renders the exporter node's content from stored node outputs and checks it against its export_id."""
+    run = load_run(db, run_id, ctx)
+    require_project_role(db, run.project_id, ctx.user, EXPORT_ROLES)
+    solution = db.get(Solution, run.solution_id)
+    if run.status != "succeeded" or solution is None:
+        raise _not_exportable()
+    rows = db.execute(
+        select(NodeRun, CapabilityVersion)
+        .join(CapabilityVersion, CapabilityVersion.id == NodeRun.capability_version_id)
+        .where(NodeRun.run_id == run.id)
+    ).all()
+    nodes = {n.node_id: n for n, _ in rows}
+    exporter = next(
+        (n for n, c in rows if (c.kind, c.contract["implementation"]["ref"]) == EXPORTER and n.status == "succeeded"),
+        None,
+    )
+    if exporter is None or exporter.output is None:
+        raise _not_exportable()
+    inputs = engine.node_inputs(solution.workflow, exporter.node_id, run.inputs, nodes)
+    content = result_exporter.document(inputs)
+    if result_exporter.export_id(content) != exporter.output["export_id"]:
+        # Stored outputs no longer reproduce what the run exported: refuse rather than hand out other data.
+        raise ApiError("export_mismatch", "出力の内容を再現できませんでした。", 409)
+    spec = next(n for n in solution.workflow["nodes"] if n["node_id"] == exporter.node_id)
+    if format == "csv":
+        body = result_exporter.render_csv(content, spec["config"].get("title_ja"))
+        media_type = "text/csv; charset=utf-8"
+    else:
+        body = json.dumps(
+            {"export_id": exporter.output["export_id"], "run_id": str(run.id), **content}, ensure_ascii=False
+        ).encode()
+        media_type = "application/json"
+    return Response(
+        content=body,
+        media_type=media_type,
+        headers={"Content-Disposition": f'attachment; filename="run-{run.id}.{format}"'},
+    )

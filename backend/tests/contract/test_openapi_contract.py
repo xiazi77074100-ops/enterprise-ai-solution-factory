@@ -18,11 +18,13 @@ from typing import Any
 import pytest
 import yaml
 from fastapi.testclient import TestClient
-from httpx import Response
+from httpx2 import Response
 from jsonschema import Draft202012Validator, FormatChecker
 from sqlalchemy.orm import Session
 
 from app import main as main_module
+from app.adapters.local import LocalHandler
+from app.capabilities.result_exporter import export_result
 from app.core.db import make_session_factory
 from app.executor.engine import Executor
 from app.main import create_app
@@ -46,7 +48,6 @@ METHODS = ("get", "post", "put", "delete", "patch")
 # Contract operations implemented in later phases (Phase 2: runs/reviews/trace; Phase 3+: documents, export,
 # evaluations, reuse, llm). Removing an entry here is part of implementing it.
 PENDING = {
-    "exportRunResult",
     "listDatasetVersions", "startEvaluation", "getEvaluation", "listEvaluations",
     "getProjectReuseEvidence", "getReuseSummary", "createReuseRecord",
     "listLlmProfiles",
@@ -101,9 +102,11 @@ def assert_matches_contract(op_id: str, res: Response) -> None:
     if not content:
         assert res.content in (b"", b"null"), f"{op_id}: {res.status_code} must have no body"
         return
-    schema = content.get("application/json", {}).get("schema")
-    if schema is None:
-        return  # non-JSON media (file download) is checked by its own tests
+    media = res.headers.get("content-type", "").split(";")[0].strip()
+    assert media in content, f"{op_id} {res.status_code}: media type {media!r} is not declared"
+    schema = content[media].get("schema")
+    if media != "application/json" or schema is None:
+        return  # non-JSON media (file download, CSV) is checked by its own tests
     wrapped = {**copy.deepcopy(schema), "components": OPENAPI["components"]}
     errors = sorted(Draft202012Validator(wrapped, format_checker=FormatChecker()).iter_errors(res.json()), key=str)
     assert not errors, f"{op_id} {res.status_code}: {[e.message for e in errors][:5]}"
@@ -124,6 +127,7 @@ class World:
     run_id: str = ""  # waiting for review
     review_id: str = ""  # assigned to "reviewer"
     document_id: str = ""  # uploaded by the lead
+    exported_run_id: str = ""  # succeeded, with a result_exporter node
 
 
 @dataclass
@@ -237,6 +241,7 @@ CALLS: dict[str, Call] = {
     "getRun": Call("GET", "/api/v1/runs/{run}", project_scoped=True),
     "listNodeRuns": Call("GET", "/api/v1/runs/{run}/nodes", project_scoped=True),
     "getRunTrace": Call("GET", "/api/v1/runs/{run}/trace", project_scoped=True),
+    "exportRunResult": Call("GET", "/api/v1/runs/{exported}/export?format=csv", project_scoped=True),
     "listReviewTasks": Call("GET", "/api/v1/reviews"),
     "getReviewTask": Call("GET", "/api/v1/runs/{run}/reviews/{review}", project_scoped=True),
     "decideReviewTask": Call(
@@ -259,6 +264,7 @@ def _send(client: TestClient, call: Call, w: World, headers: dict[str, str]) -> 
         run=w.run_id,
         review=w.review_id,
         document=w.document_id,
+        exported=w.exported_run_id,
     )
     body = call.body(w) if call.body else None
     extra = call.headers(w) if call.headers else {}
@@ -343,7 +349,51 @@ def world(db: Session, db_url: str, monkeypatch: pytest.MonkeyPatch) -> World:  
     uploaded = _send(client, CALLS["uploadDocument"], w, headers)
     assert uploaded.status_code == 201, uploaded.text
     w.document_id = uploaded.json()["id"]
+    w.exported_run_id = _exported_run(client, headers, arch_client, arch_headers, reviewer_client, w, db_url)
     return w
+
+
+def _exported_run(
+    client: TestClient,
+    headers: dict[str, str],
+    arch_client: TestClient,
+    arch_headers: dict[str, str],
+    reviewer_client: TestClient,
+    w: World,
+    db_url: str,
+) -> str:
+    """A succeeded run whose last node is the real result exporter (exportRunResult needs one)."""
+    reviewer_headers = {**ORIGIN, "X-CSRF-Token": reviewer_client.get("/api/v1/session").json()["csrf_token"]}
+    assert (
+        arch_client.post("/api/v1/capabilities", json=kit.exporter_contract(), headers=arch_headers).status_code == 201
+    )
+    body = {
+        "project_id": w.project_id,
+        "requirement_revision_id": w.approved_revision_id,
+        "workflow": kit.export_workflow(),
+    }
+    sid = arch_client.post("/api/v1/solutions", json=body, headers=arch_headers).json()["id"]
+    assert arch_client.post(f"/api/v1/solutions/{sid}/validate", headers=arch_headers).json()["valid"]
+    assert client.post(f"/api/v1/solutions/{sid}/approve", headers=headers).status_code == 200
+    started = client.post(
+        f"/api/v1/solutions/{sid}/runs", json={"inputs": {"text": "出力する"}},
+        headers={**headers, "Idempotency-Key": str(uuid.uuid4())},
+    )  # fmt: skip
+    run_id: str = started.json()["id"]
+    executor = Executor(
+        make_session_factory(make_settings(database_url=db_url)),
+        kit.handlers({("local", "result_exporter.v1"): LocalHandler(export_result)}),
+    )
+    executor.run_until_idle()
+    task = next(t for t in reviewer_client.get("/api/v1/reviews").json()["items"] if t["run_id"] == run_id)
+    decided = reviewer_client.post(
+        f"/api/v1/runs/{run_id}/reviews/{task['id']}/decision", json={"decision": "approved"},
+        headers={**reviewer_headers, "Idempotency-Key": str(uuid.uuid4())},
+    )  # fmt: skip
+    assert decided.status_code == 200, decided.text
+    executor.run_until_idle()
+    assert client.get(f"/api/v1/runs/{run_id}").json()["status"] == "succeeded"
+    return run_id
 
 
 ROLE_USER = {"solution_lead": "lead", "solution_architect": "arch", "business_reviewer": "reviewer", "admin": "admin"}
