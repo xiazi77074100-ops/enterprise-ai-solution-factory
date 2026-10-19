@@ -58,7 +58,7 @@ class MockLlm:
     def generate_structured(self, request: LlmRequest) -> LlmResult:
         started = time.monotonic()
         inputs = request.documents[0] if request.documents else {}
-        output = self.responder(inputs, {"profile": request.profile})
+        output = self.responder(inputs, {"profile": request.profile, "output_schema": request.output_schema})
         raw = json.dumps(output, ensure_ascii=False, sort_keys=True).encode()
         return LlmResult(
             status="ok",
@@ -77,9 +77,15 @@ class MockLlm:
 class LlmHandler:
     """Adapter from a capability call to the LlmPort. The provider is chosen by profile, not by the capability."""
 
-    def __init__(self, port: LlmPort, instructions: str) -> None:
+    def __init__(
+        self,
+        port: LlmPort,
+        instructions: str,
+        schema_for: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
+    ) -> None:
         self.port = port
         self.instructions = instructions
+        self.schema_for = schema_for  # node config -> the output schema the provider must follow
 
     def invoke(self, inputs: dict[str, Any], config: dict[str, Any], timeout_s: float) -> AdapterResult:
         result = self.port.generate_structured(
@@ -87,7 +93,7 @@ class LlmHandler:
                 profile=str(config.get("llm_profile", "default")),
                 instructions=self.instructions,
                 documents=[inputs],
-                output_schema={},
+                output_schema=self.schema_for(config) if self.schema_for else {},
                 max_output_tokens=4096,
                 timeout_ms=int(timeout_s * 1000),
             )

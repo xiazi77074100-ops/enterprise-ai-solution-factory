@@ -7,6 +7,7 @@ exception type crosses back, never its message (it may contain input values).
 
 import json
 import multiprocessing
+import sys
 from collections.abc import Callable
 from multiprocessing.connection import Connection
 from typing import Any
@@ -18,8 +19,24 @@ _CONTEXT = multiprocessing.get_context("spawn")
 _KILL_GRACE_S = 2.0
 
 
-def _child(conn: Connection, func: LocalFunction, inputs: dict[str, Any], config: dict[str, Any]) -> None:
+def _limit_memory(limit_bytes: int | None) -> None:
+    """Address-space cap for the child (ADR-003). POSIX only: on Windows (local development) it is not set."""
+    if limit_bytes is None or sys.platform == "win32":
+        return
+    import resource  # noqa: PLC0415  # POSIX-only module
+
+    resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
+
+
+def _child(
+    conn: Connection,
+    func: LocalFunction,
+    inputs: dict[str, Any],
+    config: dict[str, Any],
+    memory_limit_bytes: int | None = None,
+) -> None:
     try:
+        _limit_memory(memory_limit_bytes)
         payload = json.dumps(func(inputs, config), ensure_ascii=False, allow_nan=False).encode()
     except Exception as exc:  # reported as a code only
         conn.send(("error", type(exc).__name__))
@@ -31,12 +48,15 @@ def _child(conn: Connection, func: LocalFunction, inputs: dict[str, Any], config
 
 
 class LocalHandler:
-    def __init__(self, func: LocalFunction) -> None:
+    def __init__(self, func: LocalFunction, memory_limit_bytes: int | None = None) -> None:
         self.func = func
+        self.memory_limit_bytes = memory_limit_bytes
 
     def invoke(self, inputs: dict[str, Any], config: dict[str, Any], timeout_s: float) -> AdapterResult:
         receiver, sender = _CONTEXT.Pipe(duplex=False)
-        process = _CONTEXT.Process(target=_child, args=(sender, self.func, inputs, config), daemon=True)
+        process = _CONTEXT.Process(
+            target=_child, args=(sender, self.func, inputs, config, self.memory_limit_bytes), daemon=True
+        )
         process.start()
         sender.close()
         try:

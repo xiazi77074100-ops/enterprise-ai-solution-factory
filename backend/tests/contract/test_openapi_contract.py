@@ -283,7 +283,7 @@ def _session(db_url: str, login_id: str | None) -> tuple[TestClient, dict[str, s
 def world(db: Session, db_url: str, monkeypatch: pytest.MonkeyPatch) -> World:  # noqa: F811
     # Test-only capabilities so run and review operations can be exercised (PHASE2_PLAN §3).
     kit.allow_testkit(monkeypatch)
-    monkeypatch.setattr(main_module, "production_handlers", kit.handlers)
+    monkeypatch.setattr(main_module, "production_handlers", lambda settings: kit.handlers())
     users = {name: make_user(db, name) for name in ("lead", "arch", "reviewer", "outsider")}
     admin = make_user(db, "admin", admin=True)
     client, headers = _session(db_url, "admin")

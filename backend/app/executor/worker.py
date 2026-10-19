@@ -14,7 +14,8 @@ IDLE_SLEEP_S = 1.0
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO)
-    executor = Executor(make_session_factory(get_settings()), production_handlers())
+    settings = get_settings()
+    executor = Executor(make_session_factory(settings), production_handlers(settings))
     logger.info("worker started")
     while True:
         if not executor.run_once():

@@ -6,6 +6,7 @@
 | 0.2 | 2026-10-18 | P2-01 の実装に合わせる：検査結果の項目名、実装がない Capability の扱い、承認の条件 | Claude Code |
 | 0.3 | 2026-10-18 | P2-02 の実装に合わせる：再試行の回数、予算の時間、確認の項目、実行の方式の判定、出力の保存 | Claude Code |
 | 0.4 | 2026-10-19 | `document_ref` の入力を受け付ける（P3-01a） | Claude Code |
+| 0.5 | 2026-10-19 | 業務の Capability の結び付け、予約入力 `project_context`、子プロセスのメモリ上限（P3-01b） | Claude Code |
 
 前提：ADR-001（自前の型付き DAG、DB をキュー、1 プロセスのワーカー）、ADR-002（LlmPort、mock のみ）、ADR-005（MCP）、契約 v1.0.1。API の形は `contracts/openapi.yaml` が正で、ここは内部の動きを書く。
 
@@ -76,7 +77,7 @@ NodeRun: pending ─▶ running ─▶ succeeded
 1. **開始（startRun）**：Solution が実行できる状態（`requires_human_approval` なら `approved`、そうでなければ `validated` 以上）か確かめる。入力を `workflow.inputs` の型で検証（名前の過不足・型。`document_ref` は同じ案件の文書の ID だけ。それ以外は 422、`documents.md` §1）。`Idempotency-Key` が同じ利用者・同じ Solution で既にあれば元の Run を返す（本文が違えば 409）。Run（`pending`）と全ノードの NodeRun（`pending`）を作り、`run.started` を記録して 202。
 2. **ワーカー**：`SELECT … FOR UPDATE SKIP LOCKED` で、`pending`・`running` かつリース切れの Run を 1 件取り、リース（`lease_until`）を延ばしながら進める。
 3. **次のノード**：`graphlib.TopologicalSorter` の順で、依存がすべて `succeeded` のノードを 1 つずつ実行する（並列にしない）。
-4. **入力の組み立て**：ワークフローの入力と、依存ノードの出力から JSON Pointer で取り出した値。**入力スキーマで検証**（1 か所目）。違えば NodeRun `failed`（`invalid_input`）。
+4. **入力の組み立て**：ワークフローの入力と、依存ノードの出力から JSON Pointer で取り出した値。入力スキーマに `project_context` を持つ Capability には、Executor が案件の文脈を付ける（`capabilities.md` §6）。**入力スキーマで検証**（1 か所目）。違えば NodeRun `failed`（`invalid_input`）。
 5. **アダプタの呼び出し**：`timeout = min(ノードの timeout_ms, 版の timeout_ms, 予算の残り時間)`。
 6. **出力の検証**：**出力スキーマで検証**（2 か所目。3 か所目は Composer での設定の検証）。違えば `invalid_output`。出力の大きさの上限は 1 MiB。
 7. **記録**：NodeRun に入力・出力の SHA-256（JCS）、所要時間、`execution_mode`、使用量。出力そのものは DB の NodeRun にだけ保存し、トレースにはハッシュと件数だけ。
@@ -94,9 +95,11 @@ NodeRun: pending ─▶ running ─▶ succeeded
 
 | kind | Phase 2 | 方式 |
 |---|---|---|
-| `local` | 実装 | 許可リストのキー（`app/catalog/registry.py`）に結び付けた関数だけを呼ぶ。**動的 import はしない**。関数は子プロセス（`multiprocessing` の spawn）で実行し、時間切れで強制終了する |
+| `local` | 実装 | 許可リストのキー（`app/catalog/registry.py`）に結び付けた関数だけを呼ぶ。**動的 import はしない**。関数は子プロセス（`multiprocessing` の spawn）で実行し、時間切れで強制終了する。文書・Rule pack を使うものは、ワーカーが読んでから子プロセスに渡す（`app/adapters/resources.py`）。解析の子プロセスはメモリ 1 GiB まで（POSIX のみ） |
 | `llm` | mock のみ | `LlmPort`。mock は入力のハッシュから決まる固定の出力を返し、`execution_mode: mock` |
 | `mcp_tool`・`rest` | インタフェースのみ | 呼ぶと `implementation_unavailable` |
+
+業務の Capability（Phase 3）の結び付けと動きは `capabilities.md`。
 
 `review.human`（`human_review.v1`）はアダプタを通さず Executor が扱う：確認タスクを作り、NodeRun と Run を `waiting_review` にしてワーカーを離れる。
 

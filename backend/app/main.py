@@ -23,7 +23,7 @@ def create_app(settings: Settings | None = None, handlers: HandlerTable | None =
     )
     app.state.settings = settings
     # Implementation keys the API may start runs for; the worker uses the same table (app/executor/handlers.py).
-    app.state.handlers = production_handlers() if handlers is None else handlers
+    app.state.handlers = production_handlers(settings) if handlers is None else handlers
     app.state.session_factory = make_session_factory(settings)  # engine connects lazily
     install_error_handlers(app)
     app.add_middleware(SecurityMiddleware, settings=settings)

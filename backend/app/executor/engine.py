@@ -200,6 +200,41 @@ def start_run(
     return run, True
 
 
+PROJECT_CONTEXT = "project_context"
+MAX_CONTEXT_FIELDS = 50
+MAX_CONTEXT_VALUES = 10_000
+
+
+def _project_context(db: Session, run: Run) -> dict[str, Any]:
+    """Reserved input (capability.schema project_context): reviewed values of earlier succeeded runs of the
+    same project. Only runs created before this one count, so the snapshot does not change on retry."""
+    rows = db.execute(
+        select(NodeRun.output)
+        .join(Run, Run.id == NodeRun.run_id)
+        .join(CapabilityVersion, CapabilityVersion.id == NodeRun.capability_version_id)
+        .where(
+            Run.project_id == run.project_id,
+            Run.status == "succeeded",
+            Run.created_at < run.created_at,
+            NodeRun.status == "succeeded",
+            CapabilityVersion.kind == HUMAN_REVIEW[0],
+            CapabilityVersion.contract["implementation"]["ref"].astext == HUMAN_REVIEW[1],
+        )
+        .order_by(Run.created_at, Run.id)
+    ).scalars()
+    values: dict[str, list[str | int | float]] = {}
+    for output in rows:
+        for name, value in ((output or {}).get("reviewed_fields") or {}).items():
+            if isinstance(value, bool) or not isinstance(value, str | int | float):
+                continue
+            if name not in values and len(values) >= MAX_CONTEXT_FIELDS:
+                continue
+            bucket = values.setdefault(name, [])
+            if len(bucket) < MAX_CONTEXT_VALUES:
+                bucket.append(value)
+    return {"snapshot_at": run.created_at.isoformat(), "values": values}
+
+
 # --- worker -----------------------------------------------------------------------------------------
 
 
@@ -320,6 +355,8 @@ class Executor:
                 inputs = self._inputs(workflow, ready.node_id, run.inputs, nodes)
             except KeyError:
                 inputs = None
+            if inputs is not None and PROJECT_CONTEXT in contract["input_schema"].get("properties", {}):
+                inputs[PROJECT_CONTEXT] = _project_context(db, run)
             if inputs is None or _schema_errors(contract["input_schema"], inputs):
                 self._fail_node(db, run, ready, "invalid_input", contract_row.id)
                 db.commit()

@@ -18,10 +18,10 @@ class ImplementationKey:
 IMPLEMENTATIONS: dict[tuple[str, str], ImplementationKey] = {
     (k.kind, k.ref): k
     for k in (
-        ImplementationKey("local", "document_parser.v1", available=False),
-        ImplementationKey("llm", "structured_extractor.v1", available=False),
-        ImplementationKey("local", "rule_based_extractor.v1", available=False),
-        ImplementationKey("local", "rule_validator.v1", available=False),
+        ImplementationKey("local", "document_parser.v1", available=True),
+        ImplementationKey("llm", "structured_extractor.v1", available=True),
+        ImplementationKey("local", "rule_based_extractor.v1", available=True),
+        ImplementationKey("local", "rule_validator.v1", available=True),
         ImplementationKey("mcp_tool", "easf_local_mcp:locate_evidence", available=False),
         ImplementationKey("local", "human_review.v1", available=True),  # handled by the Executor (P2-02)
         ImplementationKey("local", "result_exporter.v1", available=False),

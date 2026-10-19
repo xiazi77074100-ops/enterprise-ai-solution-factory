@@ -17,6 +17,7 @@ from app.documents.inspect import inspect_document
 
 MAX_DOCUMENT_BYTES = 10 * 1024 * 1024
 INSPECT_TIMEOUT_S = 20.0
+INSPECT_MEMORY_BYTES = 1024 * 1024 * 1024  # POSIX only (app/adapters/local.py)
 
 # extension -> media type; the declared Content-Type and the magic bytes must agree with it.
 EXTENSIONS = {".pdf": "application/pdf", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
@@ -59,7 +60,9 @@ def media_type_of(name: str, declared: str | None, head: bytes) -> str:
 
 def inspect(data: bytes, media_type: str) -> int:
     """Page count from the child-process check. Anything but a clean result is rejected (fail closed)."""
-    result = LocalHandler(inspect_document).invoke({"data": data, "media_type": media_type}, {}, INSPECT_TIMEOUT_S)
+    result = LocalHandler(inspect_document, INSPECT_MEMORY_BYTES).invoke(
+        {"data": data, "media_type": media_type}, {}, INSPECT_TIMEOUT_S
+    )
     output = result.output or {}
     if result.status == "ok" and output.get("status") == "ok":
         return int(output["page_count"])
