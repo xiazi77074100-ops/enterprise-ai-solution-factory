@@ -32,3 +32,5 @@
 | P3-01d 請求書の端から端まで・画面 | CC | 完了 | `cc/P3-01d-invoice-e2e` | 請求書の Workflow（`fixtures/workflows/invoice-v2.json`、設定だけ）を本番の部品で端から端まで（全ノード real、根拠の位置が正解ラベルと一致、CSV 出力、2 回目の同じ請求書は INV-006 が fail）。画面：文書の一覧・登録・ダウンロード、実行の文書の入力、結果の出力。vitest 10・Playwright 4 passed（模擬 API、1440px・390px） | 2026-10-19 |
 | P3-03 評価・凍結・診断・G2 報告 | CC | 完了（G2 の承認待ち） | `cc/P3-03-eval-g2`・`cc/P3-03-g2-judgement` | dev の評価（v2・v3）、凍結（D-035）、ホールドアウトの評価（人が 1 回、必須の閾値をすべて満たす）、G2 前の診断、`reports/gate_G2.md`（自己判定 PASS） | 2026-10-19 |
 | P3-04 スキャン画像の OCR（Tesseract） | CC | 完了 | `cc/P3-04-ocr`・`cc/P3-04-ocr-tuning` | OCR の実装、凍結（D-035）後の dev 評価 v3：項目 0.961・重大ルールの再現率 1.0・根拠の位置 1.0。OCR の後処理（D-036）。ホールドアウトの評価の道具 `scripts/eval_holdout.ps1`（偽のホールドアウトで動作確認） | 2026-10-19 |
+| G2 ゲート報告 | CC | 完了・**承認済み**（D-037） | — | `reports/gate_G2.md` | 2026-10-19 |
+| P4-00 Phase 4 計画 | CC | レビュー待ち（計画の承認・ベースラインの実施者・時間の記録を人に確認中） | `cc/P4-00-plan` | `docs/phase4/PHASE4_PLAN.md` | 2026-10-19 |
