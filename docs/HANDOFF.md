@@ -4,7 +4,7 @@
 |---|---|
 | 更新日 | 2026-10-19 |
 | 書いた人 | Claude Code（統合責任者） |
-| main の最新 | P3-03（G2 報告、`9a24026`）の次の引き継ぎの更新。各タスクは CI の成功を確かめてから main に入れた |
+| main の最新 | P3-04（OCR）まで。各タスクは CI の成功を確かめてから main に入れた |
 
 新しいセッションは、まずこの文書、`AGENTS.md`、`TASK_STATUS.md`、`DECISIONS.md` の最後の数行を読む。
 
@@ -78,7 +78,7 @@
 
 ## 5. 次にやること
 
-1. **P3-04 OCR**（D-033）：Tesseract（日本語）で画像と、テキスト層の無い PDF のページを読む。OCR 由来の根拠は「未確認」。**ホールドアウトの凍結が DECISIONS に記録されるまで、dev で OCR を評価・調整しない**（試験は自前で作った画像で）。凍結を確かめたら dev で再評価し、必要なら調整する。
+1. **P3-04 OCR は実装済み**（D-033・D-034、`fixtures/workflows/invoice-v3.json` が `ocr: tesseract`）。**ホールドアウトの凍結が DECISIONS に記録されたら**、v3 で dev を再評価し（`python -m app.evaluation.offline --workflow ../fixtures/workflows/invoice-v3.json …`。Windows には Tesseract が無いので Linux の Docker で）、必要なら調整する。凍結の前は dev を評価しない。
 2. 最終の版で、人がホールドアウトを 1 回評価し（AI には集計値だけ）、`reports/gate_G2.md` に追記して G2 を判定する。**AI はホールドアウトの文書・ラベルを開かない。**
 3. G2 の承認後に Phase 4（契約書）の計画（P4-00）。エンジンのコードは変えず、Workflow の設定・Rule pack・field_spec で表すのが原則（`easf-capability-contract`）。
 4. 気になっている小さなこと：Windows で全テストが遅い・時間切れになる（子プロセスの再利用を ADR で検討）、実行の文書の選択が 200 件まで、ワーカーのコンテナ化。
@@ -89,7 +89,7 @@
 
 - 独立レビューなし（D-024）。
 - ホールドアウトが未生成・未凍結（G2 の AC-08 が未完了）。
-- スキャン画像の OCR がない（D-030）。子プロセスのメモリ上限は POSIX だけ。
+- OCR は Tesseract（コンテナ・CI）。この Windows には無く、OCR のテストは飛ばされる。コンテナ（Alpine 5.5.2）と CI（Ubuntu 5.3.0）で Tesseract の版と出力が違う。子プロセスのメモリ上限は POSIX だけ。
 - バックエンドのテストが遅い（Windows の spawn、全件で Linux 25 分）。
 - 画面：Workflow の作成・編集の画面なし、確認の決定後に修正の内容を表示できない（契約 v1）、実行・確認・文書の E2E は模擬 API。
 - 人の作業時間が未記録。
