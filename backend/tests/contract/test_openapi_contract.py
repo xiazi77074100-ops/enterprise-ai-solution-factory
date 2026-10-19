@@ -26,7 +26,7 @@ from app import main as main_module
 from app.adapters.local import LocalHandler
 from app.capabilities.result_exporter import export_result
 from app.core.db import make_session_factory
-from app.executor.engine import Executor
+from app.executor.engine import Executor, HandlerTable
 from app.main import create_app
 from tests import executor_testkit as kit
 from tests.conftest import make_settings
@@ -289,7 +289,7 @@ def _session(db_url: str, login_id: str | None) -> tuple[TestClient, dict[str, s
 def world(db: Session, db_url: str, monkeypatch: pytest.MonkeyPatch) -> World:  # noqa: F811
     # Test-only capabilities so run and review operations can be exercised (PHASE2_PLAN §3).
     kit.allow_testkit(monkeypatch)
-    monkeypatch.setattr(main_module, "production_handlers", lambda settings: kit.handlers())
+    monkeypatch.setattr(main_module, "production_handlers", lambda settings: _handlers())
     users = {name: make_user(db, name) for name in ("lead", "arch", "reviewer", "outsider")}
     admin = make_user(db, "admin", admin=True)
     client, headers = _session(db_url, "admin")
@@ -380,10 +380,7 @@ def _exported_run(
         headers={**headers, "Idempotency-Key": str(uuid.uuid4())},
     )  # fmt: skip
     run_id: str = started.json()["id"]
-    executor = Executor(
-        make_session_factory(make_settings(database_url=db_url)),
-        kit.handlers({("local", "result_exporter.v1"): LocalHandler(export_result)}),
-    )
+    executor = Executor(make_session_factory(make_settings(database_url=db_url)), _handlers())
     executor.run_until_idle()
     task = next(t for t in reviewer_client.get("/api/v1/reviews").json()["items"] if t["run_id"] == run_id)
     decided = reviewer_client.post(
@@ -394,6 +391,11 @@ def _exported_run(
     executor.run_until_idle()
     assert client.get(f"/api/v1/runs/{run_id}").json()["status"] == "succeeded"
     return run_id
+
+
+def _handlers() -> HandlerTable:
+    """Testkit capabilities plus the real result exporter (exportRunResult needs a run that used it)."""
+    return kit.handlers({("local", "result_exporter.v1"): LocalHandler(export_result)})
 
 
 ROLE_USER = {"solution_lead": "lead", "solution_architect": "arch", "business_reviewer": "reviewer", "admin": "admin"}
