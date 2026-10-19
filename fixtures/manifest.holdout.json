@@ -1,0 +1,90 @@
+{
+  "dataset": "invoice",
+  "generator_version": "0.1.0",
+  "samples": [
+    {
+      "sample_id": "inv-0009",
+      "split": "holdout",
+      "stratum": "normal",
+      "source_file_sha256": "4a96c8221b1b50b04f3cfad3494aa510cf42b6d9a898e17d1d9682cbfb1a808c",
+      "label_sha256": "f171d855dc913093865dc60e7c1d4797f2ca5a894c66f40e611e1a9c8c26ef7f"
+    },
+    {
+      "sample_id": "inv-0010",
+      "split": "holdout",
+      "stratum": "normal",
+      "source_file_sha256": "36a1bc127611e946da0f81bd7a1003f0637b9eb159756e8f0bb1f993ba496f7f",
+      "label_sha256": "727fef1a4f84d7aae5c94514a1d17623519bd858001b7888e0341cc531cc15f4"
+    },
+    {
+      "sample_id": "inv-0014",
+      "split": "holdout",
+      "stratum": "missing_registration",
+      "source_file_sha256": "f293f8b016a877ec1a8e8fe906016db98d13de6a8a8d1db757c087dad90e53fe",
+      "label_sha256": "658a069664a273ff5e07bbfe1abe67638511a8ff15710ff31caed2c317ea11ed"
+    },
+    {
+      "sample_id": "inv-0017",
+      "split": "holdout",
+      "stratum": "bad_registration_format",
+      "source_file_sha256": "b687d52c88e2bbeb90ecbe07573edbbc2ae10797b138404424c59f475d09f9f8",
+      "label_sha256": "4d14b2508ca1e0e1d4229303cb95214a32388480110cec137d7da85009c479d1"
+    },
+    {
+      "sample_id": "inv-0021",
+      "split": "holdout",
+      "stratum": "total_mismatch",
+      "source_file_sha256": "49f2c129a3bc4ad6baeb23af82742d016c2b11a58b849ad760c73f4c0fd12f9c",
+      "label_sha256": "f423b2c6280b516723325b0348c1e1afde7421b054e49e81d14dcf8dab00e5d2"
+    },
+    {
+      "sample_id": "inv-0022",
+      "split": "holdout",
+      "stratum": "total_mismatch",
+      "source_file_sha256": "093a973c37adad688730ae93ab3d56b1e5ec9bea6239bdf8bcf172319bf87ce6",
+      "label_sha256": "97c86a9dfffee0b9c8d1fe04517df331d57cc69db465267ce52c08416b3c5952"
+    },
+    {
+      "sample_id": "inv-0026",
+      "split": "holdout",
+      "stratum": "payee_changed",
+      "source_file_sha256": "6cbf358832e1bd2b9a6ce19bc3cb9e1bcd50cd2fddbfeab1cff055a7730bb596",
+      "label_sha256": "6649795e701945e7785420992686c4ed0bd77fb38a3c1bda6222a80201a60dc5"
+    },
+    {
+      "sample_id": "inv-0027",
+      "split": "holdout",
+      "stratum": "payee_changed",
+      "source_file_sha256": "0e1fd2f0023caea476bda95ad65bab3ba8e3a3f2b79b4d4be94882e580b6efc1",
+      "label_sha256": "96db11255cd266e07a073812eb23f1483b6975e5a0fccd6af05d5418c12f3f44"
+    },
+    {
+      "sample_id": "inv-0031",
+      "split": "holdout",
+      "stratum": "missing_due_date",
+      "source_file_sha256": "12fb286bb5417651ef30013b46a8e0daa5b77bacf1de58f058bb493ba9b87c6d",
+      "label_sha256": "7f3dcdce51045fcfd73fc328995b77ce05964a81dc57d34b4b2b58f471cce01c"
+    },
+    {
+      "sample_id": "inv-0034",
+      "split": "holdout",
+      "stratum": "duplicate_invoice_no",
+      "source_file_sha256": "1c855a8363581ec3fdb5e935c579e89b6a435abb476f558eeb0203194085885c",
+      "label_sha256": "c60ffd24fc0f826ea0ba2bc16b1f96e70b2715627108e74eb7eadde58b391b19"
+    },
+    {
+      "sample_id": "inv-0037",
+      "split": "holdout",
+      "stratum": "ambiguous",
+      "source_file_sha256": "ec0a17438258384c300f71f31a29efad6339ff1a11b9fad0e3b9eff16fed2774",
+      "label_sha256": "635fb4ed8269fc7d2dd1f18fb1f6fb8e570659c2b5c0145afa5e66c62717ad9b"
+    },
+    {
+      "sample_id": "inv-0040",
+      "split": "holdout",
+      "stratum": "injected_instruction",
+      "source_file_sha256": "f3cd722e502d2eb02f44f3920efd1bf867b7f76f7b1b11af3e0e970695f29023",
+      "label_sha256": "28c6631835c96d979fa4746f3c4acf89989579840826e6e2878ad2a5d704d1d1"
+    }
+  ]
+}
