@@ -76,8 +76,8 @@ CR-2 はベースライン側に請求書の実装がないため、ベースラ
 
 - 両 arm とも holdout の文書・正解を見ない（`fixture_plan.md` §6）。
 - 評価は人が実行する。可能なら arm の名前を伏せた出力（ファイル名を記号に置き換える）で採点する。
-- holdout の manifest の SHA-256：`（契約書のホールドアウトの凍結時に DECISIONS に記録）`
-- dev の manifest の SHA-256：`fixtures/contract/manifest.json`（凍結時に DECISIONS に記録）
+- holdout の manifest の SHA-256：`fd1038441dbe58ccc723d32040dd103ab572de405abf60513b1cf1a583420601`（`fixtures/contract/manifest.holdout.json`、D-041）
+- dev の manifest の SHA-256：`fea2d46392427ef6cb2be6c81b49d1fe8ddb3dd2e0748ac4f2bee933887bd209`（`fixtures/contract/manifest.json`、D-041）
 - 要件パッケージの SHA-256：`fe394a9ddb9a383a68eca702066b196e5a1d3604d840d42c6f8cbe48ae76b242`（D-039）
 
 ## 9. 妥当性への脅威（報告に必ず書く）

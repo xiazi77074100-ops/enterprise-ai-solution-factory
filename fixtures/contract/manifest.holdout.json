@@ -1,0 +1,102 @@
+{
+  "dataset": "contract",
+  "generator_version": "0.1.0",
+  "samples": [
+    {
+      "sample_id": "con-0008",
+      "split": "holdout",
+      "stratum": "normal",
+      "source_file_sha256": "550bcadfdd42fbb8678254cdca0ff24c49e370157a31455a68c25dede8b28226",
+      "label_sha256": "3be1fd68da50082ce15a6cbbb008ac8f2e9390ba3f302b3783e3ca689e91ff33",
+      "label_cr1_sha256": "ee7c786b3b5597a508cf14a2c06452a125d674552aabcbedc5ccaf28f7e67f04"
+    },
+    {
+      "sample_id": "con-0009",
+      "split": "holdout",
+      "stratum": "normal",
+      "source_file_sha256": "64f345af76825386617383e5de3bb57363ed573e2fa68e6b2fb63e32f3ba86f3",
+      "label_sha256": "9ad41aead1c93750fb3d77fca264713c9d9eff937b1bea24f6bea98b87b457fa",
+      "label_cr1_sha256": "4c10fa7fbb9393863d221430b4916ae068ae838d70eaf4ab1dbc4982361ca3b1"
+    },
+    {
+      "sample_id": "con-0010",
+      "split": "holdout",
+      "stratum": "normal",
+      "source_file_sha256": "eb408632e537ef50155caff95284a3ffe9cdb9ed18e43ae82479f0a4fc2cd42c",
+      "label_sha256": "80fa4e4aa23ff3e0bdcfb7c0026eb71c816d3ccd85eda7ad92e3a3f53ff9db35",
+      "label_cr1_sha256": "ca5a05d8e83e4ef1850e672ca9355c9467d5dba158047772812cd3ecf610c3d0"
+    },
+    {
+      "sample_id": "con-0014",
+      "split": "holdout",
+      "stratum": "missing_confidentiality",
+      "source_file_sha256": "a233d0f0d901e8296ae1ab320ce3432c4ddad4895b3c0f3d21164558500c6011",
+      "label_sha256": "acd873d3aa9f6169ca8d390ef28c593f3b138167df114e3a9d9facbb300d3d1f",
+      "label_cr1_sha256": "ac8f66aedfe6f4790994dd6786e7f0a2e136941dcda1d5faad0db3d2fc1e3cb0"
+    },
+    {
+      "sample_id": "con-0015",
+      "split": "holdout",
+      "stratum": "missing_confidentiality",
+      "source_file_sha256": "35c79f02872d0eb9084c714232e52591ec5773482156ca7785ce16bf43f93d6c",
+      "label_sha256": "5915e7d9df445e6dd2bf384657ab78776f6c585a7f5342babec2dbac48cb2ebd",
+      "label_cr1_sha256": "99a570ffb83178f8ac775c1416ff399dc5dba410b7dfbbb7d8764a6f7e60ef2a"
+    },
+    {
+      "sample_id": "con-0020",
+      "split": "holdout",
+      "stratum": "excessive_liability",
+      "source_file_sha256": "ea5d65c0798311c576aef9191f1557a0f94b78878a2d794717ed591eb2703162",
+      "label_sha256": "96904768a5e11b6b14ff8bb1d3a40cad7be7f2d4c6d86023b0a0f687abd71a48",
+      "label_cr1_sha256": "2fa22c3da509804e8a1460eec452a3ffd7f420e184fbf41553e359a7bbde7551"
+    },
+    {
+      "sample_id": "con-0025",
+      "split": "holdout",
+      "stratum": "auto_renewal",
+      "source_file_sha256": "8721c2f8340f3c81f39da9227221c2ff302188d02474b326c2088058357babab",
+      "label_sha256": "a162804d48b6e21ab67ec79d49d4c790010918f900e50491a289c33f5fac345b",
+      "label_cr1_sha256": "a61f7167fcd53d192e0a68fe154c17cb86207a5f8f620d14393ff62b556765f3"
+    },
+    {
+      "sample_id": "con-0029",
+      "split": "holdout",
+      "stratum": "missing_notice",
+      "source_file_sha256": "88b238dcd780e3b1841c38dfec296cb4ddae37415142e8634dbf5ca6646c78a9",
+      "label_sha256": "b66630825ff642504e111065503cfa8c10c0e8b0735b9072387c272da577935a",
+      "label_cr1_sha256": "151b18b45ac28421372fdcba4bd546575e6229886d32a332d993a88d5d6d78a9"
+    },
+    {
+      "sample_id": "con-0032",
+      "split": "holdout",
+      "stratum": "missing_governing_law",
+      "source_file_sha256": "91956cc26a20088090b2ed48a8cd01692ec93c6520f81f172b7b41297a69d1f7",
+      "label_sha256": "38e9df66786af0570a5356b72f1c5bab8c7928f1a52fef42e0b32ded24cc1d76",
+      "label_cr1_sha256": "cd6da8994031798f96d4fd2e29c041dee5d0ffe166be95e377ab918aa26c9c44"
+    },
+    {
+      "sample_id": "con-0036",
+      "split": "holdout",
+      "stratum": "ambiguous",
+      "source_file_sha256": "ce7ba7650f7c018e25a3c24ea0c6323dfa10f75614f7c4dc3086bb74044ed91c",
+      "label_sha256": "661ef91ebb9d68975cdf646d5e450100b396cfb0288697b369bd9505a4dee888",
+      "label_cr1_sha256": "71b37682f2c87663dc4ec4dcf2e9496d1030f378ef4001467d205b9f15c2f2e6"
+    },
+    {
+      "sample_id": "con-0038",
+      "split": "holdout",
+      "stratum": "contradictory",
+      "source_file_sha256": "a0dea2781536773aa54f56944221c4f2f5601d03df3976b7bc7371e6e70b98ea",
+      "label_sha256": "8b1aba08f3c13c01642de484cf55c61c9eb157e9ecea9ae5ce6894b404a7f39c",
+      "label_cr1_sha256": "344e010052db8684b2a7bb6a07de1ad793682b2396988efb064f0ffa3c26f0a1"
+    },
+    {
+      "sample_id": "con-0040",
+      "split": "holdout",
+      "stratum": "injected_instruction",
+      "source_file_sha256": "18d3e0830b20f8314285418f06c5887a347e2a3c4882fe42ee815fd34d85a0bc",
+      "label_sha256": "52ed5614a69f289985dc5f25bb2a76389abd46a97fc80e6b118cd41d613cbcf9",
+      "label_cr1_sha256": "c3025474484a0839ca68c53bde8cc870b5e755dd0a0886669e6a99c7e31914eb"
+    }
+  ]
+}
