@@ -35,3 +35,4 @@
 | G2 ゲート報告 | CC | 完了・**承認済み**（D-037） | — | `reports/gate_G2.md` | 2026-10-19 |
 | P4-00 Phase 4 計画 | CC | 完了・**承認済み**（D-038） | `cc/P4-00-plan` | `docs/phase4/PHASE4_PLAN.md` | 2026-10-20 |
 | P4-01 契約書の合成データ | CC | 完了（ホールドアウトは人の作業待ち） | `cc/P4-01-contract-fixtures` | `fixtures/generator/{contract,render_contract}.py`、dev 28 件・正解ラベル・CR-1 の正解（別ファイル）・manifest、`fixtures/contract/HOLDOUT.md`、生成器のテスト 7 件（Windows・Linux で同じバイト列） | 2026-10-20 |
+| P4-02 ベースラインの要件パッケージ | CC | 完了 | `cc/P4-02-baseline-bundle` | `experiment/baseline_bundle/`、`experiment/build_bundle.py`、SHA-256 `fe394a9d…`（D-039） | 2026-10-20 |
