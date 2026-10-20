@@ -1,0 +1,12 @@
+{
+  "sample_id": "con-0028",
+  "field": "antisocial_exclusion",
+  "value": null,
+  "status": "missing",
+  "finding": {
+    "rule_id": "CON-006",
+    "severity": "critical",
+    "result": "fail"
+  },
+  "gold_evidence": []
+}

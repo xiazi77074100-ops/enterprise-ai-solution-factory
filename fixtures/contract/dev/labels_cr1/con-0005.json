@@ -1,0 +1,19 @@
+{
+  "sample_id": "con-0005",
+  "field": "antisocial_exclusion",
+  "value": "八、反社会的勢力の排除",
+  "status": "found",
+  "finding": {
+    "rule_id": "CON-006",
+    "severity": "critical",
+    "result": "pass"
+  },
+  "gold_evidence": [
+    {
+      "page": 1,
+      "start": 596,
+      "end": 607,
+      "text_sha256": "1469bd12b923a8946dae1fea0abb762621af609d24513208ba98ef4a8b8bc573"
+    }
+  ]
+}

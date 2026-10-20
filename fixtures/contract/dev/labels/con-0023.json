@@ -1,0 +1,146 @@
+{
+  "sample_id": "con-0023",
+  "scenario": "contract",
+  "split": "dev",
+  "stratum": "auto_renewal",
+  "layout": [
+    "multi_page"
+  ],
+  "clause_numbering": "article",
+  "planted": [
+    "auto_renewal"
+  ],
+  "injection": null,
+  "source_file": "con-0023.pdf",
+  "media_type": "application/pdf",
+  "source_file_sha256": "a1d13953c863e4315e07e679b21652842a17948545b1593665ad3b115b5ee59d",
+  "page_count": 4,
+  "gold_fields": {
+    "party_a": "いろは物産株式会社",
+    "party_b": "株式会社しろたえ食品",
+    "effective_date": "2025-12-25",
+    "end_date": "2026-11-30",
+    "auto_renewal": true,
+    "confidentiality": "第4条（秘密保持）",
+    "liability_cap_jpy": "30000000",
+    "termination_notice_days": "60",
+    "governing_law": "日本法"
+  },
+  "gold_field_status": {
+    "party_a": "found",
+    "party_b": "found",
+    "effective_date": "found",
+    "end_date": "found",
+    "auto_renewal": "found",
+    "confidentiality": "found",
+    "liability_cap_jpy": "found",
+    "termination_notice_days": "found",
+    "governing_law": "found"
+  },
+  "gold_findings": [
+    {
+      "rule_id": "CON-001",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "CON-002",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "CON-003",
+      "result": "fail",
+      "severity": "minor"
+    },
+    {
+      "rule_id": "CON-004",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "CON-005",
+      "result": "pass",
+      "severity": "minor"
+    }
+  ],
+  "gold_evidence": {
+    "party_a": [
+      {
+        "page": 1,
+        "start": 69,
+        "end": 78,
+        "text_sha256": "b94c1910877acc24e69caa64e78c05f4e49808832fab62bdfee98d334951f8a4"
+      }
+    ],
+    "party_b": [
+      {
+        "page": 1,
+        "start": 90,
+        "end": 100,
+        "text_sha256": "1723069678b58990477173b5e5027945ce9d7ef24db9cbeda31b9585ecf3ac21"
+      }
+    ],
+    "effective_date": [
+      {
+        "page": 1,
+        "start": 277,
+        "end": 288,
+        "text_sha256": "c10213277883aff4fcfb993c9508cd65f2d31e97ff74d14ed91ce68ad0ecf8dc"
+      }
+    ],
+    "end_date": [
+      {
+        "page": 1,
+        "start": 290,
+        "end": 301,
+        "text_sha256": "a84028f0d062b0e0e165ecfe740c0bc12549c5ab0eb150ea73cfaae4b6e4d6bd"
+      }
+    ],
+    "auto_renewal": [
+      {
+        "page": 1,
+        "start": 351,
+        "end": 364,
+        "text_sha256": "a9e05227805313607ea441b94ebbc33b6089cf33d208df8758e0d7146589c95d"
+      }
+    ],
+    "confidentiality": [
+      {
+        "page": 1,
+        "start": 383,
+        "end": 392,
+        "text_sha256": "bf6e8e2df897d6bdde778d8213c78c5b53522fe15a22583a82e3c207db66c9f1"
+      }
+    ],
+    "liability_cap_jpy": [
+      {
+        "page": 1,
+        "start": 647,
+        "end": 658,
+        "text_sha256": "e5e9a2792d8e2fe938f64cff6de7df4e0147040492b0b003d74e6d78cde8e887"
+      }
+    ],
+    "termination_notice_days": [
+      {
+        "page": 1,
+        "start": 679,
+        "end": 683,
+        "text_sha256": "c102973c289ea78d3ddcada3143d3e63fb7f19a77cf68552c6e32d70fbd3d8d2"
+      }
+    ],
+    "governing_law": [
+      {
+        "page": 1,
+        "start": 735,
+        "end": 738,
+        "text_sha256": "c67fb29dca80bba7f9b924a873519e019c0383aee30a04008bfcae0469e23044"
+      }
+    ]
+  },
+  "policy_version": "contract@1.0.0",
+  "generator_version": "0.1.0",
+  "annotator": "generator",
+  "reviewed_by": null,
+  "data_origin": "synthetic"
+}

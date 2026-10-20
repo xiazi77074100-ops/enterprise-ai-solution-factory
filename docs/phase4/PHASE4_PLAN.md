@@ -3,6 +3,7 @@
 | 版 | 日付 | 変更内容 | 作成者 |
 |---|---|---|---|
 | 0.1 | 2026-10-19 | 初版（P4-00、承認待ち） | Claude Code |
+| 0.2 | 2026-10-20 | 承認（D-038）、P4-01 で見つけた論点を §5 に追記 | Claude Code |
 
 ## 1. 着手前の確認（easf-phase-gate §1）
 
@@ -47,6 +48,7 @@
 ## 5. 見込まれる技術的な論点（P4-03 で確かめる。いまは決めない）
 
 - 契約書は「見出し：値」ではなく条項（「第 N 条（秘密保持）」）の文章。今の `rule_based_extractor.v1` は真偽（`auto_renewal`、critical）を `uncertain` にする。設定だけで足りなければ新しい版が要り、その場合は `new_code` として正直に記録する（`easf-capability-contract` §5）。
+- `rule_validator.v1` は `eq`・`ne` で真偽を比べられず、CON-003（`auto_renewal` が false か）は常に uncertain になる（P4-01 で確認）。直すのは Factory 側の作業なので P4-03 で行い、実装の修正として記録する（ベースラインの前には直さない）。
 - 業務名をエンジンに書かない（`scripts/validate_contracts.py`）。違いは設定・Rule pack・抽出の項目の指定で表す。
 
 ## 6. 人に決めていただきたいこと

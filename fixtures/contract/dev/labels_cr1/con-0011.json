@@ -1,0 +1,19 @@
+{
+  "sample_id": "con-0011",
+  "field": "antisocial_exclusion",
+  "value": "第7条（反社会的勢力の排除）",
+  "status": "found",
+  "finding": {
+    "rule_id": "CON-006",
+    "severity": "critical",
+    "result": "pass"
+  },
+  "gold_evidence": [
+    {
+      "page": 1,
+      "start": 527,
+      "end": 541,
+      "text_sha256": "4cb223faa525bc0ce931fbcd936fbf7f2df6ae9cb55927c2fde81179182fc43f"
+    }
+  ]
+}

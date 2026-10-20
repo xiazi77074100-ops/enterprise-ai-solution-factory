@@ -1,0 +1,365 @@
+{
+  "dataset": "contract",
+  "generator_version": "0.1.0",
+  "base_date": "2025-04-01",
+  "plan_seed": 20261020,
+  "dev_seed": 2101,
+  "policy_version": "contract@1.0.0",
+  "samples": [
+    {
+      "sample_id": "con-0001",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [],
+      "source_file": "dev/documents/con-0001.pdf",
+      "source_file_sha256": "910bd20314b1fb5ba290824829e77aeb0904fd958e8c96c90a18727ef4c16872",
+      "label_sha256": "ae136d917504b482a15d92fd6704ab51c4915af33e24a1a9be120026eb3f8b95",
+      "label_cr1_sha256": "cd22d08276c3ccd2eb648fbc739c375d705dcaab646f0daed236138b8a42af8b"
+    },
+    {
+      "sample_id": "con-0002",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0002.pdf",
+      "source_file_sha256": "cbce6a47c6b13a5a1d7db8aa51694aad169c1833d4a50df57dd072310f87128a",
+      "label_sha256": "132fb4c46b532f32dc5c8e1d2564fcc63be6ab2caf0f72e7114776e2c66a0a22",
+      "label_cr1_sha256": "132a3b09f387e129a6eaffdcb2f837cbc39af13c4b64760ee1b0db89bf29df8e"
+    },
+    {
+      "sample_id": "con-0003",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0003.pdf",
+      "source_file_sha256": "62688e33f6703adc070d4639ccebcd3730020e9ea2fdeab3783961894b142902",
+      "label_sha256": "2d187490767955ae3d2b79eac93a8551e9c2b9d167f70fbbb22b3ed957771a84",
+      "label_cr1_sha256": "dee01f8251976406d6ee79a95ae9258f02c8c9a9c41682223345aabc55bd37a0"
+    },
+    {
+      "sample_id": "con-0004",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [
+        "scan",
+        "wareki"
+      ],
+      "source_file": "dev/documents/con-0004.png",
+      "source_file_sha256": "d933b338043d3606bc570c58ab7fd3d0be428c06d4e0eb6e01a9cca74081008e",
+      "label_sha256": "e167fc666f362c1dc2246250a56fb8a5a0d1b8e2790cbbdb86298270096fa661",
+      "label_cr1_sha256": "464a02a1c0b2a2d7511baa9c0d272690d9511d68a814d2bce04866a77ccbf93c"
+    },
+    {
+      "sample_id": "con-0005",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0005.pdf",
+      "source_file_sha256": "51cea5bbdf5b63773ac35c5935ac493a4d0afdf3251de45230678d5704f45f8a",
+      "label_sha256": "1f5984072bb816990bff34004dbcb56967e9b29920c63847c363881130db340b",
+      "label_cr1_sha256": "d21e55ffaadfcb2342b276aa0581b74fa9acc6155ac32bb17e7483cec3d70fb3"
+    },
+    {
+      "sample_id": "con-0006",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [
+        "multi_page",
+        "wareki"
+      ],
+      "source_file": "dev/documents/con-0006.pdf",
+      "source_file_sha256": "e959d8da088ebe0d98ff71e37ed84813bd505fdd84bcb75f1a04660cb594849d",
+      "label_sha256": "ace85e784946dabf6970e1ff62083541269e9d549c8aa027740d93077a794acb",
+      "label_cr1_sha256": "db9071135f00dcd922905931835c88115cee29ae617f1fab9c7dbc9e240b0160"
+    },
+    {
+      "sample_id": "con-0007",
+      "split": "dev",
+      "stratum": "normal",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0007.pdf",
+      "source_file_sha256": "6740f53546c36bd27d43abfd8449e7cac9319c8d2f987742cc8860c0f15a0f15",
+      "label_sha256": "abde9005ea11dd633b8b29301a52043023ad737c8faf69e96b38d0e314d8b043",
+      "label_cr1_sha256": "1a42f82c80bc6d170f8602a25788e399f739f6be32e7f92a7c5f21848d8854e2"
+    },
+    {
+      "sample_id": "con-0011",
+      "split": "dev",
+      "stratum": "missing_confidentiality",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0011.pdf",
+      "source_file_sha256": "6636d2a560364f57f7e3ba9882b5fe8edbf34eb665e68ef5183cfb9007376a8c",
+      "label_sha256": "e2e0fefc055257e9d871e29cf84e5de4ffe0bda3fd36368cbb80eaf676d8f548",
+      "label_cr1_sha256": "48732ed44ec48fcaf25771d2bc05191f9401a0a4025ef2bb47edbd608e6bba07"
+    },
+    {
+      "sample_id": "con-0012",
+      "split": "dev",
+      "stratum": "missing_confidentiality",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0012.pdf",
+      "source_file_sha256": "efed6aa575d8527110875477baee486615f3ee3d8714514369b2431a8dd9f0f5",
+      "label_sha256": "67fd7e14eeaeadda688a4e920b9c29da7ffc22796b35f3805f07579d10df3451",
+      "label_cr1_sha256": "c7482b2de1e1c1b35594ccc79848e976837035c4e5cc8573117f17328f8eeb39"
+    },
+    {
+      "sample_id": "con-0013",
+      "split": "dev",
+      "stratum": "missing_confidentiality",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0013.pdf",
+      "source_file_sha256": "bebf5e90c8595c6d1861dadd0dcd0ccc8196e365e2c5aa99731db82570950ce2",
+      "label_sha256": "70075e3414a4b7942c6502a45d14ffb21104df144dc8e7bb82f0f411b5b7449f",
+      "label_cr1_sha256": "737a0650a5d87f21dd5912f084e0d055f7215fa123e4d3d82c304946a8b4dfb2"
+    },
+    {
+      "sample_id": "con-0016",
+      "split": "dev",
+      "stratum": "excessive_liability",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0016.pdf",
+      "source_file_sha256": "524fafd1d2fb4cd28e740f3a20e23848ea027d89ed55fe1f95754ee932bf4217",
+      "label_sha256": "e1bd4dbaa3959f990210f821621d2e7bd3ac923326e8a2f51892e23be5d768ef",
+      "label_cr1_sha256": "2314496c2664148bda2487dc22c4f44671682bbb5eec5b4d3ffb077fb95a25ea"
+    },
+    {
+      "sample_id": "con-0017",
+      "split": "dev",
+      "stratum": "excessive_liability",
+      "layout": [],
+      "source_file": "dev/documents/con-0017.pdf",
+      "source_file_sha256": "bf77ac05d49f2e08eeac28b50340bb3f0edaad832093cc4d91b5aa9139e1df17",
+      "label_sha256": "da97832838008768447f5f727f1b4927a1090c8436239a11d443dfc87dad079f",
+      "label_cr1_sha256": "609af8f595865a404ce6b53f2f5790fc99f301aa8392a3e4e12e35b76db92f73"
+    },
+    {
+      "sample_id": "con-0018",
+      "split": "dev",
+      "stratum": "excessive_liability",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0018.pdf",
+      "source_file_sha256": "d651a88dcec16175480152322dd4276de70010b956f6a83bae95b61037cda594",
+      "label_sha256": "8dabc7d5e1c5aaf628ddeed27067d2b01cd52f57f8acc99aa4914a8fd8e17897",
+      "label_cr1_sha256": "519d2d21b04ae9cbaa260df0062007eabbdb1bfb8e74e2f36ddc205c209f0cfd"
+    },
+    {
+      "sample_id": "con-0019",
+      "split": "dev",
+      "stratum": "excessive_liability",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0019.pdf",
+      "source_file_sha256": "5fad77e164f0d6c0db8f03dbba71243d916c586afe43df69f0d2cc674ac00afc",
+      "label_sha256": "1170d6544000c2aeb302aa5c275272fb3c6c0fd1a549ffd59bf7b36b3e191ef4",
+      "label_cr1_sha256": "939b90326f7ca0df6676c28da8451e49c2cd52cccfdf87a089607e4396156faa"
+    },
+    {
+      "sample_id": "con-0021",
+      "split": "dev",
+      "stratum": "auto_renewal",
+      "layout": [
+        "duplicate_label",
+        "scan",
+        "wareki"
+      ],
+      "source_file": "dev/documents/con-0021.png",
+      "source_file_sha256": "87af62a0c9429580c54426e6161093b192443a3ed02ac47d47058fcffd5d2dff",
+      "label_sha256": "319c818d1268473779af848630370fa4a9d4a27fd4593f67f8a2be04b0884fb2",
+      "label_cr1_sha256": "5438cb57d656b3e5dfc12377568530a0fe96a6238f7907ab3e3fb177424916b9"
+    },
+    {
+      "sample_id": "con-0022",
+      "split": "dev",
+      "stratum": "auto_renewal",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0022.pdf",
+      "source_file_sha256": "ca4c063f580d6f00a2dc5640fc9916378bee6b8f360033256328a72cdb9ccaf8",
+      "label_sha256": "8976fd550eb93ef05dbdfa41734f62066b56a4f1345c9182c7c7755c9916b47e",
+      "label_cr1_sha256": "d8b625a1352b62d5fcc90171a51d43580bfee9ec9bd249415ecbccb0cc98bb0a"
+    },
+    {
+      "sample_id": "con-0023",
+      "split": "dev",
+      "stratum": "auto_renewal",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0023.pdf",
+      "source_file_sha256": "a1d13953c863e4315e07e679b21652842a17948545b1593665ad3b115b5ee59d",
+      "label_sha256": "0e85de9fb7b214dddd212a9678692d0c5e8c5ae9ad925449a779b82f861220c9",
+      "label_cr1_sha256": "7b64f61451c84ff8c77a7c2a1e626543ad0030e1c53f0887ba4594947b5fb0a5"
+    },
+    {
+      "sample_id": "con-0024",
+      "split": "dev",
+      "stratum": "auto_renewal",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0024.pdf",
+      "source_file_sha256": "43526e76e8b881b5b180d348f3b61835a788529d7f4a11029c1c9af31bb325c3",
+      "label_sha256": "c66526290a82c74b9515ccedf9af4c93734c94aa6b2d5a40aae638e1078cc2e6",
+      "label_cr1_sha256": "d266b9e16ff4181f61ddecffa24cf6fcf9a86bc87efa6fc4fb834f19efb4a544"
+    },
+    {
+      "sample_id": "con-0026",
+      "split": "dev",
+      "stratum": "missing_notice",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0026.pdf",
+      "source_file_sha256": "b8913ca7cebaf70b9fa29a5e9f2520dc18ac40f6755a90a683efdd281742a577",
+      "label_sha256": "c63f060bae1d023f09e30fc0da3d3baf7518883f5533ab437c082f22e61d4fa3",
+      "label_cr1_sha256": "3facb988adc6323366acd8a742c590c8274882b6cd43204f308bf0041b77bcd2"
+    },
+    {
+      "sample_id": "con-0027",
+      "split": "dev",
+      "stratum": "missing_notice",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0027.pdf",
+      "source_file_sha256": "03665bbe9b3d59cbbe37351c25e162aad6b2f8fdef27a960eb16acf66e4b7f93",
+      "label_sha256": "353ff250fe6e939c22d5f81d4f546b603e4b094418b7262e395bb5e131f8993c",
+      "label_cr1_sha256": "8e8df3c8b19850f694369a66a4e34601dd351b7a60762c94ae85e343aed82aa6"
+    },
+    {
+      "sample_id": "con-0028",
+      "split": "dev",
+      "stratum": "missing_notice",
+      "layout": [],
+      "source_file": "dev/documents/con-0028.pdf",
+      "source_file_sha256": "aa4b2854148c09c5e9d0da1276055cff930e8e8a07a2707baaf99ca06f2b7663",
+      "label_sha256": "0ba63bc99c00d94190add43c2e579a9a1e47fbd113b9f5b78e708ad8b2f135ea",
+      "label_cr1_sha256": "1a40e25583babe4e9c3db60ea22204b40afedc961f7098029858dc125d84b26c"
+    },
+    {
+      "sample_id": "con-0030",
+      "split": "dev",
+      "stratum": "missing_governing_law",
+      "layout": [
+        "duplicate_label",
+        "scan"
+      ],
+      "source_file": "dev/documents/con-0030.png",
+      "source_file_sha256": "c60efcdff87e9a156be4f7b8831d1011d56b0cdaef1b3a523e5d8efefdcc820c",
+      "label_sha256": "54aa5a7137adb7ed1765cad412444b19b4c41e13cf4a6bd04d26763fbf7b9403",
+      "label_cr1_sha256": "73a1d89e3774fc82a62396694c75dfd7c7e550836bd914e330a767e1d0b92852"
+    },
+    {
+      "sample_id": "con-0031",
+      "split": "dev",
+      "stratum": "missing_governing_law",
+      "layout": [
+        "scan"
+      ],
+      "source_file": "dev/documents/con-0031.png",
+      "source_file_sha256": "d1cacbbfa22e05fc29276351d9515db0e86e097d90f161fc97a761febe8188e1",
+      "label_sha256": "ae8fe9aeb3b91004128b34a15958e6adabe8bbc7ffd28225f094c20a98753437",
+      "label_cr1_sha256": "17e79b9b970d7bd94a2339f09e5017a743700f18852f858bfb3ed83f185c5787"
+    },
+    {
+      "sample_id": "con-0033",
+      "split": "dev",
+      "stratum": "ambiguous",
+      "layout": [
+        "multi_page",
+        "wareki"
+      ],
+      "source_file": "dev/documents/con-0033.pdf",
+      "source_file_sha256": "9a16ebeaefdbcde869e962e4cd75f4fb0ac6a23cde25ac3a4543ac71f0dee805",
+      "label_sha256": "9408087e895207bdcadc25d8b03f9caa51b6c9d670cca18a5a284af52afde5a7",
+      "label_cr1_sha256": "d893c12ee954023f38047d9d9c075b1b446198ef80af0e243c31f0015db9d808"
+    },
+    {
+      "sample_id": "con-0034",
+      "split": "dev",
+      "stratum": "ambiguous",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0034.pdf",
+      "source_file_sha256": "5ff9b4577f91825830507f54d1735682126b9c2e9cb4cc1fde0bc4cadd9a72bb",
+      "label_sha256": "aa60df8145a78d9915a9a661e5ecd971625aa3f9595fae03691ddf00db3972b1",
+      "label_cr1_sha256": "f5d96181160bdb1a59d26ecdf95a94a366ade91172d914f665d97bdee1968422"
+    },
+    {
+      "sample_id": "con-0035",
+      "split": "dev",
+      "stratum": "ambiguous",
+      "layout": [
+        "multi_page"
+      ],
+      "source_file": "dev/documents/con-0035.pdf",
+      "source_file_sha256": "5e7084282131367394c2c0fb046cd32c0c165e0cea9b98b39521cc5dac23a5c3",
+      "label_sha256": "2c672d3010a634e2066e456faefa334423c7150ea9df33f30d946fcf017ceb18",
+      "label_cr1_sha256": "431081688ef84511c9e49d3ea49d1f569a23853daa24d9e04ba84da32be42e77"
+    },
+    {
+      "sample_id": "con-0037",
+      "split": "dev",
+      "stratum": "contradictory",
+      "layout": [
+        "multi_page",
+        "wareki"
+      ],
+      "source_file": "dev/documents/con-0037.pdf",
+      "source_file_sha256": "8d2371894bd1e49cb25875d9ffafd276550fdf679895f20531709b6f7684b75d",
+      "label_sha256": "54d5acc23422b5f576b71e479fcbc7c94eb3e5cb9418fecf1d6a2806679f32aa",
+      "label_cr1_sha256": "789dd86c61f1fce6321cbbeab96d5226c42f8e3e2134ef2d2cdd128af39fd409"
+    },
+    {
+      "sample_id": "con-0039",
+      "split": "dev",
+      "stratum": "injected_instruction",
+      "layout": [
+        "multi_page",
+        "wareki"
+      ],
+      "source_file": "dev/documents/con-0039.pdf",
+      "source_file_sha256": "a6084f2e0bd9d7a4b7df5ca0cfadb860d84d5f7ba3905fc3c16bf47aa62b8f0f",
+      "label_sha256": "92517d8a9f84ea9c104dc4c8803b78fb647096a4f71c4987ae2c19fa15e66c71",
+      "label_cr1_sha256": "281e715ae875108bdaa31d06f4d7d3d1e02fa615c0b6cc9c3db80bc05e1fe5f1"
+    }
+  ],
+  "holdout": {
+    "sample_ids": [
+      "con-0008",
+      "con-0009",
+      "con-0010",
+      "con-0014",
+      "con-0015",
+      "con-0020",
+      "con-0025",
+      "con-0029",
+      "con-0032",
+      "con-0036",
+      "con-0038",
+      "con-0040"
+    ],
+    "manifest": "fixtures/contract/manifest.holdout.json (generated by a person)"
+  }
+}

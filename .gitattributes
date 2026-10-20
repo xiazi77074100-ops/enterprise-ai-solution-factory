@@ -6,3 +6,5 @@
 fixtures/dev/** -text
 fixtures/manifest*.json -text
 fixtures/rule_packs/** -text
+fixtures/contract/dev/** -text
+fixtures/contract/manifest*.json -text

@@ -1,0 +1,74 @@
+{
+  "sample_id": "con-0030",
+  "scenario": "contract",
+  "split": "dev",
+  "stratum": "missing_governing_law",
+  "layout": [
+    "duplicate_label",
+    "scan"
+  ],
+  "clause_numbering": "arabic",
+  "planted": [
+    "missing_governing_law"
+  ],
+  "injection": null,
+  "source_file": "con-0030.png",
+  "media_type": "image/png",
+  "source_file_sha256": "c60efcdff87e9a156be4f7b8831d1011d56b0cdaef1b3a523e5d8efefdcc820c",
+  "page_count": 1,
+  "gold_fields": {
+    "party_a": "株式会社さざなみ商会",
+    "party_b": "ほしかげ設備株式会社",
+    "effective_date": "2025-11-22",
+    "end_date": "2026-10-31",
+    "auto_renewal": false,
+    "confidentiality": "5.（秘密保持）",
+    "liability_cap_jpy": "50000000",
+    "termination_notice_days": "90",
+    "governing_law": null
+  },
+  "gold_field_status": {
+    "party_a": "found",
+    "party_b": "found",
+    "effective_date": "found",
+    "end_date": "found",
+    "auto_renewal": "found",
+    "confidentiality": "found",
+    "liability_cap_jpy": "found",
+    "termination_notice_days": "found",
+    "governing_law": "missing"
+  },
+  "gold_findings": [
+    {
+      "rule_id": "CON-001",
+      "result": "pass",
+      "severity": "critical"
+    },
+    {
+      "rule_id": "CON-002",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "CON-003",
+      "result": "pass",
+      "severity": "minor"
+    },
+    {
+      "rule_id": "CON-004",
+      "result": "pass",
+      "severity": "major"
+    },
+    {
+      "rule_id": "CON-005",
+      "result": "fail",
+      "severity": "minor"
+    }
+  ],
+  "gold_evidence": {},
+  "policy_version": "contract@1.0.0",
+  "generator_version": "0.1.0",
+  "annotator": "generator",
+  "reviewed_by": null,
+  "data_origin": "synthetic"
+}

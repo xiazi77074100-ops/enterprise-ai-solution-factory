@@ -4,6 +4,7 @@
 |---|---|---|---|
 | 0.1 | 2026-10-18 | 初版（P0-04。D-011 により CC が作成） | Claude Code |
 | 0.2 | 2026-10-19 | 請求書の生成器を実装（P3-02a）：層ごとの dev / holdout の件数、生成の道具、根拠の決め方、Rule pack 1.1.0 | Claude Code |
+| 0.3 | 2026-10-20 | 契約書の生成器を実装（P4-01）：層ごとの件数、正解の値の定義、CR-1 の正解を別ファイルに | Claude Code |
 
 根拠：`easf_package/docs/07_DATA_AND_EVAL.md`、ADR-003・ADR-007、D-005、skill `easf-eval-integrity`・`fixture-data`。
 **生成器・文書・ラベルは Phase 3 で作る。** ここは作り方と凍結の手順を G0 で決めるための計画。
@@ -18,6 +19,7 @@
 - 分割は「内容の層」ごとに層別で行う（各層の約 30% を holdout、端数は重大ルールの層を優先して holdout に寄せる）。
 - 重複の組（INV-006）は、組の 2 件を同じ分割に入れる。
 - 件数が少ないため、結果は「POC の健全性確認」であって統計的な主張ではない（ADR-007）。
+- 契約書の層ごとの件数（dev / holdout）：normal 7 / 3、missing_confidentiality 3 / 2、excessive_liability 4 / 1、auto_renewal 4 / 1、missing_notice 3 / 1、missing_governing_law 2 / 1、ambiguous 3 / 1、contradictory 1 / 1、injected_instruction 1 / 1（`fixtures/generator/contract.py` の `STRATA`）。置き場は `fixtures/contract/`（dev・manifest・`HOLDOUT.md`）。
 - 請求書の層ごとの件数（dev / holdout）：normal 8 / 2、missing_registration 3 / 1、bad_registration_format 2 / 1、total_mismatch 3 / 2、payee_changed 3 / 2、missing_due_date 3 / 1、duplicate_invoice_no 2 / 1、ambiguous 2 / 1、injected_instruction 2 / 1（`fixtures/generator/invoice.py` の `STRATA`）。どの文書をどの層・分割・体裁にするかは公開の種（`PLAN_SEED`）で決め、内容は分割ごとの種（dev は公開、holdout は人だけ）で作る。
 
 ## 2. 層（2 つの軸）
@@ -158,3 +160,12 @@
 | CON-005 準拠法 | missing_governing_law | 1 |
 
 仕込みのない文書（normal）は各業務 10 件あり、誤検出（false positive）の確認に使う。
+
+## 8. 契約書の正解の決め方（P4-01、2026-10-20）
+
+- 項目の正解：`party_a`・`party_b`（前文の会社名）、`effective_date`・`end_date`（ISO）、`auto_renewal`（真偽。「自動更新はしない」→ false、「同一条件でさらに1年間更新」→ true）、`confidentiality`（秘密保持の条の**見出しを印字どおり**。無ければ null・missing）、`liability_cap_jpy`（十進の文字列。印字は「30,000,000円」か「3,000万円」）、`termination_notice_days`（「30日前」→ "30"）、`governing_law`（「日本法」）。
+- ルールの正解は**ポリシー**（`contract@1.0.0`）どおりで、今の実装の振る舞いではない（例：自動更新なら CON-003 は fail）。あいまい（「別途協議」「相当の期間」）・矛盾（上限額が 2 か所で違う）は uncertain で、矛盾は根拠を 2 か所。
+- 文書：条番号は「第1条（…）」「1.（…）」「一、…」を均等に。multi_page は本文の後ろに別紙（業務仕様書）を付けて 2〜4 ページ前後。スキャンは 1 ページに収め、根拠なし。全ページに「TEST ONLY／合成データ…法的助言ではありません」。
+- 値は行をまたがないように折り返す（根拠を 1 つの範囲にするため）。根拠は描画した行を解析のテキストの中で順に探して決める。
+- **要件変更 CR-1（反社会的勢力の排除条項）**：条項の有無は公開の計画で決め（dev 6 件・holdout 3 件が無し）、正解は別ファイル `labels_cr1/`（`antisocial_exclusion` の見出し、CON-006〔critical〕の pass / fail）。主のラベルには出さない。CR-1 の前に渡す要件パッケージに含めない（事前登録 §6、両 arm とも CR-1 は初めて）。
+
