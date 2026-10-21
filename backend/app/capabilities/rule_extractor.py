@@ -9,6 +9,7 @@ characters such as ¥ and separators, so the value is kept as a draft but report
 """
 
 import re
+from dataclasses import dataclass
 from typing import Any
 
 from app.capabilities.values import nfkc, parse_amount, parse_date
@@ -47,30 +48,106 @@ def _read(kind: str, raw: str, ocr_page: bool = False) -> str | int | None:
     return None
 
 
+MAX_BETWEEN = 60  # characters between `before` and `after` (one phrase, never across a sentence end)
+MAX_HEADING = 30  # a heading is a short line; a long sentence that merely mentions the title is not one
+
+
+@dataclass
+class _Page:
+    text: str  # NFKC
+    joined: str  # NFKC without line breaks: phrases wrapped across lines still match
+    lines: list[tuple[str, str]]  # (NFKC line, line as printed)
+    ocr: bool
+
+
+def _pages(inputs: dict[str, Any]) -> list[_Page]:
+    pages = []
+    for page in inputs["pages"]:
+        raw_lines = [line.strip() for line in page["text"].splitlines()]
+        text = nfkc(page["text"])
+        pages.append(
+            _Page(
+                text=text,
+                joined=re.sub(r"[\r\n]+", "", text),
+                lines=[(nfkc(line), line) for line in raw_lines if line],
+                ocr=page["extraction_method"] != "text_layer",
+            )
+        )
+    return pages
+
+
+def _between(page: _Page, before: str, after: str) -> list[str]:
+    """Literal text between `before` and `after` (`before` empty: from the start of a line). No regex from config."""
+    before, after = nfkc(before), nfkc(after)
+    found = []
+    if not before:
+        for line, _ in page.lines:
+            end = line.find(after)
+            if end > 0:
+                found.append(line[:end])
+        return found
+    start = 0
+    while (at := page.joined.find(before, start)) != -1:
+        begin = at + len(before)
+        end = page.joined.find(after, begin)
+        value = page.joined[begin:end] if end != -1 else ""
+        if 0 < len(value) <= MAX_BETWEEN and "。" not in value:
+            found.append(value)
+        start = begin
+    return found
+
+
+def _candidates(spec: dict[str, Any], page: _Page) -> tuple[list[Any], bool]:
+    """Values this field's settings find on one page, and whether something was found but could not be read."""
+    kind = spec["type"]
+    values: list[Any] = []
+    unreadable = False
+    if kind == "boolean":
+        if any(nfkc(p) in page.joined for p in spec.get("true_if", [])):
+            values.append(True)
+        if any(nfkc(p) in page.joined for p in spec.get("false_if", [])):
+            values.append(False)
+        return values, False
+    raws = [m["value"] for label in spec.get("labels", []) for m in _pattern(label).finditer(page.text)]
+    raws += [v for pair in spec.get("between", []) for v in _between(page, pair["before"], pair["after"])]
+    for raw in raws:
+        value = _read(kind, raw, page.ocr)
+        if value is None:
+            unreadable = True
+        else:
+            values.append(value)
+    if "heading" in spec:
+        title = nfkc(spec["heading"])
+        # The heading is returned as printed (not NFKC), so evidence can be located in the page text.
+        values += [printed for line, printed in page.lines if title in line and len(line) <= MAX_HEADING]
+    return values, unreadable
+
+
 def extract_by_labels(inputs: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
-    texts = [(nfkc(page["text"]), page["extraction_method"] != "text_layer") for page in inputs["pages"]]
+    """Version 1.0.0 settings (`labels` only) behave exactly as before. Version 1.1.0 adds `between`, `heading`,
+    `true_if` / `false_if` (booleans) and `uncertain_if` (phrases meaning the value is not settled), all literal."""
+    pages = _pages(inputs)
     fields: dict[str, Any] = {}
     status: dict[str, str] = {}
     for spec in config["field_spec"]:
         name, kind = spec["name"], spec["type"]
-        if kind not in ("date", "decimal", "integer", "string"):
+        boolean = kind == "boolean" and ("true_if" in spec or "false_if" in spec)
+        if kind not in ("date", "decimal", "integer", "string") and not boolean:
             fields[name], status[name] = None, "uncertain"
             continue
-        candidates: list[str | int] = []
+        candidates: list[Any] = []
         unreadable = from_ocr = False
-        for label in spec["labels"]:
-            pattern = _pattern(label)
-            for text, ocr_page in texts:
-                for match in pattern.finditer(text):
-                    value = _read(kind, match["value"], ocr_page)
-                    from_ocr = from_ocr or ocr_page
-                    if value is None:
-                        unreadable = True
-                    elif value not in candidates:
-                        candidates.append(value)
-        if len(candidates) == 1:
+        for page in pages:
+            values, page_unreadable = _candidates(spec, page)
+            unreadable = unreadable or page_unreadable
+            from_ocr = from_ocr or (page.ocr and (bool(values) or page_unreadable))
+            for value in values:  # the same value found by two labels is one candidate
+                if value not in candidates:
+                    candidates.append(value)
+        hedged = any(nfkc(p) in page.joined for p in spec.get("uncertain_if", []) for page in pages)
+        if len(candidates) == 1 and not hedged:
             fields[name], status[name] = candidates[0], ("uncertain" if from_ocr else "found")
-        elif candidates or unreadable:
+        elif candidates or unreadable or hedged:
             fields[name], status[name] = None, "uncertain"
         else:
             fields[name], status[name] = None, "missing"

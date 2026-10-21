@@ -9,7 +9,7 @@ from typing import Any
 
 import pytest
 
-from app.capabilities.evidence import MAX_SPANS, locate
+from app.capabilities.evidence import locate
 from app.capabilities.pdf_text import span_sha256
 from app.capabilities.result_exporter import export_id, export_result, render_csv, safe_cell
 from app.catalog.validation import validate_capability
@@ -47,11 +47,24 @@ def test_exact_match_does_not_translate_formats() -> None:
     assert _spans({"issue_date": "2025-06-12"}, match="exact") == {"issue_date": []}
 
 
-def test_overlapping_forms_are_reported_once_and_capped() -> None:
+def test_overlapping_forms_are_reported_once_and_only_the_first_occurrence_is_cited() -> None:
     (span,) = _spans({"total": "104060"})["total"]  # "¥104,060" and "104,060" overlap: the longer one wins
     assert TEXT[span["start"] : span["end"]] == "¥104,060"
-    many = [{"page": 1, "text": "AB " * 50, "extraction_method": "text_layer"}]
-    assert len(locate(DOC, many, {"v": "AB"}, "exact")["evidence"]["v"]) == MAX_SPANS
+    many = [
+        {"page": 1, "text": "前文 AB 本文 AB", "extraction_method": "text_layer"},
+        {"page": 2, "text": "署名 AB", "extraction_method": "text_layer"},
+    ]
+    (first,) = locate(DOC, many, {"v": "AB"}, "exact")["evidence"]["v"]  # P4-03: a repeated name cites its first place
+    assert (first["page"], first["start"]) == (1, 3)
+
+
+def test_short_bare_numbers_are_not_searched() -> None:
+    text = "2025年5月30日\r\n30日前までに通知する。\r\n税：¥840"
+    pages = [{"page": 1, "text": text, "extraction_method": "text_layer"}]
+    evidence = locate(DOC, pages, {"days": "30", "tax": "840"}, "normalized")["evidence"]
+    assert evidence["days"] == []  # "30" alone would cite the day of a date
+    (tax,) = evidence["tax"]
+    assert text[tax["start"] : tax["end"]] == "¥840"  # a form with a symbol is still found
 
 
 def test_mcp_tool_validates_input_and_denies_unknown_tools() -> None:

@@ -36,3 +36,4 @@
 | P4-00 Phase 4 計画 | CC | 完了・**承認済み**（D-038） | `cc/P4-00-plan` | `docs/phase4/PHASE4_PLAN.md` | 2026-10-20 |
 | P4-01 契約書の合成データ | CC | 完了（ホールドアウトは人の作業待ち） | `cc/P4-01-contract-fixtures` | `fixtures/generator/{contract,render_contract}.py`、dev 28 件・正解ラベル・CR-1 の正解（別ファイル）・manifest、`fixtures/contract/HOLDOUT.md`、生成器のテスト 7 件（Windows・Linux で同じバイト列） | 2026-10-20 |
 | P4-02 ベースラインの要件パッケージ | CC | 完了 | `cc/P4-02-baseline-bundle` | `experiment/baseline_bundle/`、`experiment/build_bundle.py`、SHA-256 `fe394a9d…`（D-039） | 2026-10-20 |
+| P4-03 Factory で契約書 | CC | 完了 | `cc/P4-03-contract` | 抽出 1.1.0、検証・根拠の実装の修正、Workflow contract-v2、dev 評価（項目 0.924・重大 1.0・根拠 1.0）、請求書の回帰（変化なし）、端から端までと再利用のテスト（Linux で 4 件成功）。D-043 | 2026-10-21 |

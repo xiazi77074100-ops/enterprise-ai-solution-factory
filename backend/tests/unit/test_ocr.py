@@ -81,12 +81,10 @@ def test_missing_binary_and_llm_ocr_fail_closed(monkeypatch: pytest.MonkeyPatch)
 
 def test_evidence_in_ocr_text_is_never_verified() -> None:
     text = "請求書番号：2025-0001"
-    pages = [
-        {"page": 1, "text": text, "extraction_method": "ocr_tesseract"},
-        {"page": 2, "text": text, "extraction_method": "text_layer"},
-    ]
-    spans = locate("d", pages, {"invoice_no": "2025-0001"}, "normalized")["evidence"]["invoice_no"]
-    assert [(s["page"], s["status"]) for s in spans] == [(1, "unverified"), (2, "verified")]
+    for method, expected in (("ocr_tesseract", "unverified"), ("text_layer", "verified")):
+        pages = [{"page": 1, "text": text, "extraction_method": method}]
+        (span,) = locate("d", pages, {"invoice_no": "2025-0001"}, "normalized")["evidence"]["invoice_no"]
+        assert span["status"] == expected
 
 
 def test_ocr_text_is_normalized() -> None:

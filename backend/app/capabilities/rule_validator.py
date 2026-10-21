@@ -77,6 +77,11 @@ class _Evaluator:
     def compare(self, op: str, left: Any, right: Any) -> bool:
         if op in ("eq", "ne") and isinstance(left, str) and isinstance(right, str):
             return (left == right) == (op == "eq")
+        if isinstance(left, bool) or isinstance(right, bool):
+            # Booleans compare only with booleans, and only by eq / ne (P4-03; CON-003 was always uncertain).
+            if op not in ("eq", "ne") or not (isinstance(left, bool) and isinstance(right, bool)):
+                raise _UndecidableError
+            return (left == right) == (op == "eq")
         a, b = _number(left), _number(right)
         return {"eq": a == b, "ne": a != b, "lt": a < b, "le": a <= b, "gt": a > b, "ge": a >= b}[op]
 

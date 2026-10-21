@@ -4,6 +4,9 @@ Evidence is never invented: a span is returned only when the page text at [start
 forms of the value, and it carries the SHA-256 of exactly those characters. A value with no such span gets no
 evidence (shown as unconfirmed). Offsets index the parser's page texts (app/capabilities/pdf_text.py).
 A span found in OCR text is `unverified` (ADR-003): the OCR text is not the document's own text layer.
+Only the first occurrence in reading order is cited (P4-03): a name repeated in a signature block, or a number that
+also occurs elsewhere, is not where the value was stated. Bare numbers shorter than 4 digits are not searched at
+all ("30" matches the day of any date); printed forms with a unit or symbol ("¥840") still are.
 """
 
 from typing import Any
@@ -13,6 +16,7 @@ from app.capabilities.values import amount_forms, date_forms, nfkc
 
 MAX_SPANS = 10  # output_schema: evidence[name] maxItems
 MIN_CHARS = 2  # a single character would match almost anywhere
+MIN_BARE_DIGITS = 4  # "30" or "840" alone matches too many unrelated places
 
 
 def _forms(value: Any, match: str) -> list[str]:
@@ -22,7 +26,13 @@ def _forms(value: Any, match: str) -> list[str]:
     if match == "exact":
         return [text]
     forms = [text, nfkc(text), *date_forms(text), *amount_forms(text)]
-    return sorted({f for f in forms if len(f) >= MIN_CHARS}, key=len, reverse=True)  # longest first
+    usable = {f for f in forms if len(f) >= MIN_CHARS and not _short_bare_number(f)}
+    return sorted(usable, key=len, reverse=True)  # longest first
+
+
+def _short_bare_number(form: str) -> bool:
+    digits = form.removeprefix("-")
+    return digits.isdigit() and len(digits) < MIN_BARE_DIGITS
 
 
 def _status(page: dict[str, Any]) -> str:
@@ -56,5 +66,5 @@ def locate(document_id: str, pages: list[dict[str, Any]], fields: dict[str, Any]
                              "text_sha256": span_sha256(text, start, end), "status": _status(page)}
                         )  # fmt: skip
                     start = end
-        evidence[name] = sorted(spans, key=lambda s: (s["page"], s["start"]))
+        evidence[name] = sorted(spans, key=lambda s: (s["page"], s["start"]))[:1]  # first in reading order
     return {"evidence": evidence}

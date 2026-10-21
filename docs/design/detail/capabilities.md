@@ -5,6 +5,7 @@
 | 0.1 | 2026-10-19 | 初版（P3-01b） | Claude Code |
 | 0.2 | 2026-10-19 | 根拠の照合（MCP）・結果の出力（P3-01c） | Claude Code |
 | 0.3 | 2026-10-19 | OCR（Tesseract）、OCR 由来の根拠は未確認（P3-04） | Claude Code |
+| 0.4 | 2026-10-21 | 規則ベースの抽出 1.1.0（文言の設定・真偽）、根拠は最初の出現だけ、検証の真偽の比較、万・億の金額（P4-03） | Claude Code |
 
 Capability の契約（入出力・設定のスキーマ）は `contracts/examples/capabilities/` が正。ここは実装の動きを書く。どの部品も業務名を持たず、業務の違いはノードの設定（`field_spec`・Rule pack）で表す（`easf-capability-contract` §1-4）。
 
@@ -45,6 +46,19 @@ Capability の契約（入出力・設定のスキーマ）は `contracts/exampl
 
 文書の中の文は、どれもデータとして扱う（指示として解釈しない。LLM を使わない）。
 
+### 3.1 版 1.1.0 の設定（P4-03、契約書）
+
+`document.rule_extractor@1.1.0`（同じ実装キー `rule_based_extractor.v1`）。`field_spec[]` の各項目に、次の設定を任意で書ける。`labels` だけの設定（1.0.0）は前と同じに動く。どれも**文字列そのまま**で、正規表現を設定から受けない。
+
+| 設定 | 意味 |
+|---|---|
+| `between: [{before, after}]` | `before` と `after` に挟まれた文字列（改行をまたいで探す。60 文字以内で「。」を含まない）。`before` が空なら行の先頭から |
+| `heading` | その文言を含む **30 文字以内の行**を、印字どおりの行で値にする（条の見出し。長い文の中で触れただけのもの〔不審な指示など〕は数えない） |
+| `true_if` / `false_if` | 真偽の項目：その文言があれば true / false。両方あれば uncertain |
+| `uncertain_if` | その文言があれば、値が 1 つに決まっても uncertain（「別途協議」「相当の期間」） |
+
+金額は「3,000万円」「1億円」も読む（`backend/app/capabilities/values.py`。請求書の読み方は変わらない）。
+
 ## 4. LLM の抽出（structured_extractor.v1、mock）
 
 実 API は D-004 で保留。mock は文書を読まず、`field_spec` の全項目を null・`uncertain` で返す（決定的。正解ラベルを使わない）。実行は `mixed` / `mock` として記録され、実接続には数えない。流れの確認のためだけに使う。
@@ -69,6 +83,8 @@ Rule pack（`contracts/rule_pack.schema.json`）の式を、決まった演算�
 - `message` は「ルールの題名：適合／不適合／判定できません（要確認）」。入力の値を含めない。
 - `requires_review`：`fail` が 1 つでもある、または `critical` が `pass` でない。
 
+- 比較（`eq`・`ne`）は真偽どうしでもできる（P4-03。それまで CON-003 は常に uncertain だった）。真偽と数・文字列の比較、真偽の大小は uncertain。
+
 ## 6. 案件の文脈（project_context）
 
 入力スキーマに `project_context` を持つ Capability には、Executor が入力を組み立てるときに付ける（辺からは渡さない）。中身は、同じ案件で、この実行より前に作られ成功した実行の、人の確認ノードの出力 `reviewed_fields` の値（文字列・数値だけ、項目ごとに 10,000 件・50 項目まで）。`snapshot_at` はこの実行の作成日時。Capability は DB を読まない（`easf-capability-contract` §1.1）。実装は `backend/app/executor/engine.py`。
@@ -78,7 +94,7 @@ Rule pack（`contracts/rule_pack.schema.json`）の式を、決まった演算�
 - 実際の MCP プロトコル（公式 SDK `mcp` 2.3.0、stdio）で呼ぶが、サーバは EASF 内の自作のローカルサーバ（`python -m app.mcp_server`、固定のコマンド）。**外部の実連携ではない**。
 - ツールの引数は「Capability の入力 ＋ ノードの設定」。ツールのスキーマは `backend/app/mcp_tools/locate_evidence.json`（入力 ＝ 契約の `input_schema` に `configuration_schema` の項目を合わせたもの、出力 ＝ 契約の `output_schema`）。`mcp_tool` の版の登録時に Catalog が一致を確かめ、違えば `tool_schema_mismatch` で拒否する（`backend/app/catalog/validation.py`）。
 - アダプタは許可リストのツール名だけを呼び、サーバが広告していなければ呼ばない（`mcp_tool_not_advertised`、再試行しない）。時間切れは `timeout`、サーバの起動失敗・プロトコルの異常は例外の型名だけを `mcp_<型名>` で記録する。
-- 照合：項目の値の「印字の形」（`match: exact` は値そのまま、`normalized` は値・NFKC・日付の書き方〔西暦・和暦・スラッシュ〕・金額の書き方〔`¥`・`￥`・`円`・桁区切り〕）をページのテキストで探す。見つかった範囲を返し、その範囲の SHA-256 を付ける。状態は、テキスト層のページなら `verified`、OCR で読んだページなら `unverified`（OCR の文字は文書そのものの文字ではないため、ADR-003）。数の途中で切れる範囲（「¥104,060」の中の「¥1」など）・重なる範囲は使わない。1 項目 10 件まで、1 文字の値は探さない。見つからない値は根拠なし（空の配列。画面では「未確認」）。根拠を作らない（`easf-capability-contract` §1-6）。
+- 照合：項目の値の「印字の形」（`match: exact` は値そのまま、`normalized` は値・NFKC・日付の書き方〔西暦・和暦・スラッシュ〕・金額の書き方〔`¥`・`￥`・`円`・桁区切り〕）をページのテキストで探す。見つかった範囲を返し、その範囲の SHA-256 を付ける。状態は、テキスト層のページなら `verified`、OCR で読んだページなら `unverified`（OCR の文字は文書そのものの文字ではないため、ADR-003）。数の途中で切れる範囲（「¥104,060」の中の「¥1」など）・重なる範囲は使わない。1 項目につき**読む順の最初の出現だけ**を引用する（署名欄で繰り返す名前などを根拠にしない、P4-03）。1 文字の値・**4 桁未満の数字だけの形**（「30」は日付の日にも一致する）は探さない（「¥840」のような記号付きの形は探す）。見つからない値は根拠なし（空の配列。画面では「未確認」）。根拠を作らない（`easf-capability-contract` §1-6）。
 
 ## 8. 結果の出力（result_exporter.v1 と exportRunResult）
 

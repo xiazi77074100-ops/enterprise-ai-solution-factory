@@ -1,0 +1,207 @@
+{
+  "dataset": "contract",
+  "split": "dev",
+  "samples": 28,
+  "manifest_sha256": "fea2d46392427ef6cb2be6c81b49d1fe8ddb3dd2e0748ac4f2bee933887bd209",
+  "workflow": {
+    "workflow_id": "contract-poc",
+    "version": 2
+  },
+  "rule_pack": "contract@1.0.0",
+  "metrics": {
+    "field_macro_normalized_match": 0.9236365486365486,
+    "field_status_agreement": 0.8650793650793651,
+    "critical_fields_wrong_but_found": 0,
+    "critical_rule_recall": 1.0,
+    "critical_rule_positives": 4,
+    "evidence_position_accuracy": 1.0,
+    "evidence_spans": 161,
+    "ocr_evidence_spans": 10,
+    "ocr_evidence_all_unverified": true
+  },
+  "per_field_match": {
+    "auto_renewal": 1.0,
+    "confidentiality": 0.875,
+    "effective_date": 0.9285714285714286,
+    "end_date": 0.9642857142857143,
+    "governing_law": 0.9615384615384616,
+    "liability_cap_jpy": 1.0,
+    "party_a": 0.8571428571428571,
+    "party_b": 0.8928571428571429,
+    "termination_notice_days": 0.8333333333333334
+  },
+  "rule_confusion": {
+    "CON-001": {
+      "pass->pass": 23,
+      "fail->fail": 4,
+      "pass->fail": 1
+    },
+    "CON-002": {
+      "pass->pass": 21,
+      "fail->fail": 4,
+      "uncertain->uncertain": 3
+    },
+    "CON-003": {
+      "pass->pass": 24,
+      "fail->fail": 4
+    },
+    "CON-004": {
+      "pass->pass": 20,
+      "pass->fail": 4,
+      "fail->fail": 3,
+      "uncertain->fail": 1
+    },
+    "CON-005": {
+      "pass->pass": 25,
+      "pass->fail": 1,
+      "fail->fail": 2
+    }
+  },
+  "missed_critical_rules": [],
+  "field_errors": [
+    {
+      "sample_id": "con-0004",
+      "stratum": "normal",
+      "field": "party_a",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "株式会社たまゆら製作所"
+    },
+    {
+      "sample_id": "con-0004",
+      "stratum": "normal",
+      "field": "party_b",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "ほしかげ設備株式会社"
+    },
+    {
+      "sample_id": "con-0004",
+      "stratum": "normal",
+      "field": "effective_date",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "2025-11-02"
+    },
+    {
+      "sample_id": "con-0004",
+      "stratum": "normal",
+      "field": "termination_notice_days",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "90"
+    },
+    {
+      "sample_id": "con-0004",
+      "stratum": "normal",
+      "field": "governing_law",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "日本法"
+    },
+    {
+      "sample_id": "con-0021",
+      "stratum": "auto_renewal",
+      "field": "party_a",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "みずなら工業株式会社"
+    },
+    {
+      "sample_id": "con-0021",
+      "stratum": "auto_renewal",
+      "field": "party_b",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "株式会社しろたえ食品"
+    },
+    {
+      "sample_id": "con-0021",
+      "stratum": "auto_renewal",
+      "field": "end_date",
+      "predicted": null,
+      "predicted_status": "uncertain",
+      "gold": "2026-04-30"
+    },
+    {
+      "sample_id": "con-0021",
+      "stratum": "auto_renewal",
+      "field": "confidentiality",
+      "predicted": "・五、秘密保持",
+      "predicted_status": "uncertain",
+      "gold": "五、秘密保持"
+    },
+    {
+      "sample_id": "con-0021",
+      "stratum": "auto_renewal",
+      "field": "termination_notice_days",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "30"
+    },
+    {
+      "sample_id": "con-0030",
+      "stratum": "missing_governing_law",
+      "field": "party_a",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "株式会社さざなみ商会"
+    },
+    {
+      "sample_id": "con-0030",
+      "stratum": "missing_governing_law",
+      "field": "effective_date",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "2025-11-22"
+    },
+    {
+      "sample_id": "con-0030",
+      "stratum": "missing_governing_law",
+      "field": "confidentiality",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "5.（秘密保持）"
+    },
+    {
+      "sample_id": "con-0030",
+      "stratum": "missing_governing_law",
+      "field": "termination_notice_days",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "90"
+    },
+    {
+      "sample_id": "con-0031",
+      "stratum": "missing_governing_law",
+      "field": "party_a",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "いろは物産株式会社"
+    },
+    {
+      "sample_id": "con-0031",
+      "stratum": "missing_governing_law",
+      "field": "party_b",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "株式会社しろたえ食品"
+    },
+    {
+      "sample_id": "con-0031",
+      "stratum": "missing_governing_law",
+      "field": "confidentiality",
+      "predicted": "第4 条(秘密保持)",
+      "predicted_status": "uncertain",
+      "gold": "第4条（秘密保持）"
+    },
+    {
+      "sample_id": "con-0031",
+      "stratum": "missing_governing_law",
+      "field": "termination_notice_days",
+      "predicted": null,
+      "predicted_status": "missing",
+      "gold": "90"
+    }
+  ]
+}

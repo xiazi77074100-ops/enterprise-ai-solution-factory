@@ -12,7 +12,8 @@ from decimal import Decimal, InvalidOperation
 ERAS = {"令和": 2018, "R": 2018, "平成": 1988, "H": 1988}
 _ISO = re.compile(r"(\d{4})\s*[年/.\-]\s*(\d{1,2})\s*[月/.\-]\s*(\d{1,2})\s*日?")
 _WAREKI = re.compile(r"(令和|平成|R|H)\s*(\d{1,2}|元)\s*[年.]\s*(\d{1,2})\s*[月.]\s*(\d{1,2})\s*日?")
-_AMOUNT = re.compile(r"(-)?\s*[¥\\]?\s*(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?\s*円?")
+_AMOUNT = re.compile(r"(-)?\s*[¥\\]?\s*(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?\s*(万|億)?\s*円?")
+_UNIT = {"万": 10_000, "億": 100_000_000}  # "3,000万円" = 30,000,000 yen (P4-03)
 
 
 def nfkc(text: str) -> str:
@@ -42,12 +43,12 @@ def parse_amount(text: str) -> str | None:
     found = _AMOUNT.search(nfkc(text))
     if not found:
         return None
-    sign, digits, fraction = found.groups()
+    sign, digits, fraction, unit = found.groups()
     try:
-        value = Decimal((sign or "") + digits.replace(",", "") + (fraction or ""))
+        value = Decimal((sign or "") + digits.replace(",", "") + (fraction or "")) * _UNIT.get(unit or "", 1)
     except InvalidOperation:
         return None
-    return format(value, "f")
+    return format(value.normalize() if unit else value, "f")
 
 
 def date_forms(iso: str) -> list[str]:
@@ -78,4 +79,7 @@ def amount_forms(value: str) -> list[str]:
         return [value]
     grouped = f"{abs(int(number)):,}"
     sign = "-" if number < 0 else ""
-    return [f"{sign}¥{grouped}", f"{sign}￥{grouped}", f"{sign}{grouped}円", f"{sign}{grouped}", value]
+    forms = [f"{sign}¥{grouped}", f"{sign}￥{grouped}", f"{sign}{grouped}円", f"{sign}{grouped}", value]
+    if number and number % 10_000 == 0:  # "30000000" is also printed "3,000万円"
+        forms.append(f"{sign}{abs(int(number)) // 10_000:,}万円")
+    return forms

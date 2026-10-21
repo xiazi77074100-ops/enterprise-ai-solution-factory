@@ -190,3 +190,13 @@ def test_nesting_deeper_than_the_limit_is_uncertain() -> None:
     for _ in range(MAX_DEPTH + 1):
         check = {"op": "not", "arg": check}
     assert _validate(GOOD, pack=_pack_with(check))["TST-001"] == "uncertain"
+
+
+def test_the_same_value_found_by_two_labels_is_one_candidate() -> None:
+    """Regression (P4-03): "お支払期日：…" also matches the label "支払期日"; that is not a conflict."""
+    spec = [
+        {"name": "due", "type": "date", "label_ja": "期日", "critical": False, "labels": ["お支払期日", "支払期日"]}
+    ]
+    pages = [{"page": 1, "text": "お支払期日：2025年7月12日\r\n", "extraction_method": "text_layer"}]
+    out = extract_by_labels({"document_id": "d", "pages": pages}, {"field_spec": spec})
+    assert (out["fields"]["due"], out["field_status"]["due"]) == ("2025-07-12", "found")
