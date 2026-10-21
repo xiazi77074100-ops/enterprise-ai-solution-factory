@@ -1,3 +1,4 @@
 date,person,arm,phase,task_id,activity,minutes,note
 2026-10-20,chengwei,baseline,P4,A-01,prompting,75,estimated after the fact (log missed during work)
 
+2026-10-21,chengwei,factory,P4,P4-03,code_review,15,CC estimate (person could not measure): 2 messages x 5 min + 5 min reading the report
