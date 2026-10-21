@@ -1,0 +1,64 @@
+{
+  "dataset": "contract",
+  "split": "holdout",
+  "samples": 12,
+  "manifest_sha256": "fd1038441dbe58ccc723d32040dd103ab572de405abf60513b1cf1a583420601",
+  "workflow": {
+    "scored_outputs": "factory"
+  },
+  "rule_pack": "contract@1.1.0 (CON-001〜006)",
+  "metrics": {
+    "field_macro_normalized_match": 0.9457070707070707,
+    "field_status_agreement": 0.925,
+    "critical_fields_wrong_but_found": 0,
+    "critical_rule_recall": 1.0,
+    "critical_rule_positives": 6,
+    "evidence_position_accuracy": 1.0,
+    "evidence_spans": 80,
+    "evidence_unverified_items": 1,
+    "evidence_coverage": 0.7843137254901961,
+    "missing_outputs": 0
+  },
+  "per_field_match": {
+    "antisocial_exclusion": 0.8888888888888888,
+    "auto_renewal": 1.0,
+    "confidentiality": 1.0,
+    "effective_date": 0.9166666666666666,
+    "end_date": 1.0,
+    "governing_law": 0.9090909090909091,
+    "liability_cap_jpy": 1.0,
+    "party_a": 0.9166666666666666,
+    "party_b": 0.9166666666666666,
+    "termination_notice_days": 0.9090909090909091
+  },
+  "rule_confusion": {
+    "CON-001": {
+      "pass->pass": 9,
+      "fail->fail": 3
+    },
+    "CON-002": {
+      "pass->pass": 9,
+      "fail->fail": 1,
+      "uncertain->uncertain": 2
+    },
+    "CON-003": {
+      "pass->pass": 11,
+      "fail->fail": 1
+    },
+    "CON-004": {
+      "pass->pass": 10,
+      "pass->fail": 1,
+      "fail->fail": 1
+    },
+    "CON-005": {
+      "pass->pass": 10,
+      "pass->fail": 1,
+      "fail->fail": 1
+    },
+    "CON-006": {
+      "pass->pass": 8,
+      "pass->fail": 1,
+      "fail->fail": 3
+    }
+  }
+}
