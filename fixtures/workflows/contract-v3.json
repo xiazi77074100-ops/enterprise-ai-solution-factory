@@ -1,0 +1,319 @@
+{
+  "schema_version": "1",
+  "workflow_id": "contract-poc",
+  "version": 3,
+  "name": "契約書レビュー",
+  "description": "契約書レビュー（P4-03。v3 は要件変更 CR-1：反社会的勢力の排除条項と CON-006、設定だけ）。請求書と同じ Capability 版（解析・検証・根拠・確認・出力）を使い、抽出は規則ベースの 1.1.0（文言の設定）、確認ポリシーは Rule pack contract@1.0.0。業務の違いは設定だけ。",
+  "inputs": [
+    {
+      "name": "document",
+      "type": "document_ref",
+      "to": [
+        {
+          "node_id": "parse",
+          "field": "document_ref"
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "parse",
+      "capability_id": "document.parser",
+      "capability_version": "1.0.0",
+      "config": {
+        "ocr": "tesseract"
+      }
+    },
+    {
+      "node_id": "extract",
+      "capability_id": "document.rule_extractor",
+      "capability_version": "1.1.0",
+      "config": {
+        "field_spec": [
+          {
+            "name": "party_a",
+            "type": "string",
+            "label_ja": "甲",
+            "critical": false,
+            "between": [
+              {
+                "before": "",
+                "after": "（以下「甲」という。）"
+              }
+            ]
+          },
+          {
+            "name": "party_b",
+            "type": "string",
+            "label_ja": "乙",
+            "critical": false,
+            "between": [
+              {
+                "before": "という。）と",
+                "after": "（以下「乙」という。）"
+              }
+            ]
+          },
+          {
+            "name": "effective_date",
+            "type": "date",
+            "label_ja": "契約開始日",
+            "critical": false,
+            "between": [
+              {
+                "before": "有効期間は、",
+                "after": "から"
+              }
+            ]
+          },
+          {
+            "name": "end_date",
+            "type": "date",
+            "label_ja": "契約終了日",
+            "critical": false,
+            "between": [
+              {
+                "before": "から",
+                "after": "までとする"
+              }
+            ]
+          },
+          {
+            "name": "auto_renewal",
+            "type": "boolean",
+            "label_ja": "自動更新",
+            "critical": true,
+            "true_if": [
+              "同一条件でさらに1年間更新"
+            ],
+            "false_if": [
+              "自動更新はしない"
+            ]
+          },
+          {
+            "name": "confidentiality",
+            "type": "string",
+            "label_ja": "秘密保持条項",
+            "critical": true,
+            "heading": "秘密保持"
+          },
+          {
+            "name": "liability_cap_jpy",
+            "type": "decimal",
+            "label_ja": "損害賠償の上限額",
+            "critical": true,
+            "between": [
+              {
+                "before": "上限は、金",
+                "after": "とする"
+              },
+              {
+                "before": "総額は、金",
+                "after": "を上限とする"
+              }
+            ],
+            "uncertain_if": [
+              "別途協議"
+            ]
+          },
+          {
+            "name": "termination_notice_days",
+            "type": "integer",
+            "label_ja": "解約の通知期間（日）",
+            "critical": true,
+            "between": [
+              {
+                "before": "乙は、",
+                "after": "日前まで"
+              }
+            ],
+            "uncertain_if": [
+              "相当の期間をもって"
+            ]
+          },
+          {
+            "name": "governing_law",
+            "type": "string",
+            "label_ja": "準拠法",
+            "critical": false,
+            "between": [
+              {
+                "before": "本契約は、",
+                "after": "に準拠"
+              }
+            ]
+          },
+          {
+            "name": "antisocial_exclusion",
+            "type": "string",
+            "label_ja": "反社会的勢力の排除条項",
+            "critical": true,
+            "heading": "反社会的勢力の排除"
+          }
+        ]
+      }
+    },
+    {
+      "node_id": "validate",
+      "capability_id": "document.rule_validator",
+      "capability_version": "1.0.0",
+      "config": {
+        "rule_pack_id": "contract",
+        "rule_pack_version": "1.1.0"
+      }
+    },
+    {
+      "node_id": "locate",
+      "capability_id": "document.evidence_locator",
+      "capability_version": "1.0.0",
+      "config": {
+        "match": "normalized"
+      }
+    },
+    {
+      "node_id": "review",
+      "capability_id": "review.human",
+      "capability_version": "1.0.0",
+      "config": {
+        "reviewer_role": "business_reviewer",
+        "route_when": "always"
+      }
+    },
+    {
+      "node_id": "export",
+      "capability_id": "result.exporter",
+      "capability_version": "1.0.0",
+      "config": {
+        "format": "csv",
+        "title_ja": "契約書レビュー結果"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "parse",
+      "to": "extract",
+      "mapping": [
+        {
+          "from_path": "/document_id",
+          "to_field": "document_id"
+        },
+        {
+          "from_path": "/pages",
+          "to_field": "pages"
+        }
+      ]
+    },
+    {
+      "from": "parse",
+      "to": "locate",
+      "mapping": [
+        {
+          "from_path": "/document_id",
+          "to_field": "document_id"
+        },
+        {
+          "from_path": "/pages",
+          "to_field": "pages"
+        }
+      ]
+    },
+    {
+      "from": "extract",
+      "to": "validate",
+      "mapping": [
+        {
+          "from_path": "/fields",
+          "to_field": "fields"
+        },
+        {
+          "from_path": "/field_status",
+          "to_field": "field_status"
+        }
+      ]
+    },
+    {
+      "from": "extract",
+      "to": "locate",
+      "mapping": [
+        {
+          "from_path": "/fields",
+          "to_field": "fields"
+        }
+      ]
+    },
+    {
+      "from": "extract",
+      "to": "review",
+      "mapping": [
+        {
+          "from_path": "/fields",
+          "to_field": "fields"
+        }
+      ]
+    },
+    {
+      "from": "validate",
+      "to": "review",
+      "mapping": [
+        {
+          "from_path": "/findings",
+          "to_field": "findings"
+        }
+      ]
+    },
+    {
+      "from": "locate",
+      "to": "review",
+      "mapping": [
+        {
+          "from_path": "/evidence",
+          "to_field": "evidence"
+        }
+      ]
+    },
+    {
+      "from": "review",
+      "to": "export",
+      "mapping": [
+        {
+          "from_path": "/reviewed_fields",
+          "to_field": "reviewed_fields"
+        },
+        {
+          "from_path": "/decision",
+          "to_field": "decision"
+        }
+      ]
+    },
+    {
+      "from": "validate",
+      "to": "export",
+      "mapping": [
+        {
+          "from_path": "/findings",
+          "to_field": "findings"
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "export_id",
+      "from_node": "export",
+      "from_path": "/export_id"
+    },
+    {
+      "name": "decision",
+      "from_node": "review",
+      "from_path": "/decision"
+    }
+  ],
+  "budget": {
+    "max_duration_ms": 600000,
+    "max_llm_tokens": 0,
+    "max_cost_jpy": 0
+  },
+  "requires_human_approval": true
+}

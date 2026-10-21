@@ -106,3 +106,24 @@ def test_contract_and_invoice_runs_share_capability_versions(env: Env) -> None:
     for node in ("parse", "validate", "locate", "review"):
         assert versions[invoice_run][node] == versions[contract_run][node], node  # unchanged, config only
     assert versions[invoice_run]["extract"][1] == "1.0.0" and versions[contract_run]["extract"][1] == "1.1.0"
+
+
+def _pinned(workflow: dict[str, Any]) -> dict[str, tuple[str, str]]:
+    return {n["node_id"]: (n["capability_id"], n["capability_version"]) for n in workflow["nodes"]}
+
+
+def test_requirement_change_cr1_is_configuration_only(env: Env) -> None:
+    """AC-10 / CR-1: the anti-social-forces clause and CON-006 come from configuration (workflow v3, Rule pack
+    contract@1.1.0) on exactly the same capability versions as v2; con-0001 has no such clause."""
+    arch, h = env.as_("arch")
+    pack = json.loads((ROOT / "fixtures" / "rule_packs" / "contract-1.1.0.json").read_text("utf-8"))
+    assert arch.post("/api/v1/rule-packs", json=pack, headers=h).status_code == 201
+    v3: dict[str, Any] = json.loads((ROOT / "fixtures" / "workflows" / "contract-v3.json").read_text("utf-8"))
+    assert _pinned(v3) == _pinned(CONTRACT_WF)  # no new capability version for CR-1
+
+    folder = ROOT / "fixtures" / "contract" / "dev" / "documents"
+    run_id, _ = _run_to_review(env, env.solution(v3), _upload(env, folder, "con-0001.pdf"))
+    extract = _output(env, run_id, "extract")
+    assert extract["field_status"]["antisocial_exclusion"] == "missing"
+    findings = {f["rule_id"]: f for f in _output(env, run_id, "validate")["findings"]}
+    assert (findings["CON-006"]["result"], findings["CON-006"]["severity"]) == ("fail", "critical")

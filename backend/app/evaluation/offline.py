@@ -71,8 +71,30 @@ def aggregate_only(result: dict[str, Any]) -> dict[str, Any]:
     return {**{k: result[k] for k in keys}, "rule_confusion": result["rule_confusion"]}
 
 
+def _merge_extra(
+    label: dict[str, Any], sample: dict[str, Any], base: Path, split: str, data_dir: Path | None, folder: str
+) -> None:
+    """Adds a separately kept gold (e.g. labels_cr1: one field, its rule result and evidence) to the main label.
+    In the holdout the file must match the frozen manifest (`<folder>` → `label_<suffix>_sha256`)."""
+    path = (data_dir if data_dir is not None else base / split) / folder / f"{sample['sample_id']}.json"
+    raw = path.read_bytes()
+    key = f"label_{folder.removeprefix('labels_')}_sha256"
+    if data_dir is not None and _sha256(raw) != sample.get(key):
+        raise SystemExit(f"{sample['sample_id']}: {folder} does not match the frozen manifest")
+    extra = json.loads(raw)
+    label["gold_fields"][extra["field"]] = extra["value"]
+    label["gold_field_status"][extra["field"]] = extra["status"]
+    label["gold_findings"].append(extra["finding"])
+    label["gold_evidence"][extra["field"]] = extra["gold_evidence"]
+
+
 def evaluate(
-    workflow: dict[str, Any], pack: dict[str, Any], manifest_path: Path, split: str, data_dir: Path | None = None
+    workflow: dict[str, Any],
+    pack: dict[str, Any],
+    manifest_path: Path,
+    split: str,
+    data_dir: Path | None = None,
+    extra_labels: str | None = None,
 ) -> dict[str, Any]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     base = manifest_path.parent
@@ -96,6 +118,8 @@ def evaluate(
 
     for sample in samples:
         label, data, suffix = _load(sample, base, split, data_dir)
+        if extra_labels:
+            _merge_extra(label, sample, base, split, data_dir, extra_labels)
         document_id = sample["sample_id"]
         parsed = parse_document(
             {"data": data, "media_type": MEDIA[suffix], "document_id": document_id,
@@ -189,6 +213,7 @@ def main() -> None:
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--split", default="dev", choices=["dev", "holdout"])
     parser.add_argument("--data-dir", type=Path, help="holdout only: the decrypted folder outside the repository")
+    parser.add_argument("--extra-labels", help="a separately kept gold to merge, e.g. labels_cr1 (requirement change)")
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     if (args.split == "holdout") != (args.data_dir is not None):
@@ -199,6 +224,7 @@ def main() -> None:
         args.manifest,
         args.split,
         args.data_dir,
+        args.extra_labels,
     )
     if args.split == "holdout":
         result = aggregate_only(result)  # the AI only ever sees aggregates (easf-eval-integrity §2)

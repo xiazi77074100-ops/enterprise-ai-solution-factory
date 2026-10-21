@@ -37,3 +37,4 @@
 | P4-01 契約書の合成データ | CC | 完了（ホールドアウトは人の作業待ち） | `cc/P4-01-contract-fixtures` | `fixtures/generator/{contract,render_contract}.py`、dev 28 件・正解ラベル・CR-1 の正解（別ファイル）・manifest、`fixtures/contract/HOLDOUT.md`、生成器のテスト 7 件（Windows・Linux で同じバイト列） | 2026-10-20 |
 | P4-02 ベースラインの要件パッケージ | CC | 完了 | `cc/P4-02-baseline-bundle` | `experiment/baseline_bundle/`、`experiment/build_bundle.py`、SHA-256 `fe394a9d…`（D-039） | 2026-10-20 |
 | P4-03 Factory で契約書 | CC | 完了 | `cc/P4-03-contract` | 抽出 1.1.0、検証・根拠の実装の修正、Workflow contract-v2、dev 評価（項目 0.924・重大 1.0・根拠 1.0）、請求書の回帰（変化なし）、端から端までと再利用のテスト（Linux で 4 件成功）。D-043 | 2026-10-21 |
+| P4-04 要件変更 CR-1・再利用の証拠 | CC | 完了 | `cc/P4-04-cr1-factory` | CR-1 を設定だけで（Workflow v3・Rule pack contract@1.1.0）、dev で CON-006 の検出 6/6、端から端までのテスト（版が v2 と同じ・CON-006 fail）、請求書と契約書で同じ capability_version_id（P4-03 のテスト）。D-046 | 2026-10-21 |

@@ -1,0 +1,97 @@
+{
+  "schema_version": "1",
+  "rule_pack_id": "contract",
+  "version": "1.1.0",
+  "name": "契約書の確認ポリシー（合成）",
+  "notice": "架空のポリシーによる確認結果です。法的助言ではありません。判断は専門家が行ってください。",
+  "rules": [
+    {
+      "rule_id": "CON-001",
+      "title": "秘密保持条項がある",
+      "severity": "critical",
+      "check": {
+        "op": "present",
+        "field": "/confidentiality"
+      },
+      "on_missing": "fail",
+      "evidence_fields": [
+        "/confidentiality"
+      ]
+    },
+    {
+      "rule_id": "CON-002",
+      "title": "損害賠償の上限額が 5,000 万円以下",
+      "severity": "major",
+      "check": {
+        "op": "le",
+        "left": {
+          "field": "/liability_cap_jpy"
+        },
+        "right": {
+          "const": 50000000
+        }
+      },
+      "on_missing": "uncertain",
+      "evidence_fields": [
+        "/liability_cap_jpy"
+      ]
+    },
+    {
+      "rule_id": "CON-003",
+      "title": "自動更新でない（自動更新なら確認）",
+      "severity": "minor",
+      "check": {
+        "op": "eq",
+        "left": {
+          "field": "/auto_renewal"
+        },
+        "right": {
+          "const": false
+        }
+      },
+      "on_missing": "uncertain",
+      "evidence_fields": [
+        "/auto_renewal"
+      ]
+    },
+    {
+      "rule_id": "CON-004",
+      "title": "解約の通知期間が定められている",
+      "severity": "major",
+      "check": {
+        "op": "present",
+        "field": "/termination_notice_days"
+      },
+      "on_missing": "fail",
+      "evidence_fields": [
+        "/termination_notice_days"
+      ]
+    },
+    {
+      "rule_id": "CON-005",
+      "title": "準拠法が定められている",
+      "severity": "minor",
+      "check": {
+        "op": "present",
+        "field": "/governing_law"
+      },
+      "on_missing": "fail",
+      "evidence_fields": [
+        "/governing_law"
+      ]
+    },
+    {
+      "rule_id": "CON-006",
+      "title": "反社会的勢力の排除条項がある",
+      "severity": "critical",
+      "check": {
+        "op": "present",
+        "field": "/antisocial_exclusion"
+      },
+      "on_missing": "fail",
+      "evidence_fields": [
+        "/antisocial_exclusion"
+      ]
+    }
+  ]
+}

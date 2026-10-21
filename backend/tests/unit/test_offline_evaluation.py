@@ -1,6 +1,7 @@
 """The offline evaluator (P3-03) runs on dev only and reports the ADR-007 metrics."""
 
 import json
+import shutil
 from pathlib import Path
 
 import pytest
@@ -62,3 +63,14 @@ def test_holdout_mode_checks_hashes_and_keeps_only_aggregates(tmp_path: Path) ->
     label.write_bytes(label.read_bytes() + b" ")  # any change to a frozen file stops the run
     with pytest.raises(SystemExit):
         evaluate(WORKFLOW, PACK, manifest, "holdout", tmp_path / "data")
+
+
+@pytest.mark.skipif(shutil.which("tesseract") is None, reason="tesseract is not installed (the contract scans use OCR)")
+def test_cr1_gold_is_merged_when_asked() -> None:
+    """P4-04: the CR-1 gold (labels_cr1) adds one field and CON-006 to the contract evaluation."""
+    workflow = json.loads((ROOT / "fixtures" / "workflows" / "contract-v3.json").read_text(encoding="utf-8"))
+    pack = json.loads((ROOT / "fixtures" / "rule_packs" / "contract-1.1.0.json").read_text(encoding="utf-8"))
+    manifest = ROOT / "fixtures" / "contract" / "manifest.json"
+    result = evaluate(workflow, pack, manifest, "dev", extra_labels="labels_cr1")
+    assert "antisocial_exclusion" in result["per_field_match"]
+    assert "CON-006" in result["rule_confusion"]
