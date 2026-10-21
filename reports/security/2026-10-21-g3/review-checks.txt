@@ -1,0 +1,5 @@
+A=0.991666666667
+B=0.945707070707; 閾値=0.941666666667; 余裕=0.004040404040
+12 件、重大黙認 0、重大再現率 1、根拠位置 1、誤警告 3：報告の丸め値と一致
+CR-1 の app 配下の変更: ['backend/app/evaluation/offline.py']
+指定差分の catalog/composer/executor/adapters: 変更なし

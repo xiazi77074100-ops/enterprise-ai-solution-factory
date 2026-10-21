@@ -1,0 +1,14 @@
+F-03 /health: 200
+F-03 /docs: 404
+F-03 /redoc: 404
+F-03 /openapi.json: 404
+F-03 /.env: 404
+F-03 /.git/config: 404
+B-10/F-02/F-06: 401, nosniff, DENY, no-store, Server �Ȃ�
+Traceback (most recent call last):
+  File "C:\work\aidd\enterprise-ai-solution-factory\reports\security\2026-10-21-g3\manual_checks.py", line 80, in <module>
+    main()
+  File "C:\work\aidd\enterprise-ai-solution-factory\reports\security\2026-10-21-g3\manual_checks.py", line 31, in main
+    assert r.status_code == 200, r.status_code
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: 401

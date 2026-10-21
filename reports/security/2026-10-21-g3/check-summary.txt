@@ -1,0 +1,22 @@
+ruff S: 0
+bandit: 0
+semgrep: 未完了（結果ファイルなし）
+pip-audit: 0
+npm audit: {'info': 0, 'low': 0, 'moderate': 0, 'high': 0, 'critical': 0, 'total': 0}
+final-backend-tests-security.json 0
+final-relative-paths.json 0
+final-reports-review.json 0
+final-reports-security-2026-10-21-g3.json 34
+gitleaks-history.json 0
+worktree-backend-app.json 0
+worktree-contracts.json 0
+worktree-docs.json 0
+worktree-experiment.json 0
+worktree-fixtures-generator.json 0
+worktree-frontend-src.json 0
+worktree-scripts.json 0
+trivy-config.json {'Vulnerabilities': 0, 'Misconfigurations': 0, 'Secrets': 0}
+trivy-image-rebuilt.json {'Vulnerabilities': 0, 'Misconfigurations': 0, 'Secrets': 0}
+trivy-image.json {'Vulnerabilities': 0, 'Misconfigurations': 0, 'Secrets': 0}
+zap-api-auth.json riskcode/count: {'1': 1, '0': 3}
+zap-api.json riskcode/count: {'1': 1, '0': 4}

@@ -1,0 +1,200 @@
+debconf: delaying package configuration, since apt-utils is not installed
+Using CPython 3.12.12 interpreter at: /usr/local/bin/python3
+Creating virtual environment at: .venv
+Resolved 94 packages in 9ms
+Downloading pydantic-core (2.1MiB)
+Downloading pygments (1.2MiB)
+Downloading reportlab (1.9MiB)
+Downloading ruff (9.9MiB)
+Downloading uvloop (4.3MiB)
+Downloading cryptography (4.5MiB)
+Downloading pillow (6.8MiB)
+Downloading pypdfium2 (3.6MiB)
+Downloading sqlalchemy (4.5MiB)
+Downloading pip (1.7MiB)
+Downloading ast-serialize (1.3MiB)
+Downloading psycopg-binary (5.0MiB)
+Downloading mypy (14.8MiB)
+ Downloaded pygments
+ Downloaded ast-serialize
+ Downloaded pip
+ Downloaded reportlab
+ Downloaded pydantic-core
+ Downloaded pypdfium2
+ Downloaded uvloop
+ Downloaded sqlalchemy
+ Downloaded cryptography
+ Downloaded psycopg-binary
+ Downloaded pillow
+ Downloaded ruff
+ Downloaded mypy
+Prepared 89 packages in 22.75s
+Installed 89 packages in 573ms
+ + alembic==1.20.0
+ + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + argon2-cffi==25.1.0
+ + argon2-cffi-bindings==26.1.0
+ + ast-serialize==0.13.1
+ + attrs==26.1.0
+ + bandit==1.9.4
+ + boolean-py==5.0
+ + cachecontrol==0.14.4
+ + certifi==2026.10.19
+ + cffi==2.1.1
+ + charset-normalizer==3.5.2
+ + click==8.5.0
+ + cryptography==50.0.2
+ + cyclonedx-python-lib==11.12.0
+ + defusedxml==0.7.1
+ + fastapi==0.143.3
+ + filelock==4.2.2
+ + h11==0.16.0
+ + httpcore2==2.14.0
+ + httptools==0.9.0
+ + httpx2==2.14.0
+ + idna==3.20
+ + iniconfig==2.3.1
+ + jsonschema==4.26.0
+ + jsonschema-specifications==2025.9.1
+ + librt==0.16.0
+ + license-expression==30.4.4
+ + mako==1.4.3
+ + markdown-it-py==4.2.0
+ + markupsafe==3.0.4
+ + mcp==2.3.0
+ + mcp-types==2.3.0
+ + mdurl==0.1.2
+ + msgpack==1.2.3
+ + mypy==2.4.0
+ + mypy-extensions==1.1.0
+ + opentelemetry-api==1.45.1
+ + packageurl-python==0.17.6
+ + packaging==26.3
+ + pathspec==1.1.1
+ + pillow==13.0.0
+ + pip==26.2.1
+ + pip-api==0.0.35
+ + pip-audit==2.10.1
+ + pip-requirements-parser==32.0.1
+ + platformdirs==4.13.4
+ + pluggy==1.7.0
+ + psycopg==3.3.6
+ + psycopg-binary==3.3.6
+ + py-serializable==2.1.0
+ + pycparser==3.11
+ + pydantic==2.14.1
+ + pydantic-core==2.50.1
+ + pydantic-settings==2.16.0
+ + pygments==2.21.0
+ + pyjwt==2.15.1
+ + pyparsing==3.3.3
+ + pypdfium2==5.14.0
+ + pytest==9.1.1
+ + python-dotenv==1.2.4
+ + python-multipart==0.0.32
+ + pyyaml==6.0.3
+ + referencing==0.37.0
+ + reportlab==5.0.1
+ + requests==2.34.2
+ + rfc8785==0.1.4
+ + rich==15.0.0
+ + rpds-py==2026.9.1
+ + ruff==0.17.1
+ + sortedcontainers==2.4.0
+ + sqlalchemy==2.1.5
+ + sse-starlette==3.5.0
+ + starlette==1.8.0
+ + stevedore==5.9.1
+ + tomli==2.5.0
+ + tomli-w==1.2.0
+ + truststore==0.10.5
+ + types-jsonschema==4.26.0.20261006
+ + types-pyyaml==6.0.12.20260906
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+ + urllib3==2.8.0
+ + uvicorn==0.54.0
+ + uvloop==0.23.0
+ + watchfiles==1.3.0
+ + websockets==17.2
+.....................E.................................................. [ 25%]
+........................................................................ [ 50%]
+........................................................................ [ 76%]
+...................................................................      [100%]
+==================================== ERRORS ====================================
+________ ERROR at setup of test_authorization_matrix[listCapabilities] _________
+
+db = <sqlalchemy.orm.session.Session object at 0x772121b183e0>
+db_url = 'postgresql+psycopg://easf_app:[REDACTED]@db:5432/easf_test'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x772121bff890>
+
+    @pytest.fixture
+    def world(db: Session, db_url: str, monkeypatch: pytest.MonkeyPatch) -> World:  # noqa: F811
+        # Test-only capabilities so run and review operations can be exercised (PHASE2_PLAN §3).
+        kit.allow_testkit(monkeypatch)
+        monkeypatch.setattr(main_module, "production_handlers", lambda settings: _handlers())
+        users = {name: make_user(db, name) for name in ("lead", "arch", "reviewer", "outsider")}
+        admin = make_user(db, "admin", admin=True)
+        client, headers = _session(db_url, "admin")
+        project_id = client.post(
+            "/api/v1/projects", json={"name": "対象", "business_domain": "経理"}, headers=headers
+        ).json()["id"]
+        ids = {k: str(u.id) for k, u in users.items()}
+        members = [{"user_id": str(admin.id), "roles": ["solution_lead"]}] + _members(World("", "", ids))
+        assert client.put(f"/api/v1/projects/{project_id}/members", json=members, headers=headers).status_code == 200
+        arch_client, arch_headers = _session(db_url, "arch")
+        revision = arch_client.post(
+            f"/api/v1/projects/{project_id}/requirements", json={"content": "要件"}, headers=arch_headers
+        )
+        assert (
+            arch_client.post(
+                "/api/v1/capabilities", json=_example("capabilities", "document_parser.json"), headers=arch_headers
+            ).status_code
+            == 201
+        )
+        assert (
+            arch_client.post(
+                "/api/v1/rule-packs", json=_example("rule_packs", "invoice-1.0.0.json"), headers=arch_headers
+            ).status_code
+            == 201
+        )
+        approved = arch_client.post(
+            f"/api/v1/projects/{project_id}/requirements", json={"content": "承認済みの要件"}, headers=arch_headers
+        ).json()["id"]
+        assert client.post(f"/api/v1/requirements/{approved}/approve", headers=headers).status_code == 200
+        w = World(project_id=project_id, revision_id=revision.json()["id"], member_ids=ids, approved_revision_id=approved)
+        created = arch_client.post("/api/v1/solutions", json=_solution_create(w), headers=arch_headers)
+        assert created.status_code == 201, created.text
+        w.solution_id, w.solution_etag = created.json()["id"], created.headers["etag"]
+        report = arch_client.post(f"/api/v1/solutions/{w.solution_id}/validate", headers=arch_headers).json()
+        assert report["valid"], report
+
+        for contract in [*kit.CONTRACTS.values(), kit.human_review()]:
+            assert arch_client.post("/api/v1/capabilities", json=contract, headers=arch_headers).status_code == 201
+        body = {"project_id": project_id, "requirement_revision_id": approved, "workflow": kit.workflow()}
+        w.runnable_solution_id = arch_client.post("/api/v1/solutions", json=body, headers=arch_headers).json()["id"]
+        assert arch_client.post(f"/api/v1/solutions/{w.runnable_solution_id}/validate", headers=arch_headers).json()[
+            "valid"
+        ]
+        approved_solution = client.post(f"/api/v1/solutions/{w.runnable_solution_id}/approve", headers=headers)
+        assert approved_solution.status_code == 200, approved_solution.text
+        started = client.post(
+            f"/api/v1/solutions/{w.runnable_solution_id}/runs",
+            json={"inputs": {"text": "確認待ち"}},
+            headers={**headers, "Idempotency-Key": str(uuid.uuid4())},
+        )
+        assert started.status_code == 202, started.text
+        w.run_id = started.json()["id"]
+        Executor(make_session_factory(make_settings(database_url=db_url)), kit.handlers()).run_until_idle()
+        reviewer_client, _ = _session(db_url, "reviewer")
+        tasks = reviewer_client.get("/api/v1/reviews").json()["items"]
+>       w.review_id = next(t["id"] for t in tasks if t["run_id"] == w.run_id)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests/contract/test_openapi_contract.py:348: StopIteration
+=========================== short test summary info ============================
+ERROR tests/contract/test_openapi_contract.py::test_authorization_matrix[listCapabilities]
+282 passed, 1 error in 1551.16s (0:25:51)

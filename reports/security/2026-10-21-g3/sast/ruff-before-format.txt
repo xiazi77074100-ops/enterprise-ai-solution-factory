@@ -1,0 +1,16 @@
+All checks passed!
+unformatted: File would be reformatted
+  --> backend\app\evaluation\score_outputs.py:31:8
+   |
+30 |     start, end = item.get("start"), item.get("end")
+   -     if (
+   -         isinstance(start, int)
+   -         and isinstance(end, int)
+   -         and 0 <= start < end <= len(text)
+   -         and text[start:end] == quote
+   -     ):
+31 +     if isinstance(start, int) and isinstance(end, int) and 0 <= start < end <= len(text) and text[start:end] == quote:
+32 |         return page, start, end
+   |
+
+1 file would be reformatted, 3 files already formatted

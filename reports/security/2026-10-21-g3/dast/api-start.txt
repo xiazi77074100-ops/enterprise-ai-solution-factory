@@ -1,0 +1,159 @@
+Compose can now delegate builds to bake for better performance.
+ To do so, set COMPOSE_BAKE=true.
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [api internal] load build definition from Dockerfile
+#1 transferring dockerfile:
+#1 transferring dockerfile: 1.39kB 0.8s done
+#1 DONE 1.0s
+
+#2 [api internal] load metadata for docker.io/library/python:3.12-alpine
+#2 DONE 1.6s
+
+#3 [api internal] load metadata for ghcr.io/astral-sh/uv:0.6.17
+#3 DONE 6.1s
+
+#4 [api internal] load .dockerignore
+#4 transferring context:
+#4 transferring context: 176B 0.5s done
+#4 DONE 0.7s
+
+#5 [api internal] load build context
+#5 transferring context: 247.53kB 2.7s done
+#5 DONE 2.9s
+
+#6 [api] FROM ghcr.io/astral-sh/uv:0.6.17@sha256:4a6c9444b126bd325fba904bff796bf91fb777bf6148d60109c4cb1de2ffc497
+#6 resolve ghcr.io/astral-sh/uv:0.6.17@sha256:4a6c9444b126bd325fba904bff796bf91fb777bf6148d60109c4cb1de2ffc497 0.6s done
+#6 DONE 0.7s
+
+#7 [api build 1/5] FROM docker.io/library/python:3.12-alpine@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4
+#7 resolve docker.io/library/python:3.12-alpine@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4
+#7 resolve docker.io/library/python:3.12-alpine@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4 6.4s done
+#7 DONE 6.5s
+
+#8 [api build 2/5] COPY --from=ghcr.io/astral-sh/uv:0.6.17 /uv /usr/local/bin/uv
+#8 CACHED
+
+#9 [api build 3/5] WORKDIR /app/backend
+#9 CACHED
+
+#10 [api build 4/5] COPY backend/pyproject.toml backend/uv.lock ./
+#10 DONE 0.6s
+
+#11 [api build 5/5] RUN uv sync --locked --no-dev --no-install-project
+#11 7.841 Using CPython 3.12.15 interpreter at: /usr/local/bin/python3
+#11 7.842 Creating virtual environment at: .venv
+#11 7.945 Resolved 94 packages in 27ms
+#11 10.10 Downloading cryptography (4.8MiB)
+#11 10.20 Downloading psycopg-binary (4.1MiB)
+#11 10.22 Downloading uvloop (4.2MiB)
+#11 10.22 Downloading pillow (6.9MiB)
+#11 10.27 Downloading sqlalchemy (4.5MiB)
+#11 10.27 Downloading pypdfium2 (4.9MiB)
+#11 10.32 Downloading pydantic-core (2.4MiB)
+#11 62.02  Downloaded pydantic-core
+#11 75.85  Downloaded uvloop
+#11 76.29  Downloaded psycopg-binary
+#11 77.02  Downloaded sqlalchemy
+#11 77.63  Downloaded cryptography
+#11 77.73  Downloaded pypdfium2
+#11 78.91  Downloaded pillow
+#11 78.91 Prepared 48 packages in 1m 11s
+#11 79.40 Installed 48 packages in 473ms
+#11 79.40  + alembic==1.20.0
+#11 79.40  + annotated-doc==0.0.5
+#11 79.40  + annotated-types==0.8.0
+#11 79.40  + anyio==4.15.1
+#11 79.40  + argon2-cffi==25.1.0
+#11 79.40  + argon2-cffi-bindings==26.1.0
+#11 79.40  + attrs==26.1.0
+#11 79.40  + cffi==2.1.1
+#11 79.40  + click==8.5.0
+#11 79.40  + cryptography==50.0.2
+#11 79.40  + fastapi==0.143.3
+#11 79.40  + h11==0.16.0
+#11 79.40  + httpcore2==2.14.0
+#11 79.40  + httptools==0.9.0
+#11 79.40  + httpx2==2.14.0
+#11 79.40  + idna==3.20
+#11 79.40  + jsonschema==4.26.0
+#11 79.40  + jsonschema-specifications==2025.9.1
+#11 79.40  + mako==1.4.3
+#11 79.40  + markupsafe==3.0.4
+#11 79.40  + mcp==2.3.0
+#11 79.40  + mcp-types==2.3.0
+#11 79.40  + opentelemetry-api==1.45.1
+#11 79.40  + pillow==13.0.0
+#11 79.40  + psycopg==3.3.6
+#11 79.40  + psycopg-binary==3.3.6
+#11 79.40  + pycparser==3.11
+#11 79.40  + pydantic==2.14.1
+#11 79.40  + pydantic-core==2.50.1
+#11 79.40  + pydantic-settings==2.16.0
+#11 79.40  + pyjwt==2.15.1
+#11 79.40  + pypdfium2==5.14.0
+#11 79.40  + python-dotenv==1.2.4
+#11 79.40  + python-multipart==0.0.32
+#11 79.40  + pyyaml==6.0.3
+#11 79.40  + referencing==0.37.0
+#11 79.40  + rfc8785==0.1.4
+#11 79.40  + rpds-py==2026.9.1
+#11 79.40  + sqlalchemy==2.1.5
+#11 79.40  + sse-starlette==3.5.0
+#11 79.40  + starlette==1.8.0
+#11 79.40  + truststore==0.10.5
+#11 79.40  + typing-extensions==4.16.0
+#11 79.40  + typing-inspection==0.4.4
+#11 79.40  + uvicorn==0.54.0
+#11 79.40  + uvloop==0.23.0
+#11 79.40  + watchfiles==1.3.0
+#11 79.40  + websockets==17.2
+#11 DONE 79.8s
+
+#12 [api stage-1 3/8] WORKDIR /app/backend
+#12 CACHED
+
+#13 [api stage-1 2/8] RUN apk upgrade --no-cache && apk add --no-cache tesseract-ocr tesseract-ocr-data-jpn     && python -m pip uninstall -y pip && adduser -S -D -H -u 10001 easf     && mkdir -p /data/documents && chown easf /data/documents && chmod 700 /data/documents
+#13 CACHED
+
+#14 [api stage-1 4/8] COPY --from=build /app/backend/.venv /app/backend/.venv
+#14 CACHED
+
+#15 [api stage-1 5/8] COPY backend/app ./app
+#15 DONE 0.5s
+
+#16 [api stage-1 6/8] COPY backend/migrations ./migrations
+#16 DONE 0.9s
+
+#17 [api stage-1 7/8] COPY backend/alembic.ini ./
+#17 DONE 0.6s
+
+#18 [api stage-1 8/8] COPY contracts /app/contracts
+#18 DONE 0.9s
+
+#19 [api] exporting to image
+#19 exporting layers
+#19 exporting layers 4.7s done
+#19 exporting manifest sha256:e1f5334e3d13f6e7fb40d945ee359fb10ba1ffad1c5859a211dba679e8965842
+#19 exporting manifest sha256:e1f5334e3d13f6e7fb40d945ee359fb10ba1ffad1c5859a211dba679e8965842 0.6s done
+#19 exporting config sha256:8c97c33a949fd97e625ec89f852861ac86c72d95f800da2564bb4dd492ee361e
+#19 exporting config sha256:8c97c33a949fd97e625ec89f852861ac86c72d95f800da2564bb4dd492ee361e 0.2s done
+#19 exporting attestation manifest sha256:240b1c8409fc12cf0cd2a04d77271291b59b3345b81f3c4b1632bfb280e1b440
+#19 exporting attestation manifest sha256:240b1c8409fc12cf0cd2a04d77271291b59b3345b81f3c4b1632bfb280e1b440 0.4s done
+#19 exporting manifest list sha256:ac856a1f1e82b43f4d3dae608646281f3e39225dcecbf52214ecdff44b9e5e2c
+#19 exporting manifest list sha256:ac856a1f1e82b43f4d3dae608646281f3e39225dcecbf52214ecdff44b9e5e2c 0.1s done
+#19 naming to docker.io/library/easf-backend:local 0.0s done
+#19 unpacking to docker.io/library/easf-backend:local
+#19 unpacking to docker.io/library/easf-backend:local 0.9s done
+#19 DONE 7.4s
+
+#20 [api] resolving provenance for metadata file
+#20 DONE 1.0s
+ api  Built
+ Container enterprise-ai-solution-factory-db-1  Running
+ Container enterprise-ai-solution-factory-api-1  Recreate
+ Container enterprise-ai-solution-factory-api-1  Recreated
+ Container enterprise-ai-solution-factory-db-1  Waiting
+ Container enterprise-ai-solution-factory-db-1  Healthy
+ Container enterprise-ai-solution-factory-api-1  Starting
+ Container enterprise-ai-solution-factory-api-1  Started

@@ -28,7 +28,7 @@ def _position(texts: list[str], item: dict[str, Any]) -> tuple[int, int, int] | 
         return None
     text = texts[page - 1]
     start, end = item.get("start"), item.get("end")
-    if isinstance(start, int) and isinstance(end, int) and text[start:end] == quote:
+    if isinstance(start, int) and isinstance(end, int) and 0 <= start < end <= len(text) and text[start:end] == quote:
         return page, start, end
     at = text.find(quote)
     return (page, at, at + len(quote)) if at >= 0 else None

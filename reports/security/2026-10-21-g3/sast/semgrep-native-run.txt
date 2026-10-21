@@ -1,0 +1,16 @@
+
+┌──── ○○○ ────┐
+│ Semgrep CLI │
+└─────────────┘
+
+✔ Semgrep OSS
+  ✔ Basic security coverage for first-party code vulnerabilities.
+
+✘ Semgrep Code (SAST)
+  ✘ Find and fix vulnerabilities in the code you write with advanced scanning and expert security rules.
+
+✘ Semgrep Secrets
+  ✘ Detect and validate potential secrets in your code.
+
+
+  Loading rules from registry...

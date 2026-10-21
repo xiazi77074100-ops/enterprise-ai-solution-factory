@@ -1,0 +1,16 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+______ test_negative_offsets_cannot_expand_evidence_into_unrelated_gold _______
+
+    def test_negative_offsets_cannot_expand_evidence_into_unrelated_gold() -> None:
+        # Python �̕��̃X���C�X���ʒu�Ƃ��č̗p����ƁA�O���̖��֌W�Ȑ����Əd�Ȃ�B
+>       assert _position(["abcdef"], {"page": 1, "start": -3, "end": 6, "quote": "def"}) == (1, 3, 6)
+E       assert (1, -3, 6) == (1, 3, 6)
+E
+E         At index 1 diff: -3 != 3
+E         Use -v to get more diff
+
+tests\security\test_g3_scoring.py:33: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/security/test_g3_scoring.py::test_negative_offsets_cannot_expand_evidence_into_unrelated_gold
+1 failed in 4.18s

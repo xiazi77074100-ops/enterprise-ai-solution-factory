@@ -1,0 +1,12 @@
+F-03 /health: 200
+F-03 /docs: 404
+F-03 /redoc: 404
+F-03 /openapi.json: 404
+F-03 /.env: 404
+F-03 /.git/config: 404
+B-10/F-02/F-06: 401, nosniff, DENY, no-store, Server なし
+D-01: CSRF なし・異なる Origin は 403
+E-01: HTML の PDF 偽装は 415
+A-04/E-04: 表示名の ../ は保存パスに使われず、認可付き attachment は元の PDF と一致
+D-05/F-05: 異なる Origin に CORS 許可なし、TRACE は 405
+認証付き ZAP の一時設定を作成（秘密の表示なし）
