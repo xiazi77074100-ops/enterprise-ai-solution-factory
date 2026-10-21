@@ -88,6 +88,40 @@ def _merge_extra(
     label["gold_evidence"][extra["field"]] = extra["gold_evidence"]
 
 
+def _write_output(
+    folder: Path,
+    sample_id: str,
+    pages: list[dict[str, Any]],
+    extracted: dict[str, Any],
+    validated: dict[str, Any],
+    located: dict[str, list[dict[str, Any]]],
+) -> None:
+    """The automatic result in the arm-neutral format (baseline_bundle/requirements.md §6), for score_outputs."""
+    texts = {p["page"]: p["text"] for p in pages}
+    evidence = {
+        name: [
+            {
+                "page": s["page"],
+                "quote": texts[s["page"]][s["start"] : s["end"]],
+                "verified": s["status"] == "verified",
+                "start": s["start"],
+                "end": s["end"],
+            }
+            for s in spans
+        ]  # fmt: skip
+        for name, spans in located.items()
+    }
+    document = {
+        "sample_id": sample_id,
+        "fields": extracted["fields"],
+        "field_status": extracted["field_status"],
+        "findings": [{"rule_id": f["rule_id"], "result": f["result"]} for f in validated["findings"]],
+        "evidence": evidence,
+    }
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / f"{sample_id}.json").write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", "utf-8")
+
+
 def evaluate(
     workflow: dict[str, Any],
     pack: dict[str, Any],
@@ -95,6 +129,7 @@ def evaluate(
     split: str,
     data_dir: Path | None = None,
     extra_labels: str | None = None,
+    outputs_dir: Path | None = None,
 ) -> dict[str, Any]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     base = manifest_path.parent
@@ -133,6 +168,8 @@ def evaluate(
             {"fields": fields, "field_status": status, "project_context": context}, {"rule_pack": pack}
         )
         located = locate(document_id, parsed["pages"], fields, locate_cfg["match"])["evidence"]
+        if outputs_dir is not None:
+            _write_output(outputs_dir, document_id, parsed["pages"], extracted, validated, located)
 
         for name, gold_value in label["gold_fields"].items():
             if name not in fields:
@@ -214,6 +251,7 @@ def main() -> None:
     parser.add_argument("--split", default="dev", choices=["dev", "holdout"])
     parser.add_argument("--data-dir", type=Path, help="holdout only: the decrypted folder outside the repository")
     parser.add_argument("--extra-labels", help="a separately kept gold to merge, e.g. labels_cr1 (requirement change)")
+    parser.add_argument("--write-outputs", type=Path, help="also write each automatic result (requirements §6 form)")
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     if (args.split == "holdout") != (args.data_dir is not None):
@@ -225,6 +263,7 @@ def main() -> None:
         args.split,
         args.data_dir,
         args.extra_labels,
+        args.write_outputs,
     )
     if args.split == "holdout":
         result = aggregate_only(result)  # the AI only ever sees aggregates (easf-eval-integrity §2)

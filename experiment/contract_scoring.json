@@ -1,0 +1,30 @@
+{
+  "policy": "contract@1.1.0 (CON-001〜006)",
+  "fields": [
+    "party_a",
+    "party_b",
+    "effective_date",
+    "end_date",
+    "auto_renewal",
+    "confidentiality",
+    "liability_cap_jpy",
+    "termination_notice_days",
+    "governing_law",
+    "antisocial_exclusion"
+  ],
+  "critical_fields": [
+    "auto_renewal",
+    "confidentiality",
+    "liability_cap_jpy",
+    "termination_notice_days",
+    "antisocial_exclusion"
+  ],
+  "rule_severity": {
+    "CON-001": "critical",
+    "CON-002": "major",
+    "CON-003": "minor",
+    "CON-004": "major",
+    "CON-005": "minor",
+    "CON-006": "critical"
+  }
+}

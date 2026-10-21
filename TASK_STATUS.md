@@ -38,3 +38,4 @@
 | P4-02 ベースラインの要件パッケージ | CC | 完了 | `cc/P4-02-baseline-bundle` | `experiment/baseline_bundle/`、`experiment/build_bundle.py`、SHA-256 `fe394a9d…`（D-039） | 2026-10-20 |
 | P4-03 Factory で契約書 | CC | 完了 | `cc/P4-03-contract` | 抽出 1.1.0、検証・根拠の実装の修正、Workflow contract-v2、dev 評価（項目 0.924・重大 1.0・根拠 1.0）、請求書の回帰（変化なし）、端から端までと再利用のテスト（Linux で 4 件成功）。D-043 | 2026-10-21 |
 | P4-04 要件変更 CR-1・再利用の証拠 | CC | 完了 | `cc/P4-04-cr1-factory` | CR-1 を設定だけで（Workflow v3・Rule pack contract@1.1.0）、dev で CON-006 の検出 6/6、端から端までのテスト（版が v2 と同じ・CON-006 fail）、請求書と契約書で同じ capability_version_id（P4-03 のテスト）。D-046 | 2026-10-21 |
+| P4-05 両 arm のホールドアウトの評価・G3 | CC・人 | 作業中（人のホールドアウトの評価待ち） | `cc/P4-05-scoring` | 共通の採点の道具、Factory の出力、評価のスクリプト（偽のホールドアウトで確認）。D-047・D-048 | 2026-10-21 |
