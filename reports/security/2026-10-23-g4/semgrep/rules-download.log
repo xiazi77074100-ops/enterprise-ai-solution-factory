@@ -1,0 +1,26 @@
+Connecting to semgrep.dev (3.173.238.116:443)
+saving to '/out/rules/python.yml'
+python.yml           100% |********************************|  490k  0:00:00 ETA
+'/out/rules/python.yml' saved
+Connecting to semgrep.dev (3.173.238.116:443)
+saving to '/out/rules/owasp-top-ten.yml'
+owasp-top-ten.yml     16% |*****                           |  237k  0:00:05 ETA
+owasp-top-ten.yml    100% |********************************| 1464k  0:00:00 ETA
+'/out/rules/owasp-top-ten.yml' saved
+Connecting to semgrep.dev (3.173.238.116:443)
+saving to '/out/rules/react.yml'
+react.yml            100% |********************************| 17090  0:00:00 ETA
+'/out/rules/react.yml' saved
+Connecting to semgrep.dev (3.173.238.116:443)
+saving to '/out/rules/typescript.yml'
+typescript.yml       100% |********************************|  216k  0:00:00 ETA
+'/out/rules/typescript.yml' saved
+Connecting to semgrep.dev (3.173.238.116:443)
+saving to '/out/rules/secrets.yml'
+secrets.yml          100% |********************************| 94643  0:00:00 ETA
+'/out/rules/secrets.yml' saved
+8790677e3b9e23aa9e099250fa3d03d92fb9c6cc28e2d41235df18964472d0ba  /out/rules/owasp-top-ten.yml
+de5bc79d074c3b4146338a0bf95830406f169bd91ac590a2f1ef111f162e23f5  /out/rules/python.yml
+d773366e4e5658b0eb5224bd8f23ad74dbc87d42dda430ccbc582b96044b759d  /out/rules/react.yml
+d1afb323ed493cf9d3ee5044447b989debf033b2b7cc8208662a81b8c162c66a  /out/rules/secrets.yml
+967e551f37a9f27ce8b396ed121e5e127bf9ea60148e10589b794bd4ffe73395  /out/rules/typescript.yml

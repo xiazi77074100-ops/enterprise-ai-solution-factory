@@ -1,0 +1,6 @@
+rules:
+  - id: easf-smoke-print
+    languages: [python]
+    severity: INFO
+    message: EASF 診断用の印字関数（意図した1件）
+    pattern: print(...)

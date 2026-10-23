@@ -1,0 +1,382 @@
+[00.34][DEBUG](default): Skipping logs for: [networking.http, cohttp.lwt.client, cohttp.lwt.io, conduit_lwt_server, semgrep.engine, semgrep.tainting, semgrep.fixing, semgrep.printing, semgrep.reporting, semgrep.matching, semgrep.parsing, parser_move_on_sui, parser_hack, parser_lua, parser_scala, parser_cpp, semgrep.targeting, semgrep.analyzing, semgrep.prefiltering, ojsonnet.eval, tree-sitter, semgrep.naming, semgrep, parser_javascript, aliengrep, ast_generic, semgrep.spacegrep, lib_parsing, git_wrapper, git.value, git.tree, git.stream, git.blob, paths, process_limits, debug_trace, commons.pcre, commons.textedit, commons, parallelism, telemetry, mirage-crypto-rng.unix, ca-certs, handshake, tls.config, tls.tracing, x509.validation, x509.decoding, mirage-crypto-rng-entropy, cohttp.eio.io, cohttp.eio, cohttp.client, bos]
+[00.34][DEBUG](default): Showing logs for: [application]
+[00.34][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.34][DEBUG](default):
+If you want to show the logs of a particular library
+(e.g., the semgrep targeting library), you'll need to adjust the
+SEMGREP_LOG_SRCS environment variable as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" semgrep ... --debug
+
+or for osemgrep you can use it with any log level as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" ./bin/osemgrep ... --verbose
+
+You can see the list of possible libraries above in this log as in
+...
+[00.04][DEBUG](default): Skipping logs for semgrep.targeting
+...
+[00.04][DEBUG](default): Skipping logs for commons.pcre
+...
+For more information, See
+https://www.notion.so/semgrep/Logging-in-semgrep-semgrep-core-osemgrep-67c9046fa53744728d9d725a5a244f64
+
+[00.34][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.34][DEBUG](default): Logging setup for osemgrep: color=Console.Auto level=debug
+[00.34][DEBUG](default): Executed as: osemgrep scan --oss-only --disable-version-check --no-trace --metrics off --jobs 1 --debug --json --output /out/source.json --config /out/rules/python.yml --config /out/rules/owasp-top-ten.yml --config /out/rules/react.yml --config /out/rules/typescript.yml --config /out/rules/secrets.yml backend/app frontend/src
+semgrep version 1.180.0
+Failed to get project url from 'git ls-remote': Command failed with exit code: 128
+-----
+Command failed with output:
+fatal: No remote configured to list refs from.
+
+
+Failed to run 'git ls-remote --get-url'. Possible reasons:
+
+- the git binary is not available
+- the current working directory is not a git repository
+- the baseline commit is not a parent of the current commit
+    (if you are running through semgrep-app, check if you are setting `SEMGREP_BRANCH` or `SEMGREP_BASELINE_COMMIT` properly)
+- the current working directory is not marked as safe
+    (fix with `git config --global --add safe.directory $(pwd)`)
+
+Try running the command yourself to debug the issue.
+Loading local config from /out/rules/python.yml
+Done loading local config from /out/rules/python.yml
+Parsing /out/rules/python.yml as YAML
+Saved rules to /tmp/semgrep-qj9m644u.yaml
+RPC completed in: 8.055303s
+[01.62][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[01.62][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[01.62][DEBUG](default): Setting memory policy to balanced
+[01.62][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+semgrep-core validation response: error=None
+semgrep-core validation succeeded
+RPC validation succeeded
+loaded 1 configs in 27.668387174606323 with 0 errors and 0 missed rules
+Loading local config from /out/rules/owasp-top-ten.yml
+Done loading local config from /out/rules/owasp-top-ten.yml
+Parsing /out/rules/owasp-top-ten.yml as YAML
+Saved rules to /tmp/semgrep-td5mhl8w.yaml
+RPC completed in: 3.862131s
+[00.35][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.35][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.35][DEBUG](default): Setting memory policy to balanced
+[00.35][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+semgrep-core validation response: error=None
+semgrep-core validation succeeded
+RPC validation succeeded
+loaded 1 configs in 64.79009675979614 with 0 errors and 0 missed rules
+Loading local config from /out/rules/react.yml
+Done loading local config from /out/rules/react.yml
+Parsing /out/rules/react.yml as YAML
+Saved rules to /tmp/semgrep-9agjyra_.yaml
+RPC completed in: 0.325541s
+[00.17][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.17][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.17][DEBUG](default): Setting memory policy to balanced
+[00.17][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+semgrep-core validation response: error=None
+semgrep-core validation succeeded
+RPC validation succeeded
+loaded 1 configs in 0.6320686340332031 with 0 errors and 0 missed rules
+Loading local config from /out/rules/typescript.yml
+Done loading local config from /out/rules/typescript.yml
+Parsing /out/rules/typescript.yml as YAML
+Saved rules to /tmp/semgrep-lzj76pas.yaml
+RPC completed in: 0.690747s
+[00.23][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.23][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.23][DEBUG](default): Setting memory policy to balanced
+[00.23][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+semgrep-core validation response: error=None
+semgrep-core validation succeeded
+RPC validation succeeded
+loaded 1 configs in 4.007862329483032 with 0 errors and 0 missed rules
+Loading local config from /out/rules/secrets.yml
+Done loading local config from /out/rules/secrets.yml
+Parsing /out/rules/secrets.yml as YAML
+Saved rules to /tmp/semgrep-xfdoazia.yaml
+RPC completed in: 0.832977s
+[00.35][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.35][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.35][DEBUG](default): Setting memory policy to balanced
+[00.35][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+semgrep-core validation response: error=None
+semgrep-core validation succeeded
+RPC validation succeeded
+loaded 1 configs in 2.588128089904785 with 0 errors and 0 missed rules
+running 602 rules from 5 configs
+Rules:
+<SKIPPED DATA (too many entries; use --max-log-list-entries)>
+get_targets request: ScanningRoots(root_paths=[Fpath(value='frontend/src')], targeting_conf=TargetingConf(exclude=[], max_target_bytes=1000000, respect_gitignore=True, respect_semgrepignore_files=True, always_select_explicit_targets=True, explicit_targets=[], force_novcs_project=False, exclude_minified_files=False, include_=None, extra_gitignore_patterns_to_exclude_git_untracked_files=[], semgrepignore_filename=None, force_project_root=None, include_binary_files=False, baseline_commit=None))
+RPC completed in: 2.580228s
+[00.51][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.51][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.51][DEBUG](default): Setting memory policy to balanced
+[00.51][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+get_targets response:
+  - target paths: Fppath(fpath=Fpath(value='frontend/src/api/client.test.ts'), ppath=Ppath(value='/api/client.test.ts')), Fppath(fpath=Fpath(value='frontend/src/api/client.ts'), ppath=Ppath(value='/api/client.ts')), Fppath(fpath=Fpath(value='frontend/src/api/schema.d.ts'), ppath=Ppath(value='/api/schema.d.ts')), Fppath(fpath=Fpath(value='frontend/src/app/AppShell.tsx'), ppath=Ppath(value='/app/AppShell.tsx')), Fppath(fpath=Fpath(value='frontend/src/app/auth.tsx'), ppath=Ppath(value='/app/auth.tsx')), Fppath(fpath=Fpath(value='frontend/src/app/feedback.tsx'), ppath=Ppath(value='/app/feedback.tsx')), Fppath(fpath=Fpath(value='frontend/src/app/useLoad.ts'), ppath=Ppath(value='/app/useLoad.ts')), Fppath(fpath=Fpath(value='frontend/src/components/Field.test.tsx'), ppath=Ppath(value='/components/Field.test.tsx')), Fppath(fpath=Fpath(value='frontend/src/components/Field.tsx'), ppath=Ppath(value='/components/Field.tsx')), Fppath(fpath=Fpath(value='frontend/src/components/Modal.tsx'), ppath=Ppath(value='/components/Modal.tsx')), Fppath(fpath=Fpath(value='frontend/src/components/Pagination.tsx'), ppath=Ppath(value='/components/Pagination.tsx')), Fppath(fpath=Fpath(value='frontend/src/components/Truncate.tsx'), ppath=Ppath(value='/components/Truncate.tsx')), Fppath(fpath=Fpath(value='frontend/src/components/layout.tsx'), ppath=Ppath(value='/components/layout.tsx')), Fppath(fpath=Fpath(value='frontend/src/components/ui.tsx'), ppath=Ppath(value='/components/ui.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/catalog/CapabilityDetailPage.tsx'), ppath=Ppath(value='/features/catalog/CapabilityDetailPage.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/catalog/CatalogListPage.tsx'), ppath=Ppath(value='/features/catalog/CatalogListPage.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/catalog/labels.ts'), ppath=Ppath(value='/features/catalog/labels.ts')), Fppath(fpath=Fpath(value='frontend/src/features/documents/DocumentsPanel.test.ts'), ppath=Ppath(value='/features/documents/DocumentsPanel.test.ts')), Fppath(fpath=Fpath(value='frontend/src/features/documents/DocumentsPanel.tsx'), ppath=Ppath(value='/features/documents/DocumentsPanel.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/login/LoginPage.tsx'), ppath=Ppath(value='/features/login/LoginPage.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/projects/CreateProjectDialog.tsx'), ppath=Ppath(value='/features/projects/CreateProjectDialog.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/projects/ProjectDetailPage.tsx'), ppath=Ppath(value='/features/projects/ProjectDetailPage.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/projects/ProjectListPage.tsx'), ppath=Ppath(value='/features/projects/ProjectListPage.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/reviews/ReviewListPage.tsx'), ppath=Ppath(value='/features/reviews/ReviewListPage.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/reviews/ReviewPage.tsx'), ppath=Ppath(value='/features/reviews/ReviewPage.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/runs/RunDetailPage.tsx'), ppath=Ppath(value='/features/runs/RunDetailPage.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/runs/RunsPanel.tsx'), ppath=Ppath(value='/features/runs/RunsPanel.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/runs/labels.tsx'), ppath=Ppath(value='/features/runs/labels.tsx')), Fppath(fpath=Fpath(value='frontend/src/features/solutions/SolutionsPanel.tsx'), ppath=Ppath(value='/features/solutions/SolutionsPanel.tsx')), Fppath(fpath=Fpath(value='frontend/src/lib/format.ts'), ppath=Ppath(value='/lib/format.ts')) (and 4 others)
+get_targets request: ScanningRoots(root_paths=[Fpath(value='backend/app')], targeting_conf=TargetingConf(exclude=[], max_target_bytes=1000000, respect_gitignore=True, respect_semgrepignore_files=True, always_select_explicit_targets=True, explicit_targets=[], force_novcs_project=False, exclude_minified_files=False, include_=None, extra_gitignore_patterns_to_exclude_git_untracked_files=[], semgrepignore_filename=None, force_project_root=None, include_binary_files=False, baseline_commit=None))
+RPC completed in: 3.637759s
+[00.15][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.15][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.15][DEBUG](default): Setting memory policy to balanced
+[00.15][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+get_targets response:
+  - target paths: Fppath(fpath=Fpath(value='backend/app/__init__.py'), ppath=Ppath(value='/__init__.py')), Fppath(fpath=Fpath(value='backend/app/__pycache__/__init__.cpython-312.pyc'), ppath=Ppath(value='/__pycache__/__init__.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/__pycache__/admin.cpython-312.pyc'), ppath=Ppath(value='/__pycache__/admin.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/__pycache__/main.cpython-312.pyc'), ppath=Ppath(value='/__pycache__/main.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/__pycache__/mcp_server.cpython-312.pyc'), ppath=Ppath(value='/__pycache__/mcp_server.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/adapters/__init__.py'), ppath=Ppath(value='/adapters/__init__.py')), Fppath(fpath=Fpath(value='backend/app/adapters/__pycache__/__init__.cpython-312.pyc'), ppath=Ppath(value='/adapters/__pycache__/__init__.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/adapters/__pycache__/base.cpython-312.pyc'), ppath=Ppath(value='/adapters/__pycache__/base.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/adapters/__pycache__/llm.cpython-312.pyc'), ppath=Ppath(value='/adapters/__pycache__/llm.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/adapters/__pycache__/local.cpython-312.pyc'), ppath=Ppath(value='/adapters/__pycache__/local.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/adapters/__pycache__/mcp.cpython-312.pyc'), ppath=Ppath(value='/adapters/__pycache__/mcp.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/adapters/__pycache__/resources.cpython-312.pyc'), ppath=Ppath(value='/adapters/__pycache__/resources.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/adapters/base.py'), ppath=Ppath(value='/adapters/base.py')), Fppath(fpath=Fpath(value='backend/app/adapters/llm.py'), ppath=Ppath(value='/adapters/llm.py')), Fppath(fpath=Fpath(value='backend/app/adapters/local.py'), ppath=Ppath(value='/adapters/local.py')), Fppath(fpath=Fpath(value='backend/app/adapters/mcp.py'), ppath=Ppath(value='/adapters/mcp.py')), Fppath(fpath=Fpath(value='backend/app/adapters/resources.py'), ppath=Ppath(value='/adapters/resources.py')), Fppath(fpath=Fpath(value='backend/app/admin.py'), ppath=Ppath(value='/admin.py')), Fppath(fpath=Fpath(value='backend/app/api/__init__.py'), ppath=Ppath(value='/api/__init__.py')), Fppath(fpath=Fpath(value='backend/app/api/__pycache__/__init__.cpython-312.pyc'), ppath=Ppath(value='/api/__pycache__/__init__.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/api/__pycache__/catalog.cpython-312.pyc'), ppath=Ppath(value='/api/__pycache__/catalog.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/api/__pycache__/deps.cpython-312.pyc'), ppath=Ppath(value='/api/__pycache__/deps.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/api/__pycache__/documents.cpython-312.pyc'), ppath=Ppath(value='/api/__pycache__/documents.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/api/__pycache__/models.cpython-312.pyc'), ppath=Ppath(value='/api/__pycache__/models.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/api/__pycache__/projects.cpython-312.pyc'), ppath=Ppath(value='/api/__pycache__/projects.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/api/__pycache__/runs.cpython-312.pyc'), ppath=Ppath(value='/api/__pycache__/runs.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/api/__pycache__/session.cpython-312.pyc'), ppath=Ppath(value='/api/__pycache__/session.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/api/__pycache__/solutions.cpython-312.pyc'), ppath=Ppath(value='/api/__pycache__/solutions.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/api/__pycache__/system.cpython-312.pyc'), ppath=Ppath(value='/api/__pycache__/system.cpython-312.pyc')), Fppath(fpath=Fpath(value='backend/app/api/catalog.py'), ppath=Ppath(value='/api/catalog.py')) (and 96 others)
+Encountered likely binary file backend/app/adapters/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/api/__pycache__/catalog.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/capabilities/__pycache__/rule_validator.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/catalog/__pycache__/service.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/auth/__pycache__/service.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/project/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/capabilities/__pycache__/result_exporter.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/evaluation/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/composer/__pycache__/validation.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/capabilities/__pycache__/ocr.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/catalog/__pycache__/registry.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/project/__pycache__/models.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/evaluation/__pycache__/score_outputs.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/capabilities/__pycache__/mock_extractor.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/executor/__pycache__/engine.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/core/__pycache__/db.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/__pycache__/admin.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/api/__pycache__/models.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/adapters/__pycache__/resources.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/documents/__pycache__/inspect.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/adapters/__pycache__/local.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/executor/__pycache__/models.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/capabilities/__pycache__/pdf_text.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/capabilities/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/documents/__pycache__/storage.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/executor/__pycache__/events.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/auth/__pycache__/models.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/capabilities/__pycache__/document_parser.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/executor/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/api/__pycache__/runs.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/executor/__pycache__/handlers.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/catalog/__pycache__/validation.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/adapters/__pycache__/llm.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/capabilities/__pycache__/evidence.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/api/__pycache__/session.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/catalog/__pycache__/models.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/core/__pycache__/errors.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/solution/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/composer/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/adapters/__pycache__/mcp.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/__pycache__/main.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/catalog/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/api/__pycache__/deps.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/api/__pycache__/documents.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/capabilities/__pycache__/values.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/capabilities/__pycache__/rule_extractor.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/core/__pycache__/security.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/__pycache__/mcp_server.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/api/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/api/__pycache__/system.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/adapters/__pycache__/base.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/auth/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/core/__pycache__/config.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/documents/__pycache__/models.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/api/__pycache__/solutions.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/api/__pycache__/projects.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/core/__pycache__/middleware.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/core/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/documents/__pycache__/__init__.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/evaluation/__pycache__/offline.cpython-312.pyc while reading shebang; skipping this file
+Encountered likely binary file backend/app/solution/__pycache__/models.cpython-312.pyc while reading shebang; skipping this file
+
+
+┌─────────────┐
+│ Scan Status │
+└─────────────┘
+  Scanning 160 files tracked by git with 602 Code rules:
+
+  Language      Rules   Files          Origin      Rules
+ ─────────────────────────────        ───────────────────
+  <multilang>      40     160          Community     602
+  python          151      63
+  ts               74      33
+  json              3       1
+
+Passing whole rules directly to semgrep_core
+pyro-caml will not be used for profiling. Reason(s): profile is not enabled.
+Passing rules to semgrep-core in 1 shards
+Running Semgrep engine with command:
+/usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core -json -rules /tmp/tmppnycvo4i.json -j 1 -targets /tmp/tmpiclye5gt -timeout 5 -timeout_threshold 3 -max_memory 0 -fast -debug
+[00.11][DEBUG](default): Skipping logs for: [networking.http, cohttp.lwt.client, cohttp.lwt.io, conduit_lwt_server, semgrep.engine, semgrep.tainting, semgrep.fixing, semgrep.printing, semgrep.reporting, semgrep.matching, semgrep.parsing, parser_move_on_sui, parser_hack, parser_lua, parser_scala, parser_cpp, semgrep.targeting, semgrep.analyzing, semgrep.prefiltering, ojsonnet.eval, tree-sitter, semgrep.naming, semgrep, parser_javascript, aliengrep, ast_generic, semgrep.spacegrep, lib_parsing, git_wrapper, git.value, git.tree, git.stream, git.blob, paths, process_limits, debug_trace, commons.pcre, commons.textedit, commons, parallelism, telemetry, mirage-crypto-rng.unix, ca-certs, handshake, tls.config, tls.tracing, x509.validation, x509.decoding, mirage-crypto-rng-entropy, cohttp.eio.io, cohttp.eio, cohttp.client, bos]
+[00.11][DEBUG](default): Showing logs for: [application]
+[00.11][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.11][DEBUG](default):
+If you want to show the logs of a particular library
+(e.g., the semgrep targeting library), you'll need to adjust the
+SEMGREP_LOG_SRCS environment variable as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" semgrep ... --debug
+
+or for osemgrep you can use it with any log level as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" ./bin/osemgrep ... --verbose
+
+You can see the list of possible libraries above in this log as in
+...
+[00.04][DEBUG](default): Skipping logs for semgrep.targeting
+...
+[00.04][DEBUG](default): Skipping logs for commons.pcre
+...
+For more information, See
+https://www.notion.so/semgrep/Logging-in-semgrep-semgrep-core-osemgrep-67c9046fa53744728d9d725a5a244f64
+
+[00.11][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.11][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core -json -rules /tmp/tmppnycvo4i.json -j 1 -targets /tmp/tmpiclye5gt -timeout 5 -timeout_threshold 3 -max_memory 0 -fast -debug
+[00.11][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.11][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+[00.14][INFO]: Parsing rules in /tmp/tmppnycvo4i.json
+[02.22][DEBUG](default): read targets from file: /tmp/tmpiclye5gt
+[04.61][DEBUG](default): Core_scan.scan_exn { Core_scan_config.rule_source = Rule_files (/tmp/tmppnycvo4i.json);
+  target_source = (Core_scan_config.Target_file /tmp/tmpiclye5gt);
+  output_format = (Core_scan_config.Json true); report_time = false;
+  matching_explanations = false; strict = false; respect_rule_paths = true;
+  file_match_hook = None; timeout = 5.; timeout_threshold = 3;
+  max_memory_mb = 0; max_match_per_file = 10000;
+  num_jobs = (Core_scan_config.Force 1); filter_irrelevant_rules = true;
+  telemetry = None; symbol_analysis = false; fips_mode = false;
+  use_parmap = false;
+  par_conf =
+  (Parallelism_config.Eio_executor
+     { Parallelism_config.env = <opaque>; base = <opaque> })
+  }
+[04.61][DEBUG](default): core scan: 290 valid rules, 0 invalid rules
+[04.61][DEBUG](default): read targets from file: /tmp/tmpiclye5gt
+[07.98][DEBUG](default): Mapping 290 elements across 1 domains (290 chunks of <= 1)
+[09.33][INFO]: scan: processing 417 files (skipping 0), with 290 rules (skipping 0 )
+[09.33][DEBUG](default): Mapping 417 elements across 1 domains (417 chunks of <= 1)
+[09.33][DEBUG](default): Core_scan analyzing backend/app/composer/validation.py
+[09.65][DEBUG](default): Parsing (and naming) backend/app/composer/validation.py (with lang Python)
+[09.95][DEBUG](default): Core_scan analyzing backend/app/core/config.py
+[10.02][DEBUG](default): Parsing (and naming) backend/app/core/config.py (with lang Python)
+[10.09][DEBUG](default): Core_scan analyzing backend/app/core/__init__.py
+[10.10][DEBUG](default): Parsing (and naming) backend/app/core/__init__.py (with lang Python)
+[10.12][DEBUG](default): Core_scan analyzing backend/app/core/middleware.py
+[10.44][DEBUG](default): Parsing (and naming) backend/app/core/middleware.py (with lang Python)
+[10.69][DEBUG](default): Core_scan analyzing backend/app/catalog/registry.py
+[10.79][DEBUG](default): Parsing (and naming) backend/app/catalog/registry.py (with lang Python)
+[11.00][DEBUG](default): Core_scan analyzing backend/app/core/db.py
+[11.04][DEBUG](default): Parsing (and naming) backend/app/core/db.py (with lang Python)
+[11.10][DEBUG](default): Core_scan analyzing backend/app/capabilities/__init__.py
+[11.12][DEBUG](default): Parsing (and naming) backend/app/capabilities/__init__.py (with lang Python)
+[11.14][DEBUG](default): Core_scan analyzing backend/app/api/session.py
+[11.28][DEBUG](default): Parsing (and naming) backend/app/api/session.py (with lang Python)
+[11.36][DEBUG](default): Core_scan analyzing backend/app/executor/engine.py
+[12.54][DEBUG](default): Parsing (and naming) backend/app/executor/engine.py (with lang Python)
+[15.19][DEBUG](default): Core_scan analyzing backend/app/executor/worker.py
+[15.22][DEBUG](default): Parsing (and naming) backend/app/executor/worker.py (with lang Python)
+[15.26][DEBUG](default): Core_scan analyzing backend/app/executor/handlers.py
+[15.32][DEBUG](default): Parsing (and naming) backend/app/executor/handlers.py (with lang Python)
+[15.34][DEBUG](default): Core_scan analyzing backend/app/evaluation/__init__.py
+[15.36][DEBUG](default): Parsing (and naming) backend/app/evaluation/__init__.py (with lang Python)
+[15.39][DEBUG](default): Core_scan analyzing backend/app/api/__init__.py
+[15.40][DEBUG](default): Parsing (and naming) backend/app/api/__init__.py (with lang Python)
+[15.41][DEBUG](default): Core_scan analyzing backend/app/main.py
+[15.46][DEBUG](default): Parsing (and naming) backend/app/main.py (with lang Python)
+[15.51][DEBUG](default): Core_scan analyzing backend/app/solution/__init__.py
+[15.52][DEBUG](default): Parsing (and naming) backend/app/solution/__init__.py (with lang Python)
+[15.54][DEBUG](default): Core_scan analyzing backend/app/api/models.py
+[15.58][DEBUG](default): Parsing (and naming) backend/app/api/models.py (with lang Python)
+[15.63][DEBUG](default): Core_scan analyzing backend/app/catalog/validation.py
+[15.78][DEBUG](default): Parsing (and naming) backend/app/catalog/validation.py (with lang Python)
+[15.86][DEBUG](default): Core_scan analyzing backend/app/capabilities/mock_extractor.py
+[16.02][DEBUG](default): Parsing (and naming) backend/app/capabilities/mock_extractor.py (with lang Python)
+[16.08][DEBUG](default): Core_scan analyzing backend/app/core/security.py
+[16.16][DEBUG](default): Parsing (and naming) backend/app/core/security.py (with lang Python)
+[16.20][DEBUG](default): Core_scan analyzing backend/app/documents/inspect.py
+[16.34][DEBUG](default): Parsing (and naming) backend/app/documents/inspect.py (with lang Python)
+[16.39][DEBUG](default): Core_scan analyzing backend/app/documents/__init__.py
+[16.40][DEBUG](default): Parsing (and naming) backend/app/documents/__init__.py (with lang Python)
+[16.41][DEBUG](default): Core_scan analyzing backend/app/api/catalog.py
+[16.75][DEBUG](default): Parsing (and naming) backend/app/api/catalog.py (with lang Python)
+[18.54][DEBUG](default): Core_scan analyzing backend/app/composer/__init__.py
+[20.69][DEBUG](default): Parsing (and naming) backend/app/composer/__init__.py (with lang Python)
+[22.45][DEBUG](default): Core_scan analyzing backend/app/project/__init__.py
+[23.49][DEBUG](default): Parsing (and naming) backend/app/project/__init__.py (with lang Python)
+[24.59][DEBUG](default): Core_scan analyzing backend/app/api/solutions.py
+[27.30][DEBUG](default): Parsing (and naming) backend/app/api/solutions.py (with lang Python)
+[29.14][DEBUG](default): Core_scan analyzing backend/app/adapters/llm.py
+[29.48][DEBUG](default): Parsing (and naming) backend/app/adapters/llm.py (with lang Python)
+[29.63][DEBUG](default): Core_scan analyzing backend/app/capabilities/values.py
+[29.81][DEBUG](default): Parsing (and naming) backend/app/capabilities/values.py (with lang Python)
+[29.87][DEBUG](default): Core_scan analyzing backend/app/catalog/service.py
+[30.06][DEBUG](default): Parsing (and naming) backend/app/catalog/service.py (with lang Python)
+[30.13][DEBUG](default): Core_scan analyzing backend/app/capabilities/document_parser.py
+[30.26][DEBUG](default): Parsing (and naming) backend/app/capabilities/document_parser.py (with lang Python)
+[30.32][DEBUG](default): Core_scan analyzing backend/app/project/models.py
+[30.48][DEBUG](default): Parsing (and naming) backend/app/project/models.py (with lang Python)
+[30.58][DEBUG](default): Core_scan analyzing backend/app/catalog/__init__.py
+[30.61][DEBUG](default): Parsing (and naming) backend/app/catalog/__init__.py (with lang Python)
+[30.65][DEBUG](default): Core_scan analyzing backend/app/api/documents.py
+[31.06][DEBUG](default): Parsing (and naming) backend/app/api/documents.py (with lang Python)
+[31.97][DEBUG](default): Core_scan analyzing backend/app/catalog/models.py
+[32.05][DEBUG](default): Parsing (and naming) backend/app/catalog/models.py (with lang Python)
+[32.10][DEBUG](default): Core_scan analyzing backend/app/capabilities/ocr.py
+[32.27][DEBUG](default): Parsing (and naming) backend/app/capabilities/ocr.py (with lang Python)
+[32.33][DEBUG](default): Core_scan analyzing backend/app/executor/events.py
+[32.50][DEBUG](default): Parsing (and naming) backend/app/executor/events.py (with lang Python)
+[32.59][DEBUG](default): Core_scan analyzing backend/app/api/deps.py
+[32.83][DEBUG](default): Parsing (and naming) backend/app/api/deps.py (with lang Python)
+[33.87][DEBUG](default): Core_scan analyzing backend/app/api/runs.py
+[35.29][DEBUG](default): Parsing (and naming) backend/app/api/runs.py (with lang Python)
+[37.32][DEBUG](default): Core_scan analyzing backend/app/api/system.py
+[37.43][DEBUG](default): Parsing (and naming) backend/app/api/system.py (with lang Python)
+[37.99][DEBUG](default): Core_scan analyzing backend/app/executor/__init__.py
+[38.08][DEBUG](default): Parsing (and naming) backend/app/executor/__init__.py (with lang Python)
+[38.29][DEBUG](default): Core_scan analyzing backend/app/auth/service.py
+[38.48][DEBUG](default): Parsing (and naming) backend/app/auth/service.py (with lang Python)
+[38.52][DEBUG](default): Core_scan analyzing backend/app/capabilities/evidence.py
+[38.81][DEBUG](default): Parsing (and naming) backend/app/capabilities/evidence.py (with lang Python)
+[39.00][DEBUG](default): Core_scan analyzing backend/app/evaluation/offline.py
+[40.33][DEBUG](default): Parsing (and naming) backend/app/evaluation/offline.py (with lang Python)
+[41.67][WARNING]: Fixpoint timeout while performing taint analysis at backend/app/evaluation/offline.py:125:4 [rules: 1, first: out.rules.python.boto3.security.hardcoded-token.hardcoded-token]
+[41.72][DEBUG](default): Core_scan analyzing backend/app/capabilities/pdf_text.py
+[41.84][DEBUG](default): Parsing (and naming) backend/app/capabilities/pdf_text.py (with lang Python)
+[41.89][DEBUG](default): Core_scan analyzing backend/app/adapters/mcp.py
+[42.10][DEBUG](default): Parsing (and naming) backend/app/adapters/mcp.py (with lang Python)
+[42.18][DEBUG](default): Core_scan analyzing backend/app/executor/models.py
+[42.43][DEBUG](default): Parsing (and naming) backend/app/executor/models.py (with lang Python)
+[42.75][DEBUG](default): Core_scan analyzing backend/app/capabilities/rule_extractor.py
+[43.10][DEBUG](default): Parsing (and naming) backend/app/capabilities/rule_extractor.py (with lang Python)
+[43.25][DEBUG](default): Core_scan analyzing backend/app/core/errors.py
+[43.50][DEBUG](default): Parsing (and naming) backend/app/core/errors.py (with lang Python)
+[44.52][DEBUG](default): Core_scan analyzing backend/app/documents/storage.py
+[44.82][DEBUG](default): Parsing (and naming) backend/app/documents/storage.py (with lang Python)
+[44.93][DEBUG](default): Core_scan analyzing backend/app/auth/__init__.py
+[44.94][DEBUG](default): Parsing (and naming) backend/app/auth/__init__.py (with lang Python)
+[44.96][DEBUG](default): Core_scan analyzing backend/app/adapters/base.py
+[45.08][DEBUG](default): Parsing (and naming) backend/app/adapters/base.py (with lang Python)
+[45.11][DEBUG](default): Core_scan analyzing backend/app/api/projects.py
+Terminated
