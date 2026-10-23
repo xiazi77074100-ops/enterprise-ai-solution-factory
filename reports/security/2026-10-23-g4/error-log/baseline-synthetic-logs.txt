@@ -1,0 +1,42 @@
+=== TEST ONLY plain ===
+ERROR unhandled exception
+Traceback (most recent call last):
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\app\core\middleware.py", line 84, in __call__
+    await self.app(scope, _replay(body, receive), tracking_send)
+  File "C:\work\aidd\enterprise-ai-solution-factory\reports\security\2026-10-23-g4\error-log\check_logs.py", line 62, in app
+    fail(value)
+  File "C:\work\aidd\enterprise-ai-solution-factory\reports\security\2026-10-23-g4\error-log\check_logs.py", line 32, in plain
+    raise RuntimeError(f"TEST_ONLY exception value={value}\nTEST_ONLY log continuation")
+RuntimeError: TEST_ONLY exception value=TEST_ONLY_SYNTHETIC_VALUE_PLAIN
+TEST_ONLY log continuation
+
+=== TEST ONLY chained ===
+ERROR unhandled exception
+Traceback (most recent call last):
+  File "C:\work\aidd\enterprise-ai-solution-factory\reports\security\2026-10-23-g4\error-log\check_logs.py", line 37, in chained
+    raise ValueError(value)
+ValueError: TEST_ONLY_SYNTHETIC_VALUE_CHAINED
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\app\core\middleware.py", line 84, in __call__
+    await self.app(scope, _replay(body, receive), tracking_send)
+  File "C:\work\aidd\enterprise-ai-solution-factory\reports\security\2026-10-23-g4\error-log\check_logs.py", line 62, in app
+    fail(value)
+  File "C:\work\aidd\enterprise-ai-solution-factory\reports\security\2026-10-23-g4\error-log\check_logs.py", line 39, in chained
+    raise RuntimeError("TEST_ONLY outer error") from exc
+RuntimeError: TEST_ONLY outer error
+
+=== TEST ONLY database ===
+ERROR unhandled exception
+Traceback (most recent call last):
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\app\core\middleware.py", line 84, in __call__
+    await self.app(scope, _replay(body, receive), tracking_send)
+  File "C:\work\aidd\enterprise-ai-solution-factory\reports\security\2026-10-23-g4\error-log\check_logs.py", line 62, in app
+    fail(value)
+  File "C:\work\aidd\enterprise-ai-solution-factory\reports\security\2026-10-23-g4\error-log\check_logs.py", line 44, in database
+    raise StatementError(
+sqlalchemy.exc.StatementError: TEST_ONLY database failure
+[SQL: SELECT :value]
+[parameters: {'value': 'TEST_ONLY_SYNTHETIC_VALUE_DATABASE'}]

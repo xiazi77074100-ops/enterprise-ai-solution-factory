@@ -1,0 +1,48 @@
+{
+  "source_commit": "fe581a5d84f0581712fe71afa8f68d9126c9bd54",
+  "label": "candidate",
+  "cases": [
+    {
+      "case": "plain",
+      "http_status": 500,
+      "response_code": "internal_error",
+      "synthetic_value_in_log": false,
+      "synthetic_value_in_response": false,
+      "record_count": 1,
+      "error_type_matches_expected": true,
+      "exception_attached": false,
+      "structured_trace_id_present": true,
+      "structured_trace_matches_response": true,
+      "response_trace_matches_capture_context": true,
+      "trace_context_restored": true
+    },
+    {
+      "case": "chained",
+      "http_status": 500,
+      "response_code": "internal_error",
+      "synthetic_value_in_log": false,
+      "synthetic_value_in_response": false,
+      "record_count": 1,
+      "error_type_matches_expected": true,
+      "exception_attached": false,
+      "structured_trace_id_present": true,
+      "structured_trace_matches_response": true,
+      "response_trace_matches_capture_context": true,
+      "trace_context_restored": true
+    },
+    {
+      "case": "database",
+      "http_status": 500,
+      "response_code": "internal_error",
+      "synthetic_value_in_log": false,
+      "synthetic_value_in_response": false,
+      "record_count": 1,
+      "error_type_matches_expected": true,
+      "exception_attached": false,
+      "structured_trace_id_present": true,
+      "structured_trace_matches_response": true,
+      "response_trace_matches_capture_context": true,
+      "trace_context_restored": true
+    }
+  ]
+}

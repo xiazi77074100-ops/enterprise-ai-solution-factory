@@ -45,3 +45,4 @@
 | P5-03a semgrep実行条件の独立確認 | Codex | 有界調査の成果物作成済み。製品semgrepは未完了・原因不明 | `codex/P5-03a-semgrep-diagnostics` | `handoffs/P5-03a.md`、`reports/security/2026-10-23-g4/report.md`。最小1件検出exit 0、製品検査180秒でexit 143 | 2026-10-23 |
 | P5-03b 依存ライセンス・出所・安全境界 | Codex | 一覧・独立レビュー作成済み、配布表示・来歴・ログと保持の不足を継続 | `codex/P5-03b-license-review` | `handoffs/P5-03b.md`、`reports/security_review.md`、`reports/security/2026-10-23-g4/licenses/` | 2026-10-23 |
 | P5-03a2 semgrep分割実行の補完 | Codex | 5規則集の製品検査完了、指摘0・errors 0。テイント解析timeout警告2実行で残存 | `codex/P5-03a2-semgrep-copy` | `handoffs/P5-03a2.md`、`reports/security/2026-10-23-g4/semgrep-followup/`。対象集合98件一致、原因不明は維持 | 2026-10-23 |
+| P5-03c 例外ログの合成値混入の確認 | Codex | 診断・隔離修正案を作成。製品未修正、共有処理への適用承認待ち | `codex/P5-03c-error-log-review` | `handoffs/P5-03c.md`、`reports/security/2026-10-23-g4/error-log/`。製品3/3混入exit 1、隔離案3/3非混入exit 0。VA-G4-001暫定中 | 2026-10-23 |
