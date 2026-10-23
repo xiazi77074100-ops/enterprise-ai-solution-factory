@@ -1,0 +1,75 @@
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+__________ test_unexpected_error_hides_values_and_keeps_trace[plain] __________
+backend\tests\security\test_error_logging.py:49: in test_unexpected_error_hides_values_and_keeps_trace
+    assert marker not in rendered
+E   AssertionError: assert 'TEST_ONLY_S..._VALUE_PLAIN' not in 'ERROR unhan...continuation'
+E
+E     'TEST_ONLY_SYNTHETIC_VALUE_PLAIN' is contained here:
+E       imeError: TEST_ONLY_SYNTHETIC_VALUE_PLAIN
+E       TEST ONLY log continuation
+------------------------------ Captured log call ------------------------------
+ERROR    easf.errors:middleware.py:86 unhandled exception
+Traceback (most recent call last):
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\app\core\middleware.py", line 84, in __call__
+    await self.app(scope, _replay(body, receive), tracking_send)
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\tests\security\test_error_logging.py", line 34, in app
+    _raise_error(kind, json.loads(message["body"])["value"])
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\tests\security\test_error_logging.py", line 25, in _raise_error
+    raise RuntimeError(f"{value}\nTEST ONLY log continuation")
+RuntimeError: TEST_ONLY_SYNTHETIC_VALUE_PLAIN
+TEST ONLY log continuation
+_________ test_unexpected_error_hides_values_and_keeps_trace[chained] _________
+backend\tests\security\test_error_logging.py:49: in test_unexpected_error_hides_values_and_keeps_trace
+    assert marker not in rendered
+E   AssertionError: assert 'TEST_ONLY_S...ALUE_CHAINED' not in 'ERROR unhan...er exception'
+E
+E     'TEST_ONLY_SYNTHETIC_VALUE_CHAINED' is contained here:
+E       lueError: TEST_ONLY_SYNTHETIC_VALUE_CHAINED
+E
+E       The above exception was the direct cause of the following exception:
+E
+E       Traceback (most recent call last):...
+E
+E     ...Full output truncated (7 lines hidden), use '-vv' to show
+------------------------------ Captured log call ------------------------------
+ERROR    easf.errors:middleware.py:86 unhandled exception
+Traceback (most recent call last):
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\tests\security\test_error_logging.py", line 19, in _raise_error
+    raise ValueError(value)
+ValueError: TEST_ONLY_SYNTHETIC_VALUE_CHAINED
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\app\core\middleware.py", line 84, in __call__
+    await self.app(scope, _replay(body, receive), tracking_send)
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\tests\security\test_error_logging.py", line 34, in app
+    _raise_error(kind, json.loads(message["body"])["value"])
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\tests\security\test_error_logging.py", line 21, in _raise_error
+    raise RuntimeError("TEST ONLY outer exception") from exc
+RuntimeError: TEST ONLY outer exception
+________ test_unexpected_error_hides_values_and_keeps_trace[database] _________
+backend\tests\security\test_error_logging.py:49: in test_unexpected_error_hides_values_and_keeps_trace
+    assert marker not in rendered
+E   assert 'TEST_ONLY_S...LUE_DATABASE' not in "ERROR unhan..._DATABASE'}]"
+E
+E     'TEST_ONLY_SYNTHETIC_VALUE_DATABASE' is contained here:
+E       'value': 'TEST_ONLY_SYNTHETIC_VALUE_DATABASE'}]
+------------------------------ Captured log call ------------------------------
+ERROR    easf.errors:middleware.py:86 unhandled exception
+Traceback (most recent call last):
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\app\core\middleware.py", line 84, in __call__
+    await self.app(scope, _replay(body, receive), tracking_send)
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\tests\security\test_error_logging.py", line 34, in app
+    _raise_error(kind, json.loads(message["body"])["value"])
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\tests\security\test_error_logging.py", line 24, in _raise_error
+    raise StatementError("TEST ONLY database failure", "SELECT :value", {"value": value}, RuntimeError(value))
+sqlalchemy.exc.StatementError: TEST ONLY database failure
+[SQL: SELECT :value]
+[parameters: {'value': 'TEST_ONLY_SYNTHETIC_VALUE_DATABASE'}]
+=========================== short test summary info ===========================
+FAILED backend\tests\security\test_error_logging.py::test_unexpected_error_hides_values_and_keeps_trace[plain]
+FAILED backend\tests\security\test_error_logging.py::test_unexpected_error_hides_values_and_keeps_trace[chained]
+FAILED backend\tests\security\test_error_logging.py::test_unexpected_error_hides_values_and_keeps_trace[database]
+3 failed in 0.93s

@@ -83,7 +83,12 @@ class SecurityMiddleware:
                 return
             await self.app(scope, _replay(body, receive), tracking_send)
         except Exception as exc:
-            logger.error("unhandled exception", extra={"error_type": type(exc).__name__}, exc_info=exc)
+            logger.error(
+                "unhandled exception: %s (trace_id=%s)",
+                type(exc).__name__,
+                trace_id_var.get(),
+                extra={"error_type": type(exc).__name__, "trace_id": trace_id_var.get()},
+            )
             if not started:
                 await self._json(
                     send_with_headers,
