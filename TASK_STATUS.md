@@ -43,3 +43,4 @@
 | G3 ゲート報告・承認記録 | Codex（人の継続指示） | **承認済み（D-051）**、記録更新 | `codex/G3-approval-record` | `reports/gate_G3.md`。検査・レビューの残事項は維持 | 2026-10-23 |
 | Phase 5 移行準備 | Codex（人の継続指示） | 計画整理済み、P5-03aの有界診断を実施 | `codex/G3-approval-record`（計画）、`codex/P5-03a-semgrep-diagnostics`（診断） | `docs/phase5/PHASE5_PLAN.md` | 2026-10-23 |
 | P5-03a semgrep実行条件の独立確認 | Codex | 有界調査の成果物作成済み。製品semgrepは未完了・原因不明 | `codex/P5-03a-semgrep-diagnostics` | `handoffs/P5-03a.md`、`reports/security/2026-10-23-g4/report.md`。最小1件検出exit 0、製品検査180秒でexit 143 | 2026-10-23 |
+| P5-03b 依存ライセンス・出所・安全境界 | Codex | 一覧・独立レビュー作成済み、配布表示・来歴・ログと保持の不足を継続 | `codex/P5-03b-license-review` | `handoffs/P5-03b.md`、`reports/security_review.md`、`reports/security/2026-10-23-g4/licenses/` | 2026-10-23 |

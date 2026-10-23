@@ -1,0 +1,38 @@
+[
+  {
+    "path": "fixtures/generator/fonts/BIZUDPGothic-Regular.ttf",
+    "sha256": "258d7156c165f2ff774b6efee637c22c3b950de0d8a10e501137061bc8085d01"
+  },
+  {
+    "path": "fixtures/generator/fonts/OFL.txt",
+    "sha256": "e753d7155d53c747d037a445e584c8ecfca6dd79846db610417e282a736b28bc"
+  },
+  {
+    "path": ".agents/skills/README.md",
+    "sha256": "b5d87098754df82742e1c3558e59cb132baa29991e4520005551ae1bee56d778"
+  },
+  {
+    "path": ".agents/skills/design-taste-frontend/LICENSE",
+    "sha256": "4575a543ab88dad12ccea7d97e563d0bce5b448b06072e65d3264497dad326df"
+  },
+  {
+    "path": ".agents/skills/redesign-existing-projects/LICENSE",
+    "sha256": "4575a543ab88dad12ccea7d97e563d0bce5b448b06072e65d3264497dad326df"
+  },
+  {
+    "path": ".agents/skills/ponytail/LICENSE",
+    "sha256": "fb1bc6909ac3ef82d5c22106e32ef682b0cff66788fa915fb9b53b15c9d2f3ab"
+  },
+  {
+    "path": ".agents/skills/ponytail-review/LICENSE",
+    "sha256": "fb1bc6909ac3ef82d5c22106e32ef682b0cff66788fa915fb9b53b15c9d2f3ab"
+  },
+  {
+    "path": "frontend/node_modules/@fontsource/noto-sans-jp/LICENSE",
+    "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3"
+  },
+  {
+    "path": "frontend/node_modules/lucide-react/LICENSE",
+    "sha256": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57"
+  }
+]
