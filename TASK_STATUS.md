@@ -47,3 +47,4 @@
 | P5-03a2 semgrep分割実行の補完 | Codex | 5規則集の製品検査完了、指摘0・errors 0。テイント解析timeout警告2実行で残存 | `codex/P5-03a2-semgrep-copy` | `handoffs/P5-03a2.md`、`reports/security/2026-10-23-g4/semgrep-followup/`。対象集合98件一致、原因不明は維持 | 2026-10-23 |
 | P5-03c 例外ログの合成値混入の確認 | Codex | 診断・隔離修正案を作成。製品未修正、共有処理への適用承認待ち | `codex/P5-03c-error-log-review` | `handoffs/P5-03c.md`、`reports/security/2026-10-23-g4/error-log/`。製品3/3混入exit 1、隔離案3/3非混入exit 0。VA-G4-001暫定中 | 2026-10-23 |
 | P5-03d VA-G4-001の本体修正・再診断 | Codex | D-052により個別適用。修正・本体3ケース再診断済み | `codex/P5-03d-error-log-fix` | `handoffs/P5-03d.md`、`reports/security/2026-10-23-g4/error-log-fix/`。3失敗→3成功、型・trace_idと500応答を保持。全件CIはコミット履歴で確認 | 2026-10-23 |
+| P5-02a 既存評価の独立照合・証拠索引 | Codex | 7集計・比較表16セルを照合。G4の証拠不足を整理。再評価は未実行 | `codex/P5-02a-evaluation-index` | `handoffs/P5-02a.md`、`reports/evaluation_index.md`、`reports/eval/2026-10-23-index/`、`reports/review/2026-10-23-g4-readiness.md` | 2026-10-23 |

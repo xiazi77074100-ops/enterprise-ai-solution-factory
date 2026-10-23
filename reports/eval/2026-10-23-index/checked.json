@@ -1,0 +1,229 @@
+{
+  "source_commit": "9801b902f51b1c63642ff14219ba7b2b8fead889",
+  "scope": "既存集計の照合。再評価・元の採点の再現ではない。",
+  "input_sha256": {
+    "reports/eval/2026-10-19-dev/result.json": "bcc054d2e627923752208a6d9786b09839168b5b7708fe2556f336b99a1eecac",
+    "reports/eval/2026-10-19-dev-v3/result.json": "e13f7f52df66d8b51331f3d7a275f3537656e6fd15474c1d4a16f25c9db17121",
+    "reports/eval/holdout/result.json": "2b01d398521e73e4cb53c6be599e23a16e760072a6f15314867741230f5157c2",
+    "reports/eval/2026-10-21-contract-dev/result.json": "cf1bb7f4b32375f8ef17594093ca164fe41d190b331d57b9f2486bd4de7349dd",
+    "reports/eval/2026-10-21-contract-cr1-dev/result.json": "55f20b5d57cfc6536ae96e2f34b4803f9b3b1d3994d1f86cdcc46edea0fab8de",
+    "reports/eval/contract-holdout/baseline.json": "6fb71e5e3ee422db908c261af006e80824f3340f1154043e1114f85cd5eef27b",
+    "reports/eval/contract-holdout/factory.json": "19301ee4c17bef622dadb1fc7c8e041e6d318b0f6d8657337bd645975a80fccb",
+    "reports/eval/contract-holdout/report.md": "c5b0b72b8b34883c774189b2b1d797e929db3b8de01381f3c11e3cadce6071d2",
+    "docs/experiment/preregistration.md": "ecd8f5e9e9d0556bd8ca656ca24f8039747792f6b48a8de2e0e61646e625c1fa",
+    "HUMAN_TIME_LOG.csv": "4fb4b333d32a5c5fedbb1946df1cd51ea5cb922d15cab0828e9f5087bc7645ce",
+    "COST_LEDGER.csv": "458c3c026d17977663a0e7194450c446887fafe7e490f791a1a8fbab1a22a025"
+  },
+  "aggregates": [
+    {
+      "source": "reports/eval/2026-10-19-dev/result.json",
+      "dataset": "invoice",
+      "split": "dev",
+      "samples": 28,
+      "manifest_sha256": "bbbae8e47c7c497ec0bc453645b57b1cff17143a8ce2ce10a9b37c24332d41a3",
+      "workflow": {
+        "workflow_id": "invoice-poc",
+        "version": 2
+      },
+      "rule_pack": "invoice@1.1.0",
+      "metrics": {
+        "field_macro_normalized_match": 0.9265134865134865,
+        "field_status_agreement": 0.8511904761904762,
+        "critical_fields_wrong_but_found": 0,
+        "critical_rule_recall": 1.0,
+        "critical_rule_positives": 8,
+        "evidence_position_accuracy": 1.0,
+        "evidence_spans": 278
+      }
+    },
+    {
+      "source": "reports/eval/2026-10-19-dev-v3/result.json",
+      "dataset": "invoice",
+      "split": "dev",
+      "samples": 28,
+      "manifest_sha256": "bbbae8e47c7c497ec0bc453645b57b1cff17143a8ce2ce10a9b37c24332d41a3",
+      "workflow": {
+        "workflow_id": "invoice-poc",
+        "version": 3
+      },
+      "rule_pack": "invoice@1.1.0",
+      "metrics": {
+        "field_macro_normalized_match": 0.9606493506493506,
+        "field_status_agreement": 0.8511904761904762,
+        "critical_fields_wrong_but_found": 0,
+        "critical_rule_recall": 1.0,
+        "critical_rule_positives": 8,
+        "evidence_position_accuracy": 1.0,
+        "evidence_spans": 278,
+        "ocr_evidence_spans": 9,
+        "ocr_evidence_all_unverified": true
+      }
+    },
+    {
+      "source": "reports/eval/holdout/result.json",
+      "dataset": "invoice",
+      "split": "holdout",
+      "samples": 12,
+      "manifest_sha256": "9439de443027be16f9d2e5dc54a24a3f1ab65506a3ca29a64bab8314ac622ac6",
+      "workflow": {
+        "workflow_id": "invoice-poc",
+        "version": 3
+      },
+      "rule_pack": "invoice@1.1.0",
+      "metrics": {
+        "field_macro_normalized_match": 0.9084022038567493,
+        "field_status_agreement": 0.7013888888888888,
+        "critical_fields_wrong_but_found": 0,
+        "critical_rule_recall": 1.0,
+        "critical_rule_positives": 5,
+        "evidence_position_accuracy": 1.0,
+        "evidence_spans": 98,
+        "ocr_evidence_spans": 15,
+        "ocr_evidence_all_unverified": true
+      }
+    },
+    {
+      "source": "reports/eval/2026-10-21-contract-dev/result.json",
+      "dataset": "contract",
+      "split": "dev",
+      "samples": 28,
+      "manifest_sha256": "fea2d46392427ef6cb2be6c81b49d1fe8ddb3dd2e0748ac4f2bee933887bd209",
+      "workflow": {
+        "workflow_id": "contract-poc",
+        "version": 2
+      },
+      "rule_pack": "contract@1.0.0",
+      "metrics": {
+        "field_macro_normalized_match": 0.9236365486365486,
+        "field_status_agreement": 0.8650793650793651,
+        "critical_fields_wrong_but_found": 0,
+        "critical_rule_recall": 1.0,
+        "critical_rule_positives": 4,
+        "evidence_position_accuracy": 1.0,
+        "evidence_spans": 161,
+        "ocr_evidence_spans": 10,
+        "ocr_evidence_all_unverified": true
+      }
+    },
+    {
+      "source": "reports/eval/2026-10-21-contract-cr1-dev/result.json",
+      "dataset": "contract",
+      "split": "dev",
+      "samples": 28,
+      "manifest_sha256": "fea2d46392427ef6cb2be6c81b49d1fe8ddb3dd2e0748ac4f2bee933887bd209",
+      "workflow": {
+        "workflow_id": "contract-poc",
+        "version": 3
+      },
+      "rule_pack": "contract@1.1.0",
+      "metrics": {
+        "field_macro_normalized_match": 0.9176365301365301,
+        "field_status_agreement": 0.8642857142857143,
+        "critical_fields_wrong_but_found": 0,
+        "critical_rule_recall": 1.0,
+        "critical_rule_positives": 10,
+        "evidence_position_accuracy": 1.0,
+        "evidence_spans": 179,
+        "ocr_evidence_spans": 11,
+        "ocr_evidence_all_unverified": true
+      }
+    },
+    {
+      "source": "reports/eval/contract-holdout/baseline.json",
+      "dataset": "contract",
+      "split": "holdout",
+      "samples": 12,
+      "manifest_sha256": "fd1038441dbe58ccc723d32040dd103ab572de405abf60513b1cf1a583420601",
+      "workflow": {
+        "scored_outputs": "baseline"
+      },
+      "rule_pack": "contract@1.1.0 (CON-001〜006)",
+      "metrics": {
+        "field_macro_normalized_match": 0.9916666666666666,
+        "field_status_agreement": 1.0,
+        "critical_fields_wrong_but_found": 0,
+        "critical_rule_recall": 1.0,
+        "critical_rule_positives": 6,
+        "evidence_position_accuracy": 1.0,
+        "evidence_spans": 103,
+        "evidence_unverified_items": 9,
+        "evidence_coverage": 1.0,
+        "missing_outputs": 0
+      }
+    },
+    {
+      "source": "reports/eval/contract-holdout/factory.json",
+      "dataset": "contract",
+      "split": "holdout",
+      "samples": 12,
+      "manifest_sha256": "fd1038441dbe58ccc723d32040dd103ab572de405abf60513b1cf1a583420601",
+      "workflow": {
+        "scored_outputs": "factory"
+      },
+      "rule_pack": "contract@1.1.0 (CON-001〜006)",
+      "metrics": {
+        "field_macro_normalized_match": 0.9457070707070707,
+        "field_status_agreement": 0.925,
+        "critical_fields_wrong_but_found": 0,
+        "critical_rule_recall": 1.0,
+        "critical_rule_positives": 6,
+        "evidence_position_accuracy": 1.0,
+        "evidence_spans": 80,
+        "evidence_unverified_items": 1,
+        "evidence_coverage": 0.7843137254901961,
+        "missing_outputs": 0
+      }
+    }
+  ],
+  "contract_report_numeric_cells_checked": 16,
+  "conditions_from_original_aggregates": {
+    "both_critical_wrong_found_zero": true,
+    "factory_critical_recall_one": true,
+    "factory_field_at_least_baseline_minus_005": true,
+    "factory_evidence_at_least_09": true
+  },
+  "contract_field_threshold_decimal": "0.9416666666666666",
+  "contract_field_margin_decimal": "0.0040404040404041",
+  "labor_entries": [
+    {
+      "arm": "baseline",
+      "task_id": "A-01",
+      "minutes": "75",
+      "kind": "estimate"
+    },
+    {
+      "arm": "factory",
+      "task_id": "P4-03",
+      "minutes": "15",
+      "kind": "estimate"
+    },
+    {
+      "arm": "baseline",
+      "task_id": "CR-1",
+      "minutes": "30",
+      "kind": "wall_clock_upper_bound"
+    },
+    {
+      "arm": "factory",
+      "task_id": "CR-1",
+      "minutes": "15",
+      "kind": "estimate"
+    }
+  ],
+  "cost_entries": [
+    {
+      "date": "2026-10-18",
+      "arm": "shared",
+      "phase": "P0",
+      "amount_jpy": "0"
+    },
+    {
+      "date": "2026-10-18",
+      "arm": "shared",
+      "phase": "P1",
+      "amount_jpy": "0"
+    }
+  ],
+  "m1_decision": "未判定（D-050）",
+  "m6_break_even": "未算出（構築・保守の実測不足）"
+}
