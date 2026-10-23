@@ -1,0 +1,2 @@
+enterprise-ai-solution-factory-db-1 postgres:17-alpine Up 2 days (healthy)
+ocr-saas-db-1 postgres:17 Up 2 days (healthy)

@@ -4,7 +4,7 @@
 |---|---|
 | 更新日 | 2026-10-23 |
 | 書いた人 | Claude Code（初稿）、Codex（人の指示でG3承認・現在地を更新） |
-| main の最新 | P5-03dのログ修正まで統合済み（9801b90）、全件CI成功。P5-02aの評価索引は本変更 |
+| main の最新 | P5-02aの評価索引まで統合済み（1475842）、全件CI成功。P5-03eの修正後イメージ診断は本変更 |
 
 新しいセッションは、まずこの文書、`AGENTS.md`、`TASK_STATUS.md`、`DECISIONS.md` の最後の数行を読む。
 
@@ -28,6 +28,8 @@
 | G1b | 承認（D-027） | `reports/gate_G1b.md` |
 | G2 | 承認（D-037） | `reports/gate_G2.md` |
 | G3 | 承認（D-051、残事項を継続管理） | `reports/gate_G3.md` |
+
+- **P5-03e**：別タグで修正後イメージをビルドし、UID 10001・実装SHA一致・合成例外3ケース成功を確認。初回Trivyはmusl系2パッケージの同一CVEでexit 1、キャッシュなし再ビルドでr3へ更新後はOS・Pythonとも0件、exit 0。認証前ASGI7経路成功。HTTP/認証後DAST・DBは未実行。旧タグと既存DBは変更なし。`reports/security/2026-10-23-g4/runtime/report.md`。G4の証拠不足・他の残事項は維持。
 
 ## 2. できているもの
 

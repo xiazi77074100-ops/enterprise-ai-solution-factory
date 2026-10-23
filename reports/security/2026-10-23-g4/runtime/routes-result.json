@@ -1,0 +1,37 @@
+[
+  {
+    "path": "/health",
+    "status": 200,
+    "headers_passed": true
+  },
+  {
+    "path": "/docs",
+    "status": 404,
+    "headers_passed": true
+  },
+  {
+    "path": "/redoc",
+    "status": 404,
+    "headers_passed": true
+  },
+  {
+    "path": "/openapi.json",
+    "status": 404,
+    "headers_passed": true
+  },
+  {
+    "path": "/.env",
+    "status": 404,
+    "headers_passed": true
+  },
+  {
+    "path": "/.git/config",
+    "status": 404,
+    "headers_passed": true
+  },
+  {
+    "path": "/api/v1/projects",
+    "status": 401,
+    "headers_passed": true
+  }
+]

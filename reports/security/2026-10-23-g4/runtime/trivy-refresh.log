@@ -1,0 +1,16 @@
+2026-10-23T10:15:28Z	INFO	[vulndb] Need to update DB
+2026-10-23T10:15:28Z	INFO	[vulndb] Downloading vulnerability DB...
+2026-10-23T10:15:28Z	INFO	[vulndb] Downloading artifact...	repo="mirror.gcr.io/aquasec/trivy-db:2"
+2026-10-23T10:16:01Z	INFO	[vulndb] Artifact successfully downloaded	repo="mirror.gcr.io/aquasec/trivy-db:2"
+2026-10-23T10:16:01Z	INFO	[vuln] Vulnerability scanning is enabled
+2026-10-23T10:16:20Z	INFO	[python] Licenses acquired from one or more METADATA files may be subject to additional terms. Use `--debug` flag to see all affected packages.
+2026-10-23T10:16:23Z	INFO	Detected OS	family="alpine" version="3.24.2"
+2026-10-23T10:16:23Z	INFO	[alpine] Detecting vulnerabilities...	os_version="3.24" repository="3.24" pkg_num=78
+2026-10-23T10:16:23Z	INFO	Number of language-specific files	num=1
+2026-10-23T10:16:23Z	INFO	[python-pkg] Detecting vulnerabilities...
+
+📣 Notices:
+  - Version 0.76.1 of Trivy is now available, current version is 0.76.0
+
+To suppress version checks, run Trivy scans with the --skip-version-check flag
+

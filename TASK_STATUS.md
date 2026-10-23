@@ -48,3 +48,4 @@
 | P5-03c 例外ログの合成値混入の確認 | Codex | 診断・隔離修正案を作成。製品未修正、共有処理への適用承認待ち | `codex/P5-03c-error-log-review` | `handoffs/P5-03c.md`、`reports/security/2026-10-23-g4/error-log/`。製品3/3混入exit 1、隔離案3/3非混入exit 0。VA-G4-001暫定中 | 2026-10-23 |
 | P5-03d VA-G4-001の本体修正・再診断 | Codex | D-052により個別適用。修正・本体3ケース再診断済み | `codex/P5-03d-error-log-fix` | `handoffs/P5-03d.md`、`reports/security/2026-10-23-g4/error-log-fix/`。3失敗→3成功、型・trace_idと500応答を保持。全件CIはコミット履歴で確認 | 2026-10-23 |
 | P5-02a 既存評価の独立照合・証拠索引 | Codex | 7集計・比較表16セルを照合。G4の証拠不足を整理。再評価は未実行 | `codex/P5-02a-evaluation-index` | `handoffs/P5-02a.md`、`reports/evaluation_index.md`、`reports/eval/2026-10-23-index/`、`reports/review/2026-10-23-g4-readiness.md` | 2026-10-23 |
+| P5-03e 修正後イメージの自己診断 | Codex | コードSHA一致・例外3ケース・認証前ASGI7経路成功。初回musl系2検出→キャッシュなしビルド後0件。HTTP/認証後DAST未実行 | `codex/P5-03e-runtime-reassessment` | `handoffs/P5-03e.md`、`reports/security/2026-10-23-g4/runtime/report.md`。製品・既存DB・旧タグは変更なし | 2026-10-23 |
