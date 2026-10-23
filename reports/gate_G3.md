@@ -2,11 +2,11 @@
 
 | 項目 | 内容 |
 |---|---|
-| コミット | main（P4-05 のホールドアウトの評価まで） |
+| コミット | P4-06 統合済み `d97a556`（実装・診断 `c717f54`）。承認記録は本変更 |
 | 作成日 | 2026-10-21 |
-| 作成 | Claude Code（統合責任者） |
-| 判定（自己） | **草稿（未完了）**。品質（M3）は事前登録の非劣性の条件をすべて満たした。主要指標 M1（人の時間）は推定だけで、測った値が無い。G3 前の診断と独立レビューは未実行（Codex に引き渡し、`handoffs/P4-06.md`） |
-| 人の承認 | [ ] 承認　承認者：　日付： |
+| 作成 | Claude Code（草稿）、Codex（P4-06 統合結果・承認記録の追記） |
+| 判定（自己） | 未解決事項あり（§5）。元の集計では M3 の条件を満たす。M1 は推定だけで判定しない。診断・独立レビューの結果を反映したが、全検査の成功は主張しない |
+| 人の承認 | [x] **承認（D-051）**。承認者：プロジェクト責任者（本会話の利用者）。記録日：2026-10-23。残事項は継続管理 |
 
 G3 の条件（`docs/phase4/PHASE4_PLAN.md`）：コピーした業務専用の流れを作らない、同じ不変の Capability 版の再利用と回帰の証拠。AC-06・AC-07・AC-09・AC-12（契約書）、事前登録の M1〜M5。
 
@@ -20,7 +20,7 @@ G3 の条件（`docs/phase4/PHASE4_PLAN.md`）：コピーした業務専用の�
 | P4-03 | Factory で契約書（D-043） | `fixtures/workflows/contract-v2.json`、`reports/eval/2026-10-21-contract-dev/` | d80e481 | 完了 |
 | P4-04 | 要件変更 CR-1（両 arm、D-044・D-046） | `fixtures/workflows/contract-v3.json`、`fixtures/rule_packs/contract-1.1.0.json` | 71abf10 | 完了 |
 | P4-05 | 最終の版の凍結（D-047）、両 arm 共通の採点（D-048）、ホールドアウトの評価（D-049） | `reports/eval/contract-holdout/` | 7ba596a ほか | 完了 |
-| P4-06 | G3 前の診断・独立レビュー | `handoffs/P4-06.md` | — | **未実行**（Codex） |
+| P4-06 | G3 前の自己診断・独立レビュー、採点の負の添字の修正 | `reports/security/2026-10-21-g3/`、`reports/review/2026-10-21-g3.md` | c717f54・d97a556 | 成果物統合済み。未完了検査・残事項は§5 |
 
 ## 2. 再利用の証拠（D-043・D-046）
 
@@ -33,7 +33,7 @@ G3 の条件（`docs/phase4/PHASE4_PLAN.md`）：コピーした業務専用の�
 | `document.rule_validator@1.0.0` | 同じ版、実装を修正（真偽の比較） | new_code |
 | `document.evidence_locator@1.0.0` | 同じ版、実装を修正（最初の出現だけ・4 桁未満の数字を探さない） | new_code |
 
-- 請求書と契約書で同じ `capability_version_id` を使うことを結合テストで確認（`backend/tests/integration/test_contract_workflow.py`）。
+- 請求書と契約書の2つの Workflow で同じ `capability_version_id` を使うことを結合テストで確認（同一案件、parse/validate/locate/review の4ノード）。別案件・exporter までの証明とは区別する（RV-G3-003）。
 - 業務ごとの分岐なし（`scripts/validate_contracts.py` が CI で検査）。
 - 回帰：実装を直した後、請求書の dev（v3）の数値がすべて前と同じことを確認（D-043）。
 - **CR-1 は設定だけ**：Workflow v3 に 1 項目、Rule pack に CON-006。製品のコードの変更なし、Capability の版は v2 と同じ（D-046、AC-10）。
@@ -41,7 +41,9 @@ G3 の条件（`docs/phase4/PHASE4_PLAN.md`）：コピーした業務専用の�
 
 ## 3. 比較実験（事前登録 §7）
 
-### M3 品質（ホールドアウト 12 件、`reports/eval/contract-holdout/report.md`）
+### M3 品質（元の採点器による集計、ホールドアウト 12 件）
+
+出典：`reports/eval/contract-holdout/report.md`。P4-06 の採点修正前の値であり、修正後の再評価は未実行。負の根拠位置の不備が既存集計に与えた影響は不明（要確認、RV-G3-002）。集計値は変更していない。
 
 | 条件 | A | B | 判定 |
 |---|---|---|---|
@@ -73,11 +75,25 @@ G3 の条件（`docs/phase4/PHASE4_PLAN.md`）：コピーした業務専用の�
 | `uv run pytest -q tests/unit`（Windows） | 0 | 104 passed、4 skipped（Tesseract が無い） |
 | GitHub Actions（ci） | 成功 | 7ba596a |
 
-未実行：
-- G3 前の診断（ruff S・bandit・semgrep・pip-audit・npm audit・gitleaks・trivy・ZAP、手動の診断項目）→ P4-06。
-- 独立レビュー → P4-06（Codex）。
-- 契約書の画面（AC-12）の確認・E2E → P4-06 で確認範囲を決める。
-- Linux でのバックエンドの全テスト（G3 用の記録）。
+P4-06 の結果（完全なコマンド・版・秘匿化済みログは自己診断報告を参照）：
+
+| コマンド・検査 | 終了コード | 結果 |
+|---|---|---|
+| ruff S・bandit・pip-audit・npm audit、gitleaks の最終検査、trivy | 各0 | 検出0。gitleaks のログ初回34件は公開GPG鍵ID・ローカルURLの誤検知として保存 |
+| 固定版 ZAP 2.16.1（未ログイン・認証付き） | 各0 | FAIL0・PASS114・版のWARN1。自己診断であり第三者診断ではない |
+| Linux Docker `uv run pytest -q` | 1 | 282 passed・1 setup error。認可マトリクス listCapabilities の本体は未実行 |
+| 同じ認可試験1件だけのLinux再実行 | 0 | 1 passed。全件実行のエラー原因は不明（要確認） |
+| 修正後の採点・評価の対象pytest | 0 | 9 passed・1 skipped（WindowsにTesseractなし） |
+| frontend lint・typecheck・build・vitest | 各0 | vitest 10件成功 |
+| mypy・最終ruff check/format・契約検査・skill同期・集計照合 | 各0 | 問題なし |
+| semgrep 1.180.0 | 137（停止） | 4通りの起動方法でも結果ファイルを得られず未完了 |
+| GitHub Actions ci（d97a556） | success | ブランチpushとmain統合後の成功を確認。ローカルの失敗記録は維持 |
+
+CI証跡：[ブランチ](https://github.com/xiazi77074100-ops/enterprise-ai-solution-factory/actions/runs/39549742765)、[main](https://github.com/xiazi77074100-ops/enterprise-ai-solution-factory/actions/runs/39552826220)。
+
+承認記録の文書確認（2026-10-23）：`git diff --check`、`python scripts/sync_skills.py --check`、D-051の一意性・承認チェック欄・残事項の記載・制御文字の検査はすべて終了0。変更は文書5ファイルだけ。追加現金支出0円、人の作業時間は未測定。
+
+未実行：契約書の実画面での一連の確認・修正と画面DAST、修正後のホールドアウト再採点。今回の承認記録は文書のみの変更のため、ローカルでアプリケーションの全テストを再実行せず、上記の実行証跡を参照する。
 
 ## 5. 既知の問題・未解決のリスク
 
@@ -86,8 +102,11 @@ G3 の条件（`docs/phase4/PHASE4_PLAN.md`）：コピーした業務専用の�
 3. 合成データは 1 つの生成器から作った。実在の契約書の多様さを表していない。
 4. OCR の環境が arm で違う。
 5. 実装キーが版に結び付かない（§2 の限界）。
-6. 独立レビューなし（P4-06 まで）。
+6. 独立レビューは実施済み（P4-06）。RV-G3-001 の版と実装の不変性、RV-G3-002 の過去の集計への影響、RV-G3-003 の再利用証跡の範囲は未解決。
 7. 実 LLM は未評価（D-004）。
+8. semgrep 未完了、ローカル全件回帰の1セットアップエラー（単独再実行・CIは成功）、AC-12 の実画面確認は未実行。
+
+残事項はPhase 5の計画で担当・対応順・証跡を定める。G3の人間承認を検査成功・指摘解消として数えない。外部公開や次のゲートの承認は別に扱う。
 
 ## 6. 人に決めていただきたいこと
 
@@ -98,3 +117,9 @@ G3 の条件（`docs/phase4/PHASE4_PLAN.md`）：コピーした業務専用の�
 
 1. M1：推定のまま G3 の成否には使わない。後で別の業務で人の時間を測り直す（時期は未定）。G3 は再利用の証拠・M3 の品質・診断・独立レビューで判定する。
 2. P4-06 の結果を待って G3 を判定する（承認）。G3 の承認まで Phase 5 に進まない。
+
+### G3 の承認（記録日2026-10-23、D-051）
+
+プロジェクト責任者は、本会話で自身がG3の承認者であることを確認したうえで承認し、記録と作業の継続を指示した。Codexがこれを正式記録する。P4-06は人の明示的なマージ指示により `d97a556` までmainへfast-forward・push済み。CCによる追加の確認記録はない。
+
+承認範囲はG3の通過と次段階の準備。§5の残事項は未解決のまま管理し、M1の判定除外と将来の別業務での再測定はD-050を維持する。ホールドアウトの再生成・再評価、ベースラインのコード参照、有料API利用、外部公開は今回の承認対象に含めない。
