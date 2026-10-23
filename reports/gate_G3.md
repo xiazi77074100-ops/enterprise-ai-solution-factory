@@ -91,7 +91,7 @@ P4-06 の結果（完全なコマンド・版・秘匿化済みログは自己�
 
 CI証跡：[ブランチ](https://github.com/xiazi77074100-ops/enterprise-ai-solution-factory/actions/runs/39549742765)、[main](https://github.com/xiazi77074100-ops/enterprise-ai-solution-factory/actions/runs/39552826220)。
 
-承認記録の文書確認（2026-10-23）：`git diff --check`、`python scripts/sync_skills.py --check`、D-051の一意性・承認チェック欄・残事項の記載・制御文字の検査はすべて終了0。変更は文書5ファイルだけ。追加現金支出0円、人の作業時間は未測定。
+承認記録の文書確認（2026-10-23）：`git diff --check`、`python scripts/sync_skills.py --check`、D-051の一意性・承認チェック欄・残事項の記載・制御文字の検査はすべて終了0。変更は文書のみ。追加現金支出0円、人の作業時間は未測定。
 
 未実行：契約書の実画面での一連の確認・修正と画面DAST、修正後のホールドアウト再採点。今回の承認記録は文書のみの変更のため、ローカルでアプリケーションの全テストを再実行せず、上記の実行証跡を参照する。
 

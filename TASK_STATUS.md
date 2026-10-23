@@ -41,3 +41,4 @@
 | P4-05 両 arm のホールドアウトの評価・G3 | CC・人 | 完了（G3承認D-051、元集計を維持） | `cc/P4-05-scoring`・`cc/P4-05-holdout-result` | 共通の採点の道具、評価のスクリプト、`reports/eval/contract-holdout/`、`reports/gate_G3.md`。D-047〜D-051 | 2026-10-23 |
 | P4-06 G3 前の診断・独立レビュー | Codex | 成果物統合済み（未完了検査・残事項はG3報告） | `codex/P4-06-g3-review` | c717f54・d97a556、`reports/security/2026-10-21-g3/`、`reports/review/2026-10-21-g3.md` | 2026-10-23 |
 | G3 ゲート報告・承認記録 | Codex（人の継続指示） | **承認済み（D-051）**、記録更新 | `codex/G3-approval-record` | `reports/gate_G3.md`。検査・レビューの残事項は維持 | 2026-10-23 |
+| Phase 5 移行準備 | Codex（人の継続指示） | 計画整理済み、個別タスクの実行は未着手 | `codex/G3-approval-record`（G3引き継ぎの文書） | `docs/phase5/PHASE5_PLAN.md`。次はP5-03aの引き渡し具体化 | 2026-10-23 |
