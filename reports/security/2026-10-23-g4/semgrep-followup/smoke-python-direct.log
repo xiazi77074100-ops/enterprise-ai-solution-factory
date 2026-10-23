@@ -1,0 +1,48 @@
+[00.81][DEBUG](default): Skipping logs for: [networking.http, cohttp.lwt.client, cohttp.lwt.io, conduit_lwt_server, semgrep.engine, semgrep.tainting, semgrep.fixing, semgrep.printing, semgrep.reporting, semgrep.matching, semgrep.parsing, parser_move_on_sui, parser_hack, parser_lua, parser_scala, parser_cpp, semgrep.targeting, semgrep.analyzing, semgrep.prefiltering, ojsonnet.eval, tree-sitter, semgrep.naming, semgrep, parser_javascript, aliengrep, ast_generic, semgrep.spacegrep, lib_parsing, git_wrapper, git.value, git.tree, git.stream, git.blob, paths, process_limits, debug_trace, commons.pcre, commons.textedit, commons, parallelism, telemetry, mirage-crypto-rng.unix, ca-certs, handshake, tls.config, tls.tracing, x509.validation, x509.decoding, mirage-crypto-rng-entropy, cohttp.eio.io, cohttp.eio, cohttp.client, bos]
+[00.82][DEBUG](default): Showing logs for: [application]
+[00.82][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.82][DEBUG](default):
+If you want to show the logs of a particular library
+(e.g., the semgrep targeting library), you'll need to adjust the
+SEMGREP_LOG_SRCS environment variable as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" semgrep ... --debug
+
+or for osemgrep you can use it with any log level as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" ./bin/osemgrep ... --verbose
+
+You can see the list of possible libraries above in this log as in
+...
+[00.04][DEBUG](default): Skipping logs for semgrep.targeting
+...
+[00.04][DEBUG](default): Skipping logs for commons.pcre
+...
+For more information, See
+https://www.notion.so/semgrep/Logging-in-semgrep-semgrep-core-osemgrep-67c9046fa53744728d9d725a5a244f64
+
+[00.82][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.82][DEBUG](default): Logging setup for osemgrep: color=Console.Auto level=debug
+[00.82][DEBUG](default): Executed as: osemgrep scan --oss-only --disable-version-check --no-trace --metrics off --jobs 1 --debug --exclude **/__pycache__/** --json --output /out/smoke-python-direct.json --config /tmp/rules/python.yml /smoke/input.py
+semgrep version 1.180.0
+Failed to get project url from 'git ls-remote': Command failed with exit code: 128
+-----
+Command failed with output:
+fatal: No remote configured to list refs from.
+
+
+Failed to run 'git ls-remote --get-url'. Possible reasons:
+
+- the git binary is not available
+- the current working directory is not a git repository
+- the baseline commit is not a parent of the current commit
+    (if you are running through semgrep-app, check if you are setting `SEMGREP_BRANCH` or `SEMGREP_BASELINE_COMMIT` properly)
+- the current working directory is not marked as safe
+    (fix with `git config --global --add safe.directory $(pwd)`)
+
+Try running the command yourself to debug the issue.
+Loading local config from /tmp/rules/python.yml
+Done loading local config from /tmp/rules/python.yml
+Parsing /tmp/rules/python.yml as YAML
+Saved rules to /tmp/semgrep-znuexth3.yaml
+Terminated

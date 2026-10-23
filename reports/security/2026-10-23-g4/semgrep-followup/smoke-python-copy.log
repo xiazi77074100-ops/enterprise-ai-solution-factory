@@ -1,0 +1,215 @@
+[00.37][DEBUG](default): Skipping logs for: [networking.http, cohttp.lwt.client, cohttp.lwt.io, conduit_lwt_server, semgrep.engine, semgrep.tainting, semgrep.fixing, semgrep.printing, semgrep.reporting, semgrep.matching, semgrep.parsing, parser_move_on_sui, parser_hack, parser_lua, parser_scala, parser_cpp, semgrep.targeting, semgrep.analyzing, semgrep.prefiltering, ojsonnet.eval, tree-sitter, semgrep.naming, semgrep, parser_javascript, aliengrep, ast_generic, semgrep.spacegrep, lib_parsing, git_wrapper, git.value, git.tree, git.stream, git.blob, paths, process_limits, debug_trace, commons.pcre, commons.textedit, commons, parallelism, telemetry, mirage-crypto-rng.unix, ca-certs, handshake, tls.config, tls.tracing, x509.validation, x509.decoding, mirage-crypto-rng-entropy, cohttp.eio.io, cohttp.eio, cohttp.client, bos]
+[00.37][DEBUG](default): Showing logs for: [application]
+[00.37][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.37][DEBUG](default):
+If you want to show the logs of a particular library
+(e.g., the semgrep targeting library), you'll need to adjust the
+SEMGREP_LOG_SRCS environment variable as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" semgrep ... --debug
+
+or for osemgrep you can use it with any log level as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" ./bin/osemgrep ... --verbose
+
+You can see the list of possible libraries above in this log as in
+...
+[00.04][DEBUG](default): Skipping logs for semgrep.targeting
+...
+[00.04][DEBUG](default): Skipping logs for commons.pcre
+...
+For more information, See
+https://www.notion.so/semgrep/Logging-in-semgrep-semgrep-core-osemgrep-67c9046fa53744728d9d725a5a244f64
+
+[00.37][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.37][DEBUG](default): Logging setup for osemgrep: color=Console.Auto level=debug
+[00.37][DEBUG](default): Executed as: osemgrep scan --oss-only --disable-version-check --no-trace --metrics off --jobs 1 --debug --exclude **/__pycache__/** --json --output /out/smoke-python-copy.json --config /tmp/rules/python.yml /tmp/smoke/input.py
+semgrep version 1.180.0
+Failed to get project url from 'git ls-remote': Command failed with exit code: 128
+-----
+Command failed with output:
+fatal: No remote configured to list refs from.
+
+
+Failed to run 'git ls-remote --get-url'. Possible reasons:
+
+- the git binary is not available
+- the current working directory is not a git repository
+- the baseline commit is not a parent of the current commit
+    (if you are running through semgrep-app, check if you are setting `SEMGREP_BRANCH` or `SEMGREP_BASELINE_COMMIT` properly)
+- the current working directory is not marked as safe
+    (fix with `git config --global --add safe.directory $(pwd)`)
+
+Try running the command yourself to debug the issue.
+Loading local config from /tmp/rules/python.yml
+Done loading local config from /tmp/rules/python.yml
+Parsing /tmp/rules/python.yml as YAML
+Saved rules to /tmp/semgrep-hlwdehkh.yaml
+RPC completed in: 2.485229s
+[00.94][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.94][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.94][DEBUG](default): Setting memory policy to balanced
+[00.94][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+semgrep-core validation response: error=None
+semgrep-core validation succeeded
+RPC validation succeeded
+loaded 1 configs in 15.536255359649658 with 0 errors and 0 missed rules
+running 151 rules from 1 config /tmp/rules/python.yml_0
+Rules:
+<SKIPPED DATA (too many entries; use --max-log-list-entries)>
+get_targets request: ScanningRoots(root_paths=[Fpath(value='/tmp/smoke/input.py')], targeting_conf=TargetingConf(exclude=['**/__pycache__/**'], max_target_bytes=1000000, respect_gitignore=True, respect_semgrepignore_files=True, always_select_explicit_targets=True, explicit_targets=[], force_novcs_project=False, exclude_minified_files=False, include_=None, extra_gitignore_patterns_to_exclude_git_untracked_files=[], semgrepignore_filename=None, force_project_root=None, include_binary_files=False, baseline_commit=None))
+RPC completed in: 1.541343s
+[00.84][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.84][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.84][DEBUG](default): Setting memory policy to balanced
+[00.84][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+get_targets response:
+  - target paths: Fppath(fpath=Fpath(value='/tmp/smoke/input.py'), ppath=Ppath(value='/input.py'))
+
+
+┌─────────────┐
+│ Scan Status │
+└─────────────┘
+  Scanning 1 file tracked by git with 151 Code rules:
+  Scanning 1 file with 151 python rules.
+Passing whole rules directly to semgrep_core
+pyro-caml will not be used for profiling. Reason(s): profile is not enabled.
+Passing rules to semgrep-core in 1 shards
+Running Semgrep engine with command:
+/usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core -json -rules /tmp/tmp3w23lbbf.json -j 1 -targets /tmp/tmp326rzyp_ -timeout 5 -timeout_threshold 3 -max_memory 0 -fast -debug
+[00.26][DEBUG](default): Skipping logs for: [networking.http, cohttp.lwt.client, cohttp.lwt.io, conduit_lwt_server, semgrep.engine, semgrep.tainting, semgrep.fixing, semgrep.printing, semgrep.reporting, semgrep.matching, semgrep.parsing, parser_move_on_sui, parser_hack, parser_lua, parser_scala, parser_cpp, semgrep.targeting, semgrep.analyzing, semgrep.prefiltering, ojsonnet.eval, tree-sitter, semgrep.naming, semgrep, parser_javascript, aliengrep, ast_generic, semgrep.spacegrep, lib_parsing, git_wrapper, git.value, git.tree, git.stream, git.blob, paths, process_limits, debug_trace, commons.pcre, commons.textedit, commons, parallelism, telemetry, mirage-crypto-rng.unix, ca-certs, handshake, tls.config, tls.tracing, x509.validation, x509.decoding, mirage-crypto-rng-entropy, cohttp.eio.io, cohttp.eio, cohttp.client, bos]
+[00.26][DEBUG](default): Showing logs for: [application]
+[00.26][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.26][DEBUG](default):
+If you want to show the logs of a particular library
+(e.g., the semgrep targeting library), you'll need to adjust the
+SEMGREP_LOG_SRCS environment variable as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" semgrep ... --debug
+
+or for osemgrep you can use it with any log level as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" ./bin/osemgrep ... --verbose
+
+You can see the list of possible libraries above in this log as in
+...
+[00.04][DEBUG](default): Skipping logs for semgrep.targeting
+...
+[00.04][DEBUG](default): Skipping logs for commons.pcre
+...
+For more information, See
+https://www.notion.so/semgrep/Logging-in-semgrep-semgrep-core-osemgrep-67c9046fa53744728d9d725a5a244f64
+
+[00.26][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.26][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core -json -rules /tmp/tmp3w23lbbf.json -j 1 -targets /tmp/tmp326rzyp_ -timeout 5 -timeout_threshold 3 -max_memory 0 -fast -debug
+[00.26][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.26][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+[00.31][INFO]: Parsing rules in /tmp/tmp3w23lbbf.json
+[00.79][DEBUG](default): read targets from file: /tmp/tmp326rzyp_
+[00.80][DEBUG](default): Core_scan.scan_exn { Core_scan_config.rule_source = Rule_files (/tmp/tmp3w23lbbf.json);
+  target_source = (Core_scan_config.Target_file /tmp/tmp326rzyp_);
+  output_format = (Core_scan_config.Json true); report_time = false;
+  matching_explanations = false; strict = false; respect_rule_paths = true;
+  file_match_hook = None; timeout = 5.; timeout_threshold = 3;
+  max_memory_mb = 0; max_match_per_file = 10000;
+  num_jobs = (Core_scan_config.Force 1); filter_irrelevant_rules = true;
+  telemetry = None; symbol_analysis = false; fips_mode = false;
+  use_parmap = false;
+  par_conf =
+  (Parallelism_config.Eio_executor
+     { Parallelism_config.env = <opaque>; base = <opaque> })
+  }
+[00.80][DEBUG](default): core scan: 151 valid rules, 0 invalid rules
+[00.80][DEBUG](default): read targets from file: /tmp/tmp326rzyp_
+[00.80][DEBUG](default): Mapping 151 elements across 1 domains (151 chunks of <= 1)
+[00.94][INFO]: scan: processing 1 files (skipping 0), with 151 rules (skipping 0 )
+[00.94][DEBUG](default): Mapping 1 elements across 1 domains (1 chunks of <= 1)
+[00.95][DEBUG](default): Core_scan analyzing /tmp/smoke/input.py
+[00.96][DEBUG](default): Parsing (and naming) /tmp/smoke/input.py (with lang Python)
+[01.03][DEBUG](default): scan: found 0 matches, 0 errors (scanned 1 targets, skipped 0)
+[01.04][DEBUG](default): size of returned JSON string: 16437
+--- semgrep-core stderr ---
+<semgrep-core stderr not captured, should be printed above>
+--- end semgrep-core stderr ---
+semgrep ran in 0:00:01.537070 on 1 files
+findings summary: 0 warning, 0 error, 0 info
+SCA findings adjustment: No SCA rules to adjust
+[00.89][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.89][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.89][DEBUG](default): Setting memory policy to balanced
+[00.89][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+Getting API token from settings file
+No API token found in settings file
+RPC completed in: 0.568126s
+[00.34][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.34][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.34][DEBUG](default): Setting memory policy to balanced
+[00.34][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+
+========================================
+Files skipped:
+========================================
+
+  Always skipped by Semgrep:
+
+   • <none>
+
+  Skipped by .gitignore:
+  (Disable by passing --no-git-ignore)
+
+   • <all files not listed by `git ls-files` were skipped>
+
+  Skipped by .semgrepignore:
+  - https://semgrep.dev/docs/ignoring-files-folders-code/#understand-semgrep-defaults
+
+   • <none>
+
+  Skipped by --include patterns:
+
+   • <none>
+
+  Skipped by --exclude patterns:
+
+   • <none>
+
+  Files that couldn't be accessed:
+
+   • <none>
+
+  Skipped by limiting to files smaller than 1000000 bytes:
+  (Adjust with the --max-target-bytes flag)
+
+   • <none>
+
+  Partially analyzed due to parsing or internal Semgrep errors
+
+   • <none>
+
+
+
+┌──────────────┐
+│ Scan Summary │
+└──────────────┘
+✅ Scan completed successfully.
+ • Findings: 0 (0 blocking)
+ • Rules run: 151
+ • Targets scanned: 1
+ • Parsed lines: ~100.0%
+ • No ignore information available
+Ran 151 rules on 1 file: 0 findings.
+Not sending pseudonymous metrics since metrics are configured to OFF, registry usage is False, and login status is False

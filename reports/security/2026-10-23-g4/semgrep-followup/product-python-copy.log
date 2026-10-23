@@ -1,0 +1,415 @@
+[00.27][DEBUG](default): Skipping logs for: [networking.http, cohttp.lwt.client, cohttp.lwt.io, conduit_lwt_server, semgrep.engine, semgrep.tainting, semgrep.fixing, semgrep.printing, semgrep.reporting, semgrep.matching, semgrep.parsing, parser_move_on_sui, parser_hack, parser_lua, parser_scala, parser_cpp, semgrep.targeting, semgrep.analyzing, semgrep.prefiltering, ojsonnet.eval, tree-sitter, semgrep.naming, semgrep, parser_javascript, aliengrep, ast_generic, semgrep.spacegrep, lib_parsing, git_wrapper, git.value, git.tree, git.stream, git.blob, paths, process_limits, debug_trace, commons.pcre, commons.textedit, commons, parallelism, telemetry, mirage-crypto-rng.unix, ca-certs, handshake, tls.config, tls.tracing, x509.validation, x509.decoding, mirage-crypto-rng-entropy, cohttp.eio.io, cohttp.eio, cohttp.client, bos]
+[00.27][DEBUG](default): Showing logs for: [application]
+[00.27][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.27][DEBUG](default):
+If you want to show the logs of a particular library
+(e.g., the semgrep targeting library), you'll need to adjust the
+SEMGREP_LOG_SRCS environment variable as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" semgrep ... --debug
+
+or for osemgrep you can use it with any log level as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" ./bin/osemgrep ... --verbose
+
+You can see the list of possible libraries above in this log as in
+...
+[00.04][DEBUG](default): Skipping logs for semgrep.targeting
+...
+[00.04][DEBUG](default): Skipping logs for commons.pcre
+...
+For more information, See
+https://www.notion.so/semgrep/Logging-in-semgrep-semgrep-core-osemgrep-67c9046fa53744728d9d725a5a244f64
+
+[00.27][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.27][DEBUG](default): Logging setup for osemgrep: color=Console.Auto level=debug
+[00.27][DEBUG](default): Executed as: osemgrep scan --oss-only --disable-version-check --no-trace --metrics off --jobs 1 --debug --exclude **/__pycache__/** --json --output /out/product-python-copy.json --config /tmp/rules/python.yml /tmp/src/backend/app /tmp/src/frontend/src
+semgrep version 1.180.0
+Failed to get project url from 'git ls-remote': Command failed with exit code: 128
+-----
+Command failed with output:
+fatal: No remote configured to list refs from.
+
+
+Failed to run 'git ls-remote --get-url'. Possible reasons:
+
+- the git binary is not available
+- the current working directory is not a git repository
+- the baseline commit is not a parent of the current commit
+    (if you are running through semgrep-app, check if you are setting `SEMGREP_BRANCH` or `SEMGREP_BASELINE_COMMIT` properly)
+- the current working directory is not marked as safe
+    (fix with `git config --global --add safe.directory $(pwd)`)
+
+Try running the command yourself to debug the issue.
+Loading local config from /tmp/rules/python.yml
+Done loading local config from /tmp/rules/python.yml
+Parsing /tmp/rules/python.yml as YAML
+Saved rules to /tmp/semgrep-kqjfcclk.yaml
+RPC completed in: 2.042816s
+[00.41][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.41][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.41][DEBUG](default): Setting memory policy to balanced
+[00.42][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+semgrep-core validation response: error=None
+semgrep-core validation succeeded
+RPC validation succeeded
+loaded 1 configs in 29.015994548797607 with 0 errors and 0 missed rules
+running 151 rules from 1 config /tmp/rules/python.yml_0
+Rules:
+<SKIPPED DATA (too many entries; use --max-log-list-entries)>
+get_targets request: ScanningRoots(root_paths=[Fpath(value='/tmp/src/frontend/src')], targeting_conf=TargetingConf(exclude=['**/__pycache__/**'], max_target_bytes=1000000, respect_gitignore=True, respect_semgrepignore_files=True, always_select_explicit_targets=True, explicit_targets=[], force_novcs_project=False, exclude_minified_files=False, include_=None, extra_gitignore_patterns_to_exclude_git_untracked_files=[], semgrepignore_filename=None, force_project_root=None, include_binary_files=False, baseline_commit=None))
+RPC completed in: 1.804752s
+[01.10][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[01.10][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[01.10][DEBUG](default): Setting memory policy to balanced
+[01.10][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+get_targets response:
+  - target paths: Fppath(fpath=Fpath(value='/tmp/src/frontend/src/api/client.test.ts'), ppath=Ppath(value='/api/client.test.ts')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/api/client.ts'), ppath=Ppath(value='/api/client.ts')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/api/schema.d.ts'), ppath=Ppath(value='/api/schema.d.ts')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/app/AppShell.tsx'), ppath=Ppath(value='/app/AppShell.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/app/auth.tsx'), ppath=Ppath(value='/app/auth.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/app/feedback.tsx'), ppath=Ppath(value='/app/feedback.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/app/useLoad.ts'), ppath=Ppath(value='/app/useLoad.ts')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/components/Field.test.tsx'), ppath=Ppath(value='/components/Field.test.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/components/Field.tsx'), ppath=Ppath(value='/components/Field.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/components/Modal.tsx'), ppath=Ppath(value='/components/Modal.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/components/Pagination.tsx'), ppath=Ppath(value='/components/Pagination.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/components/Truncate.tsx'), ppath=Ppath(value='/components/Truncate.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/components/layout.tsx'), ppath=Ppath(value='/components/layout.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/components/ui.tsx'), ppath=Ppath(value='/components/ui.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/catalog/CapabilityDetailPage.tsx'), ppath=Ppath(value='/features/catalog/CapabilityDetailPage.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/catalog/CatalogListPage.tsx'), ppath=Ppath(value='/features/catalog/CatalogListPage.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/catalog/labels.ts'), ppath=Ppath(value='/features/catalog/labels.ts')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/documents/DocumentsPanel.test.ts'), ppath=Ppath(value='/features/documents/DocumentsPanel.test.ts')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/documents/DocumentsPanel.tsx'), ppath=Ppath(value='/features/documents/DocumentsPanel.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/login/LoginPage.tsx'), ppath=Ppath(value='/features/login/LoginPage.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/projects/CreateProjectDialog.tsx'), ppath=Ppath(value='/features/projects/CreateProjectDialog.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/projects/ProjectDetailPage.tsx'), ppath=Ppath(value='/features/projects/ProjectDetailPage.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/projects/ProjectListPage.tsx'), ppath=Ppath(value='/features/projects/ProjectListPage.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/reviews/ReviewListPage.tsx'), ppath=Ppath(value='/features/reviews/ReviewListPage.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/reviews/ReviewPage.tsx'), ppath=Ppath(value='/features/reviews/ReviewPage.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/runs/RunDetailPage.tsx'), ppath=Ppath(value='/features/runs/RunDetailPage.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/runs/RunsPanel.tsx'), ppath=Ppath(value='/features/runs/RunsPanel.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/runs/labels.tsx'), ppath=Ppath(value='/features/runs/labels.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/features/solutions/SolutionsPanel.tsx'), ppath=Ppath(value='/features/solutions/SolutionsPanel.tsx')), Fppath(fpath=Fpath(value='/tmp/src/frontend/src/lib/format.ts'), ppath=Ppath(value='/lib/format.ts')) (and 4 others)
+get_targets request: ScanningRoots(root_paths=[Fpath(value='/tmp/src/backend/app')], targeting_conf=TargetingConf(exclude=['**/__pycache__/**'], max_target_bytes=1000000, respect_gitignore=True, respect_semgrepignore_files=True, always_select_explicit_targets=True, explicit_targets=[], force_novcs_project=False, exclude_minified_files=False, include_=None, extra_gitignore_patterns_to_exclude_git_untracked_files=[], semgrepignore_filename=None, force_project_root=None, include_binary_files=False, baseline_commit=None))
+RPC completed in: 1.544826s
+[00.76][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.76][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.76][DEBUG](default): Setting memory policy to balanced
+[00.76][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+get_targets response:
+  - target paths: Fppath(fpath=Fpath(value='/tmp/src/backend/app/__init__.py'), ppath=Ppath(value='/__init__.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/adapters/__init__.py'), ppath=Ppath(value='/adapters/__init__.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/adapters/base.py'), ppath=Ppath(value='/adapters/base.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/adapters/llm.py'), ppath=Ppath(value='/adapters/llm.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/adapters/local.py'), ppath=Ppath(value='/adapters/local.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/adapters/mcp.py'), ppath=Ppath(value='/adapters/mcp.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/adapters/resources.py'), ppath=Ppath(value='/adapters/resources.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/admin.py'), ppath=Ppath(value='/admin.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/api/__init__.py'), ppath=Ppath(value='/api/__init__.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/api/catalog.py'), ppath=Ppath(value='/api/catalog.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/api/deps.py'), ppath=Ppath(value='/api/deps.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/api/documents.py'), ppath=Ppath(value='/api/documents.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/api/models.py'), ppath=Ppath(value='/api/models.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/api/projects.py'), ppath=Ppath(value='/api/projects.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/api/runs.py'), ppath=Ppath(value='/api/runs.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/api/session.py'), ppath=Ppath(value='/api/session.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/api/solutions.py'), ppath=Ppath(value='/api/solutions.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/api/system.py'), ppath=Ppath(value='/api/system.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/auth/__init__.py'), ppath=Ppath(value='/auth/__init__.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/auth/models.py'), ppath=Ppath(value='/auth/models.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/auth/service.py'), ppath=Ppath(value='/auth/service.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/capabilities/__init__.py'), ppath=Ppath(value='/capabilities/__init__.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/capabilities/document_parser.py'), ppath=Ppath(value='/capabilities/document_parser.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/capabilities/evidence.py'), ppath=Ppath(value='/capabilities/evidence.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/capabilities/mock_extractor.py'), ppath=Ppath(value='/capabilities/mock_extractor.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/capabilities/ocr.py'), ppath=Ppath(value='/capabilities/ocr.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/capabilities/pdf_text.py'), ppath=Ppath(value='/capabilities/pdf_text.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/capabilities/result_exporter.py'), ppath=Ppath(value='/capabilities/result_exporter.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/capabilities/rule_extractor.py'), ppath=Ppath(value='/capabilities/rule_extractor.py')), Fppath(fpath=Fpath(value='/tmp/src/backend/app/capabilities/rule_validator.py'), ppath=Ppath(value='/capabilities/rule_validator.py')) (and 34 others)
+  - skipped targets: SkippedTarget(path=Fpath(value='/tmp/src/backend/app/__pycache__/__init__.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/__pycache__/admin.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/__pycache__/main.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/__pycache__/mcp_server.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/adapters/__pycache__/__init__.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/adapters/__pycache__/base.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/adapters/__pycache__/llm.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/adapters/__pycache__/local.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/adapters/__pycache__/mcp.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/adapters/__pycache__/resources.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/api/__pycache__/__init__.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/api/__pycache__/catalog.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/api/__pycache__/deps.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/api/__pycache__/documents.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/api/__pycache__/models.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/api/__pycache__/projects.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/api/__pycache__/runs.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/api/__pycache__/session.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/api/__pycache__/solutions.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/api/__pycache__/system.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/auth/__pycache__/__init__.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/auth/__pycache__/models.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/auth/__pycache__/service.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/capabilities/__pycache__/__init__.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/capabilities/__pycache__/document_parser.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/capabilities/__pycache__/evidence.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/capabilities/__pycache__/mock_extractor.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/capabilities/__pycache__/ocr.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/capabilities/__pycache__/pdf_text.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None), SkippedTarget(path=Fpath(value='/tmp/src/backend/app/capabilities/__pycache__/result_exporter.cpython-312.pyc'), reason=SkipReason(value=CliExcludeFlagsMatch()), details='excluded by --include/--exclude, gitignore, or semgrepignore', rule_id=None) (and 32 others)
+
+
+┌─────────────┐
+│ Scan Status │
+└─────────────┘
+  Scanning 98 files tracked by git with 151 Code rules:
+  Scanning 63 files with 151 python rules.
+Passing whole rules directly to semgrep_core
+pyro-caml will not be used for profiling. Reason(s): profile is not enabled.
+Passing rules to semgrep-core in 1 shards
+Running Semgrep engine with command:
+/usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core -json -rules /tmp/tmp1s2h67gk.json -j 1 -targets /tmp/tmpnbzm378i -timeout 5 -timeout_threshold 3 -max_memory 0 -fast -debug
+[00.25][DEBUG](default): Skipping logs for: [networking.http, cohttp.lwt.client, cohttp.lwt.io, conduit_lwt_server, semgrep.engine, semgrep.tainting, semgrep.fixing, semgrep.printing, semgrep.reporting, semgrep.matching, semgrep.parsing, parser_move_on_sui, parser_hack, parser_lua, parser_scala, parser_cpp, semgrep.targeting, semgrep.analyzing, semgrep.prefiltering, ojsonnet.eval, tree-sitter, semgrep.naming, semgrep, parser_javascript, aliengrep, ast_generic, semgrep.spacegrep, lib_parsing, git_wrapper, git.value, git.tree, git.stream, git.blob, paths, process_limits, debug_trace, commons.pcre, commons.textedit, commons, parallelism, telemetry, mirage-crypto-rng.unix, ca-certs, handshake, tls.config, tls.tracing, x509.validation, x509.decoding, mirage-crypto-rng-entropy, cohttp.eio.io, cohttp.eio, cohttp.client, bos]
+[00.25][DEBUG](default): Showing logs for: [application]
+[00.25][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.25][DEBUG](default):
+If you want to show the logs of a particular library
+(e.g., the semgrep targeting library), you'll need to adjust the
+SEMGREP_LOG_SRCS environment variable as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" semgrep ... --debug
+
+or for osemgrep you can use it with any log level as in
+
+  SEMGREP_LOG_SRCS="semgrep.targeting" ./bin/osemgrep ... --verbose
+
+You can see the list of possible libraries above in this log as in
+...
+[00.04][DEBUG](default): Skipping logs for semgrep.targeting
+...
+[00.04][DEBUG](default): Skipping logs for commons.pcre
+...
+For more information, See
+https://www.notion.so/semgrep/Logging-in-semgrep-semgrep-core-osemgrep-67c9046fa53744728d9d725a5a244f64
+
+[00.25][DEBUG](default): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[00.25][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core -json -rules /tmp/tmp1s2h67gk.json -j 1 -targets /tmp/tmpnbzm378i -timeout 5 -timeout_threshold 3 -max_memory 0 -fast -debug
+[00.25][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.25][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+[00.34][INFO]: Parsing rules in /tmp/tmp1s2h67gk.json
+[00.79][DEBUG](default): read targets from file: /tmp/tmpnbzm378i
+[00.80][DEBUG](default): Core_scan.scan_exn { Core_scan_config.rule_source = Rule_files (/tmp/tmp1s2h67gk.json);
+  target_source = (Core_scan_config.Target_file /tmp/tmpnbzm378i);
+  output_format = (Core_scan_config.Json true); report_time = false;
+  matching_explanations = false; strict = false; respect_rule_paths = true;
+  file_match_hook = None; timeout = 5.; timeout_threshold = 3;
+  max_memory_mb = 0; max_match_per_file = 10000;
+  num_jobs = (Core_scan_config.Force 1); filter_irrelevant_rules = true;
+  telemetry = None; symbol_analysis = false; fips_mode = false;
+  use_parmap = false;
+  par_conf =
+  (Parallelism_config.Eio_executor
+     { Parallelism_config.env = <opaque>; base = <opaque> })
+  }
+[00.80][DEBUG](default): core scan: 151 valid rules, 0 invalid rules
+[00.80][DEBUG](default): read targets from file: /tmp/tmpnbzm378i
+[00.81][DEBUG](default): Mapping 151 elements across 1 domains (151 chunks of <= 1)
+[01.00][INFO]: scan: processing 63 files (skipping 0), with 151 rules (skipping 0 )
+[01.00][DEBUG](default): Mapping 63 elements across 1 domains (63 chunks of <= 1)
+[01.01][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/capabilities/document_parser.py
+[01.14][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/capabilities/document_parser.py (with lang Python)
+[01.23][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/executor/models.py
+[01.45][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/executor/models.py (with lang Python)
+[01.75][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/core/config.py
+[01.91][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/core/config.py (with lang Python)
+[01.97][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/executor/handlers.py
+[02.09][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/executor/handlers.py (with lang Python)
+[02.10][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/adapters/llm.py
+[02.37][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/adapters/llm.py (with lang Python)
+[02.56][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/composer/validation.py
+[03.18][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/composer/validation.py (with lang Python)
+[03.46][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/auth/models.py
+[03.53][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/auth/models.py (with lang Python)
+[03.55][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/api/session.py
+[03.70][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/api/session.py (with lang Python)
+[03.82][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/solution/__init__.py
+[03.83][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/solution/__init__.py (with lang Python)
+[03.83][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/api/deps.py
+[04.05][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/api/deps.py (with lang Python)
+[04.47][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/core/__init__.py
+[04.48][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/core/__init__.py (with lang Python)
+[04.48][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/admin.py
+[04.66][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/admin.py (with lang Python)
+[04.69][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/core/errors.py
+[04.92][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/core/errors.py (with lang Python)
+[05.10][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/api/runs.py
+[06.07][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/api/runs.py (with lang Python)
+[07.63][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/api/solutions.py
+[08.21][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/api/solutions.py (with lang Python)
+[08.83][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/executor/events.py
+[09.03][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/executor/events.py (with lang Python)
+[09.10][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/adapters/mcp.py
+[09.34][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/adapters/mcp.py (with lang Python)
+[09.38][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/documents/models.py
+[09.47][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/documents/models.py (with lang Python)
+[09.49][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/executor/__init__.py
+[09.51][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/executor/__init__.py (with lang Python)
+[09.51][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/catalog/registry.py
+[09.57][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/catalog/registry.py (with lang Python)
+[09.58][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/executor/worker.py
+[09.63][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/executor/worker.py (with lang Python)
+[09.64][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/capabilities/pdf_text.py
+[09.72][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/capabilities/pdf_text.py (with lang Python)
+[09.73][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/core/middleware.py
+[10.16][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/core/middleware.py (with lang Python)
+[10.50][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/api/catalog.py
+[11.01][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/api/catalog.py (with lang Python)
+[11.47][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/evaluation/offline.py
+[12.49][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/evaluation/offline.py (with lang Python)
+[12.89][WARNING]: Fixpoint timeout while performing taint analysis at /tmp/src/backend/app/evaluation/offline.py:125:4 [rules: 1, first: tmp.rules.python.boto3.security.hardcoded-token.hardcoded-token]
+[12.94][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/api/projects.py
+[13.64][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/api/projects.py (with lang Python)
+[14.26][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/adapters/resources.py
+[14.50][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/adapters/resources.py (with lang Python)
+[14.53][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/adapters/local.py
+[14.80][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/adapters/local.py (with lang Python)
+[14.85][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/solution/models.py
+[14.97][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/solution/models.py (with lang Python)
+[14.99][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/documents/__init__.py
+[15.01][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/documents/__init__.py (with lang Python)
+[15.02][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/executor/engine.py
+[16.64][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/executor/engine.py (with lang Python)
+[19.75][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/auth/__init__.py
+[19.75][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/auth/__init__.py (with lang Python)
+[19.75][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/capabilities/rule_validator.py
+[20.21][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/capabilities/rule_validator.py (with lang Python)
+[20.30][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/capabilities/values.py
+[20.52][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/capabilities/values.py (with lang Python)
+[20.56][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/documents/storage.py
+[20.81][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/documents/storage.py (with lang Python)
+[20.86][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/catalog/validation.py
+[21.13][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/catalog/validation.py (with lang Python)
+[21.21][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/adapters/__init__.py
+[21.21][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/adapters/__init__.py (with lang Python)
+[21.21][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/capabilities/__init__.py
+[21.21][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/capabilities/__init__.py (with lang Python)
+[21.21][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/project/models.py
+[21.30][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/project/models.py (with lang Python)
+[21.33][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/catalog/models.py
+[21.44][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/catalog/models.py (with lang Python)
+[21.46][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/evaluation/score_outputs.py
+[21.82][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/evaluation/score_outputs.py (with lang Python)
+[22.09][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/documents/inspect.py
+[22.24][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/documents/inspect.py (with lang Python)
+[22.26][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/api/system.py
+[22.30][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/api/system.py (with lang Python)
+[22.35][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/capabilities/ocr.py
+[22.49][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/capabilities/ocr.py (with lang Python)
+[22.53][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/project/__init__.py
+[22.53][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/project/__init__.py (with lang Python)
+[22.53][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/catalog/__init__.py
+[22.54][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/catalog/__init__.py (with lang Python)
+[22.54][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/capabilities/mock_extractor.py
+[22.68][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/capabilities/mock_extractor.py (with lang Python)
+[22.71][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/evaluation/__init__.py
+[22.72][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/evaluation/__init__.py (with lang Python)
+[22.72][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/mcp_server.py
+[22.82][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/mcp_server.py (with lang Python)
+[22.85][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/auth/service.py
+[22.99][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/auth/service.py (with lang Python)
+[23.00][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/main.py
+[23.07][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/main.py (with lang Python)
+[23.14][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/api/documents.py
+[23.35][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/api/documents.py (with lang Python)
+[23.72][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/__init__.py
+[23.72][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/__init__.py (with lang Python)
+[23.72][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/api/models.py
+[23.81][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/api/models.py (with lang Python)
+[23.83][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/adapters/base.py
+[23.93][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/adapters/base.py (with lang Python)
+[23.95][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/core/db.py
+[23.98][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/core/db.py (with lang Python)
+[23.99][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/api/__init__.py
+[23.99][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/api/__init__.py (with lang Python)
+[23.99][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/capabilities/rule_extractor.py
+[24.40][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/capabilities/rule_extractor.py (with lang Python)
+[24.51][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/capabilities/evidence.py
+[24.71][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/capabilities/evidence.py (with lang Python)
+[24.75][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/composer/__init__.py
+[24.75][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/composer/__init__.py (with lang Python)
+[24.75][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/core/security.py
+[24.86][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/core/security.py (with lang Python)
+[24.88][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/catalog/service.py
+[25.07][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/catalog/service.py (with lang Python)
+[25.10][DEBUG](default): Core_scan analyzing /tmp/src/backend/app/capabilities/result_exporter.py
+[25.26][DEBUG](default): Parsing (and naming) /tmp/src/backend/app/capabilities/result_exporter.py (with lang Python)
+[25.33][DEBUG](default): scan: found 0 matches, 0 errors (scanned 63 targets, skipped 0)
+[25.34][DEBUG](default): size of returned JSON string: 19668
+--- semgrep-core stderr ---
+<semgrep-core stderr not captured, should be printed above>
+--- end semgrep-core stderr ---
+semgrep ran in 0:00:26.088709 on 63 files
+findings summary: 0 warning, 0 error, 0 info
+SCA findings adjustment: No SCA rules to adjust
+[00.92][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.92][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.92][DEBUG](default): Setting memory policy to balanced
+[00.92][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+Getting API token from settings file
+No API token found in settings file
+RPC completed in: 0.785594s
+[00.42][INFO]: Executed as: /usr/lib/python3.12/site-packages/semgrep/bin/semgrep-core-proprietary -rpc -debug -j 1
+[00.42][INFO]: Version: 1.180.0 (2d0a15ae8f)
+[00.42][DEBUG](default): Setting memory policy to balanced
+[00.42][INFO]: Proxy was configured with { Proxy.http_proxy = None;
+                                           https_proxy = None;
+                                           all_proxy = None; no_proxy = None;
+                                           credentials = <opaque> }
+
+========================================
+Files skipped:
+========================================
+
+  Always skipped by Semgrep:
+
+   • <none>
+
+  Skipped by .gitignore:
+  (Disable by passing --no-git-ignore)
+
+   • <all files not listed by `git ls-files` were skipped>
+
+  Skipped by .semgrepignore:
+  - https://semgrep.dev/docs/ignoring-files-folders-code/#understand-semgrep-defaults
+
+   • <none>
+
+  Skipped by --include patterns:
+
+   • <none>
+
+  Skipped by --exclude patterns:
+
+   • /tmp/src/backend/app/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/__pycache__/admin.cpython-312.pyc
+   • /tmp/src/backend/app/__pycache__/main.cpython-312.pyc
+   • /tmp/src/backend/app/__pycache__/mcp_server.cpython-312.pyc
+   • /tmp/src/backend/app/adapters/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/adapters/__pycache__/base.cpython-312.pyc
+   • /tmp/src/backend/app/adapters/__pycache__/llm.cpython-312.pyc
+   • /tmp/src/backend/app/adapters/__pycache__/local.cpython-312.pyc
+   • /tmp/src/backend/app/adapters/__pycache__/mcp.cpython-312.pyc
+   • /tmp/src/backend/app/adapters/__pycache__/resources.cpython-312.pyc
+   • /tmp/src/backend/app/api/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/api/__pycache__/catalog.cpython-312.pyc
+   • /tmp/src/backend/app/api/__pycache__/deps.cpython-312.pyc
+   • /tmp/src/backend/app/api/__pycache__/documents.cpython-312.pyc
+   • /tmp/src/backend/app/api/__pycache__/models.cpython-312.pyc
+   • /tmp/src/backend/app/api/__pycache__/projects.cpython-312.pyc
+   • /tmp/src/backend/app/api/__pycache__/runs.cpython-312.pyc
+   • /tmp/src/backend/app/api/__pycache__/session.cpython-312.pyc
+   • /tmp/src/backend/app/api/__pycache__/solutions.cpython-312.pyc
+   • /tmp/src/backend/app/api/__pycache__/system.cpython-312.pyc
+   • /tmp/src/backend/app/auth/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/auth/__pycache__/models.cpython-312.pyc
+   • /tmp/src/backend/app/auth/__pycache__/service.cpython-312.pyc
+   • /tmp/src/backend/app/capabilities/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/capabilities/__pycache__/document_parser.cpython-312.pyc
+   • /tmp/src/backend/app/capabilities/__pycache__/evidence.cpython-312.pyc
+   • /tmp/src/backend/app/capabilities/__pycache__/mock_extractor.cpython-312.pyc
+   • /tmp/src/backend/app/capabilities/__pycache__/ocr.cpython-312.pyc
+   • /tmp/src/backend/app/capabilities/__pycache__/pdf_text.cpython-312.pyc
+   • /tmp/src/backend/app/capabilities/__pycache__/result_exporter.cpython-312.pyc
+   • /tmp/src/backend/app/capabilities/__pycache__/rule_extractor.cpython-312.pyc
+   • /tmp/src/backend/app/capabilities/__pycache__/rule_validator.cpython-312.pyc
+   • /tmp/src/backend/app/capabilities/__pycache__/values.cpython-312.pyc
+   • /tmp/src/backend/app/catalog/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/catalog/__pycache__/models.cpython-312.pyc
+   • /tmp/src/backend/app/catalog/__pycache__/registry.cpython-312.pyc
+   • /tmp/src/backend/app/catalog/__pycache__/service.cpython-312.pyc
+   • /tmp/src/backend/app/catalog/__pycache__/validation.cpython-312.pyc
+   • /tmp/src/backend/app/composer/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/composer/__pycache__/validation.cpython-312.pyc
+   • /tmp/src/backend/app/core/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/core/__pycache__/config.cpython-312.pyc
+   • /tmp/src/backend/app/core/__pycache__/db.cpython-312.pyc
+   • /tmp/src/backend/app/core/__pycache__/errors.cpython-312.pyc
+   • /tmp/src/backend/app/core/__pycache__/middleware.cpython-312.pyc
+   • /tmp/src/backend/app/core/__pycache__/security.cpython-312.pyc
+   • /tmp/src/backend/app/documents/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/documents/__pycache__/inspect.cpython-312.pyc
+   • /tmp/src/backend/app/documents/__pycache__/models.cpython-312.pyc
+   • /tmp/src/backend/app/documents/__pycache__/storage.cpython-312.pyc
+   • /tmp/src/backend/app/evaluation/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/evaluation/__pycache__/offline.cpython-312.pyc
+   • /tmp/src/backend/app/evaluation/__pycache__/score_outputs.cpython-312.pyc
+   • /tmp/src/backend/app/executor/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/executor/__pycache__/engine.cpython-312.pyc
+   • /tmp/src/backend/app/executor/__pycache__/events.cpython-312.pyc
+   • /tmp/src/backend/app/executor/__pycache__/handlers.cpython-312.pyc
+   • /tmp/src/backend/app/executor/__pycache__/models.cpython-312.pyc
+   • /tmp/src/backend/app/project/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/project/__pycache__/models.cpython-312.pyc
+   • /tmp/src/backend/app/solution/__pycache__/__init__.cpython-312.pyc
+   • /tmp/src/backend/app/solution/__pycache__/models.cpython-312.pyc
+
+  Files that couldn't be accessed:
+
+   • <none>
+
+  Skipped by limiting to files smaller than 1000000 bytes:
+  (Adjust with the --max-target-bytes flag)
+
+   • <none>
+
+  Partially analyzed due to parsing or internal Semgrep errors
+
+   • <none>
+
+
+
+┌──────────────┐
+│ Scan Summary │
+└──────────────┘
+✅ Scan completed successfully.
+ • Findings: 0 (0 blocking)
+ • Rules run: 151
+ • Targets scanned: 63
+ • Parsed lines: ~100.0%
+ • Scan skipped:
+   ◦ Matching --exclude patterns: 62
+ • For a detailed list of skipped files and lines, run semgrep with the --verbose flag
+Ran 151 rules on 63 files: 0 findings.
+Not sending pseudonymous metrics since metrics are configured to OFF, registry usage is False, and login status is False

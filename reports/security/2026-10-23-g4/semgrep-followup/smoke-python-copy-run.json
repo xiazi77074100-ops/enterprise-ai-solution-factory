@@ -1,0 +1,6 @@
+{
+  "label": "smoke-python-copy",
+  "exit": 0,
+  "wall_seconds": 35.1414905,
+  "scan_limit_seconds": 40
+}

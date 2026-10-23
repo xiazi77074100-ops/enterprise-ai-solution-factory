@@ -1,0 +1,6 @@
+{
+  "label": "smoke-python-direct",
+  "exit": 143,
+  "wall_seconds": 44.9365439,
+  "scan_limit_seconds": 40
+}
