@@ -23,16 +23,20 @@
 
 ## 変更要求（共有処理・製品未適用）
 
-[proposed-fix.patch](proposed-fix.patch) は、例外オブジェクトをログへ渡すのをやめ、固定メッセージ・例外型・trace_idだけを記録する最小差分。新しい依存・フィルタ・正規表現は不要。完全なスタックトレースを失う代わりに、型と応答と同じtrace_idで追跡する。
+[proposed-fix.patch](proposed-fix.patch) は、例外オブジェクトをログへ渡すのをやめ、固定の書式に例外型・trace_idだけを記録する最小差分。構造化フィールドにも同じ値を保持し、標準のテキスト表示でも確認できる。新しい依存・フィルタ・正規表現は不要。完全なスタックトレースを失う代わりに、型と応答と同じtrace_idで追跡する。
 
 ```python
 logger.error(
-    "unhandled exception",
+    "unhandled exception: %s (trace_id=%s)",
+    type(exc).__name__,
+    trace_id_var.get(),
     extra={"error_type": type(exc).__name__, "trace_id": trace_id_var.get()},
 )
 ```
 
 `git apply --check` は0。この差分を今回の証跡ディレクトリ直下の一時コピーにだけ適用し、[verify_candidate.ps1](verify_candidate.ps1) で同じ診断を実行して0を確認した。コピーの削除前に絶対パスが証跡ディレクトリ内であることを確認し、元の環境変数を復元した。製品・contracts・frontendの差分は0。
+
+補足：初期案はextraだけに型・trace_idを保持しており、混入の防止と構造化フィールドの検査は通ったが、標準表示にはtrace_idが出なかった。表示の検査を追加するとexit 1となった結果を `candidate-extra-only-result.json`・`candidate-extra-only-logs.txt` に保存。最終案は通常表示にも型・trace_idが出ることを加えて3ケースともexit 0で確認した。
 
 共有処理への適用は、[並行作業規則](../../../../easf_package/prompts/01_CODEX_PARALLEL.md)の「Never modify shared API schemas, DB migrations, or cross-cutting modules without explicit integration-owner approval.」に従い、統合担当への変更要求として残す。[easf-phase-gate](../../../../.agents/skills/easf-phase-gate/SKILL.md) の停止条件「セキュリティの高・中の指摘を直せない。」にも該当するため、別タスク・次のゲートへは進めない。修正適用の承認後は、この3ケースを本体で再実行し、backend全体のruff・mypy・bandit・pytestと契約テストを確認する。
 

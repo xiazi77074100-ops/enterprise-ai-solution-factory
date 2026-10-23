@@ -1,8 +1,8 @@
 === TEST ONLY plain ===
-ERROR unhandled exception
+ERROR unhandled exception: RuntimeError (trace_id=cde31f784a3348d793cd8b50636bf3bf)
 
 === TEST ONLY chained ===
-ERROR unhandled exception
+ERROR unhandled exception: RuntimeError (trace_id=703571d65c9d4eb896d8f478198c3972)
 
 === TEST ONLY database ===
-ERROR unhandled exception
+ERROR unhandled exception: StatementError (trace_id=57af53ac89274461bccd9a45bf1eb324)

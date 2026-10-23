@@ -117,6 +117,8 @@ async def check(
         "error_type_matches_expected": all(
             getattr(r, "error_type", None) == expected_type for r in capture.records
         ),
+        "error_type_visible_in_formatted_log": expected_type in text,
+        "trace_id_visible_in_formatted_log": parsed["trace_id"] in text,
         "exception_attached": any(r.exc_info is not None for r in capture.records),
         "structured_trace_id_present": all(
             hasattr(r, "trace_id") for r in capture.records
@@ -157,6 +159,8 @@ async def main(label: str) -> int:
         or row["response_code"] != "internal_error"
         or row["record_count"] != 1
         or not row["error_type_matches_expected"]
+        or not row["error_type_visible_in_formatted_log"]
+        or not row["trace_id_visible_in_formatted_log"]
         or not row["structured_trace_matches_response"]
         or not row["trace_context_restored"]
         for row in rows

@@ -27,6 +27,8 @@ exit $LASTEXITCODE
 
 このスクリプトは証跡ディレクトリ内の一時コピーにだけ差分を適用する。製品・実DB・外部ネットワークには書き込まない。候補の検証は作成中のPython補助でも0を確認し、最終的な再現手順はWindows標準のPowerShellに揃えて再実行した。修正案適用後に例外型の保持も追加確認し、baseline 1 / candidate 0を再確認した。
 
+標準フォーマッタでの型・trace_idの表示を追加確認した際は、extraだけの旧候補でexit 1。`candidate-extra-only-*` にその結果を保存した。書式にも安全な型・trace_idを出す最終候補へ変更し、同じPowerShell手順でbaseline 1 / candidate 0、最終ruff・整形0を確認した。
+
 ```powershell
 backend/.venv/Scripts/ruff.exe check --select E,F,I,B,UP,S,SIM,N reports/security/2026-10-23-g4/error-log/check_logs.py
 backend/.venv/Scripts/ruff.exe format --check reports/security/2026-10-23-g4/error-log/check_logs.py
