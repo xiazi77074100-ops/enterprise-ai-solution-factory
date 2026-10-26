@@ -4,7 +4,7 @@
 |---|---|
 | 更新日 | 2026-10-26 |
 | 書いた人 | Claude Code（初稿）、Codex（人の指示でG3承認・現在地を更新） |
-| main の最新 | P5-03eのイメージ診断まで統合済み（a0fe780）、全件CI成功。P5-03fの専用HTTP診断は本変更 |
+| main の最新 | P5-03fのHTTP診断まで統合済み（5db3134）、全件CI成功。P5-03gの有界ZAP・CC向け変更要求は本変更 |
 
 新しいセッションは、まずこの文書、`AGENTS.md`、`TASK_STATUS.md`、`DECISIONS.md` の最後の数行を読む。
 
@@ -32,6 +32,8 @@
 - **P5-03e**：別タグで修正後イメージをビルドし、UID 10001・実装SHA一致・合成例外3ケース成功を確認。初回Trivyはmusl系2パッケージの同一CVEでexit 1、キャッシュなし再ビルドでr3へ更新後はOS・Pythonとも0件、exit 0。認証前ASGI7経路成功。HTTP/認証後DAST・DBは未実行。旧タグと既存DBは変更なし。`reports/security/2026-10-23-g4/runtime/report.md`。G4の証拠不足・他の残事項は維持。
 
 - **P5-03f**：専用の使い捨て `_test` DBと修正後APIで、認証・CSRF・他利用者の案件/文書拒否・dev PDF登録/取得等のHTTP24項目成功、exit 0。初回3失敗も保持。2ユーザーの無効化・専用資源の削除・既存コンテナID維持を確認。全面ZAP・実画面・業務実行・保持削除は未実行。`reports/security/2026-10-26-g4/http/report.md`。自己診断であり第三者診断ではない。G4の証拠不足と他の残事項は維持。
+
+- **P5-03g**：専用環境・外部接続できないZAP用内部ネットワークで、未認証OpenAPI診断exit 0（PASS 106）、認証付き受動診断exit 0（PASS 57）。中/高alert 0、ZAP履歴で案件一覧200＋Cookie存在を1件確認。全体4分・規則1分の上限と完了状態未採取のため、全面完了とは数えない。HTTP24項目・後始末も成功。`reports/security/2026-10-26-g4/zap/report.md`。並行Codexエージェントの読み取り調査から `reports/review/2026-10-26-version-change-request.md` を準備したが、CC承認・実装・RV-G3-001解消ではない。CLI接続先は不明との回答を受け、別Claude Codeプロセスは未起動。G4の証拠不足は維持。
 
 ## 2. できているもの
 

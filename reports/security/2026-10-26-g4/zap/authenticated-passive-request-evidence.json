@@ -1,0 +1,47 @@
+{
+  "message_limit": 10000,
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/projects",
+      "status": 200,
+      "cookie_present": true
+    },
+    {
+      "method": "GET",
+      "path": "",
+      "status": 0,
+      "cookie_present": true
+    },
+    {
+      "method": "GET",
+      "path": "/api",
+      "status": 0,
+      "cookie_present": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1",
+      "status": 0,
+      "cookie_present": true
+    },
+    {
+      "method": "GET",
+      "path": "/robots.txt",
+      "status": 404,
+      "cookie_present": true
+    },
+    {
+      "method": "GET",
+      "path": "/sitemap.xml",
+      "status": 404,
+      "cookie_present": true
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 404,
+      "cookie_present": true
+    }
+  ]
+}

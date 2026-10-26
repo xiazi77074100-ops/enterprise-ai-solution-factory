@@ -8,6 +8,7 @@ import socket
 import subprocess
 import time
 import uuid
+from collections.abc import Callable
 from pathlib import Path
 
 import httpx2 as httpx
@@ -16,18 +17,21 @@ OUT = Path(__file__).resolve().parent
 ROOT = OUT.parents[3]
 IMAGE = "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac"
 ORIGIN = "http://localhost:5173"
+SOURCE_COMMIT = "a0fe780dff1b63f9a1a6b128cdda9124421e8410"
+RESOURCE_PREFIX = "easf-p503f"
+DATABASE_NAME = "easf_p503f_test"
 
 
-def main() -> int:
+def main(after_checks: Callable[..., None] | None = None) -> int:
     suffix = uuid.uuid4().hex[:12]
-    network = f"easf-p503f-{suffix}"
+    network = f"{RESOURCE_PREFIX}-{suffix}"
     database = f"{network}-db"
     api = f"{network}-api"
-    db_name = "easf_p503f_test"
+    db_name = DATABASE_NAME
     owner_password, app_password, user_password, key = (
         secrets.token_hex(24) for _ in range(4)
     )
-    credentials = (owner_password, app_password, user_password, key)
+    credentials = [owner_password, app_password, user_password, key]
     env = {
         **os.environ,
         "POSTGRES_DB": db_name,
@@ -335,6 +339,15 @@ def main() -> int:
             response = owner.get("/health", headers={"Origin": "https://evil.example"})
             assert "access-control-allow-origin" not in response.headers
             checks.append({"check": "異なるOriginへのCORS許可なし", "passed": True})
+            if after_checks is not None:
+                after_checks(
+                    owner=owner,
+                    network=network,
+                    api=api,
+                    project=project,
+                    document=document,
+                    credentials=credentials,
+                )
             expect("ログアウト", owner.delete("/api/v1/session"), 204)
             expect("ログアウト後拒否", owner.get("/api/v1/projects"), 401)
             (OUT / "http-summary.json").write_text(
@@ -437,7 +450,7 @@ def main() -> int:
         ) as exc:
             cleanup.append({"verification_error_type": type(exc).__name__})
         output = {
-            "source_commit": "a0fe780dff1b63f9a1a6b128cdda9124421e8410",
+            "source_commit": SOURCE_COMMIT,
             "image": IMAGE,
             "failure": failure,
             "checks": checks,

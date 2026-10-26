@@ -1,0 +1,203 @@
+{
+  "results": [
+    {
+      "label": "unauthenticated",
+      "exit_code": 0,
+      "counts": {
+        "fail": 0,
+        "warn": 0,
+        "pass": 106
+      },
+      "authenticated_projects_200": 0,
+      "medium_or_high_alerts": []
+    },
+    {
+      "label": "authenticated-passive",
+      "exit_code": 0,
+      "counts": {
+        "fail": 0,
+        "warn": 0,
+        "pass": 57
+      },
+      "authenticated_projects_200": 1,
+      "medium_or_high_alerts": []
+    }
+  ],
+  "commands": [
+    {
+      "args": [
+        "network",
+        "create",
+        "--internal",
+        "easf-p503g-88dab8f3baf6-scan"
+      ],
+      "exit_code": 0,
+      "stdout": "99c43b1fe1d56a6eebcbdd68023068a3b52dbff3a7a588458726d5ca32ca3395\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "network",
+        "connect",
+        "easf-p503g-88dab8f3baf6-scan",
+        "easf-p503g-88dab8f3baf6-api"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "inspect",
+        "easf-p503g-88dab8f3baf6-api",
+        "--format",
+        "{{json .NetworkSettings.Networks}}"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"easf-p503g-88dab8f3baf6\":{\"IPAMConfig\":null,\"Links\":null,\"Aliases\":null,\"MacAddress\":\"9e:be:c6:ac:80:09\",\"DriverOpts\":null,\"GwPriority\":0,\"NetworkID\":\"88af29232de50d84b8121e6703a75900f72ff9bcde675e2dcb94d58c220f333b\",\"EndpointID\":\"08cf8f640316927079742639a225e79431d2d1f756324b8d8da44cfe7df5be5b\",\"Gateway\":\"172.22.0.1\",\"IPAddress\":\"172.22.0.3\",\"IPPrefixLen\":16,\"IPv6Gateway\":\"\",\"GlobalIPv6Address\":\"\",\"GlobalIPv6PrefixLen\":0,\"DNSNames\":[\"easf-p503g-88dab8f3baf6-api\",\"8ac8b81ab6e0\"]},\"easf-p503g-88dab8f3baf6-scan\":{\"IPAMConfig\":{},\"Links\":null,\"Aliases\":[],\"MacAddress\":\"56:fb:f9:b2:0c:c5\",\"DriverOpts\":{},\"GwPriority\":0,\"NetworkID\":\"99c43b1fe1d56a6eebcbdd68023068a3b52dbff3a7a588458726d5ca32ca3395\",\"EndpointID\":\"1e91df59c2c17ec95f9dbbcb17fcb4e010ae2bf49e91dabd526855f831cb4ee5\",\"Gateway\":\"\",\"IPAddress\":\"172.23.0.2\",\"IPPrefixLen\":16,\"IPv6Gateway\":\"\",\"GlobalIPv6Address\":\"\",\"GlobalIPv6PrefixLen\":0,\"DNSNames\":[\"easf-p503g-88dab8f3baf6-api\",\"8ac8b81ab6e0\"]}}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--name",
+        "easf-p503g-88dab8f3baf6-api-zap-unauthenticated",
+        "--network",
+        "easf-p503g-88dab8f3baf6-scan",
+        "--add-host",
+        "host.docker.internal:172.23.0.2",
+        "--memory",
+        "2g",
+        "--cpus",
+        "2",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "-v",
+        "C:\\Users\\chengwei\\AppData\\Local\\Temp\\easf-p503g-x3zco49_\\unauthenticated:/zap/wrk",
+        "ghcr.io/zaproxy/zaproxy:2.16.1",
+        "zap-api-scan.py",
+        "-t",
+        "/zap/wrk/openapi.json",
+        "-f",
+        "openapi",
+        "-T",
+        "3",
+        "-J",
+        "report.json",
+        "--hook",
+        "/zap/wrk/evidence_hook.py",
+        "-z",
+        "-configfile /zap/wrk/scan.properties"
+      ],
+      "exit_code": 0,
+      "stdout": "Total of 140 URLs\nPASS: Directory Browsing [0]\nPASS: Vulnerable JS Library (Powered by Retire.js) [10003]\nPASS: Cookie No HttpOnly Flag [10010]\nPASS: Cookie Without Secure Flag [10011]\nPASS: Re-examine Cache-control Directives [10015]\nPASS: Cross-Domain JavaScript Source File Inclusion [10017]\nPASS: Content-Type Header Missing [10019]\nPASS: Anti-clickjacking Header [10020]\nPASS: X-Content-Type-Options Header Missing [10021]\nPASS: Information Disclosure - Debug Error Messages [10023]\nPASS: Information Disclosure - Sensitive Information in URL [10024]\nPASS: Information Disclosure - Sensitive Information in HTTP Referrer Header [10025]\nPASS: Information Disclosure - Suspicious Comments [10027]\nPASS: Off-site Redirect [10028]\nPASS: Cookie Poisoning [10029]\nPASS: User Controllable Charset [10030]\nPASS: User Controllable HTML Element Attribute (Potential XSS) [10031]\nPASS: Viewstate [10032]\nPASS: Directory Browsing [10033]\nPASS: Heartbleed OpenSSL Vulnerability (Indicative) [10034]\nPASS: Strict-Transport-Security Header [10035]\nPASS: HTTP Server Response Header [10036]\nPASS: Server Leaks Information via \"X-Powered-By\" HTTP Response Header Field(s) [10037]\nPASS: Content Security Policy (CSP) Header Not Set [10038]\nPASS: X-Backend-Server Header Information Leak [10039]\nPASS: Secure Pages Include Mixed Content [10040]\nPASS: HTTP to HTTPS Insecure Transition in Form Post [10041]\nPASS: HTTPS to HTTP Insecure Transition in Form Post [10042]\nPASS: User Controllable JavaScript Event (XSS) [10043]\nPASS: Big Redirect Detected (Potential Sensitive Information Leak) [10044]\nPASS: Source Code Disclosure - /WEB-INF Folder [10045]\nPASS: Retrieved from Cache [10050]\nPASS: X-ChromeLogger-Data (XCOLD) Header Information Leak [10052]\nPASS: Cookie without SameSite Attribute [10054]\nPASS: CSP [10055]\nPASS: X-Debug-Token Information Leak [10056]\nPASS: Username Hash Found [10057]\nPASS: GET for POST [10058]\nPASS: X-AspNet-Version Response Header [10061]\nPASS: PII Disclosure [10062]\nPASS: Timestamp Disclosure [10096]\nPASS: Hash Disclosure [10097]\nPASS: Cross-Domain Misconfiguration [10098]\nPASS: User Agent Fuzzer [10104]\nPASS: Weak Authentication Method [10105]\nPASS: Reverse Tabnabbing [10108]\nPASS: Modern Web Application [10109]\nPASS: Authentication Request Identified [10111]\nPASS: Session Management Response Identified [10112]\nPASS: Verification Request Identified [10113]\nPASS: Script Served From Malicious Domain (polyfill) [10115]\nPASS: ZAP is Out of Date [10116]\nPASS: Absence of Anti-CSRF Tokens [10202]\nPASS: Private IP Disclosure [2]\nPASS: Heartbleed OpenSSL Vulnerability [20015]\nPASS: Source Code Disclosure - CVE-2012-1823 [20017]\nPASS: Remote Code Execution - CVE-2012-1823 [20018]\nPASS: External Redirect [20019]\nPASS: Session ID in URL Rewrite [3]\nPASS: Buffer Overflow [30001]\nPASS: Format String Error [30002]\nPASS: CRLF Injection [40003]\nPASS: Parameter Tampering [40008]\nPASS: Server Side Include [40009]\nPASS: Cross Site Scripting (Reflected) [40012]\nPASS: Cross Site Scripting (Persistent) [40014]\nPASS: Cross Site Scripting (Persistent) - Prime [40016]\nPASS: Cross Site Scripting (Persistent) - Spider [40017]\nPASS: SQL Injection [40018]\nPASS: SQL Injection - MySQL (Time Based) [40019]\nPASS: SQL Injection - Hypersonic SQL (Time Based) [40020]\nPASS: SQL Injection - Oracle (Time Based) [40021]\nPASS: SQL Injection - PostgreSQL (Time Based) [40022]\nPASS: SQL Injection - SQLite (Time Based) [40024]\nPASS: Cross Site Scripting (DOM Based) [40026]\nPASS: SQL Injection - MsSQL (Time Based) [40027]\nPASS: ELMAH Information Leak [40028]\nPASS: Trace.axd Information Leak [40029]\nPASS: .htaccess Information Leak [40032]\nPASS: .env Information Leak [40034]\nPASS: Hidden File Finder [40035]\nPASS: Spring Actuator Information Leak [40042]\nPASS: Log4Shell [40043]\nPASS: Spring4Shell [40045]\nPASS: Remote Code Execution (React2Shell) [40048]\nPASS: Script Active Scan Rules [50000]\nPASS: Script Passive Scan Rules [50001]\nPASS: Path Traversal [6]\nPASS: Remote File Inclusion [7]\nPASS: Insecure JSF ViewState [90001]\nPASS: Charset Mismatch [90011]\nPASS: XSLT Injection [90017]\nPASS: Server Side Code Injection [90019]\nPASS: Remote OS Command Injection [90020]\nPASS: XPath Injection [90021]\nPASS: Application Error Disclosure [90022]\nPASS: XML External Entity Attack [90023]\nPASS: Generic Padding Oracle [90024]\nPASS: SOAP Action Spoofing [90026]\nPASS: SOAP XML Injection [90029]\nPASS: WSDL File Detection [90030]\nPASS: Loosely Scoped Cookie [90033]\nPASS: Cloud Metadata Potentially Exposed [90034]\nPASS: Server Side Template Injection [90035]\nPASS: Server Side Template Injection (Blind) [90036]\nPASS: Remote OS Command Injection (Time Based) [90037]\nFAIL-NEW: 0\tFAIL-INPROG: 0\tWARN-NEW: 0\tWARN-INPROG: 0\tINFO: 0\tIGNORE: 0\tPASS: 106\n",
+      "stderr": "2026-10-26 01:33:00,982 Number of Imported URLs: 54\n"
+    },
+    {
+      "args": [
+        "rm",
+        "--force",
+        "easf-p503g-88dab8f3baf6-api-zap-unauthenticated"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Error response from daemon: No such container: easf-p503g-88dab8f3baf6-api-zap-unauthenticated\n"
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--name",
+        "easf-p503g-88dab8f3baf6-api-zap-authenticated-passive",
+        "--network",
+        "easf-p503g-88dab8f3baf6-scan",
+        "--add-host",
+        "host.docker.internal:172.23.0.2",
+        "--memory",
+        "2g",
+        "--cpus",
+        "2",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "-v",
+        "C:\\Users\\chengwei\\AppData\\Local\\Temp\\easf-p503g-x3zco49_\\authenticated-passive:/zap/wrk",
+        "ghcr.io/zaproxy/zaproxy:2.16.1",
+        "zap-baseline.py",
+        "--autooff",
+        "-t",
+        "http://host.docker.internal:8000/api/v1/projects",
+        "-m",
+        "1",
+        "-T",
+        "3",
+        "-J",
+        "report.json",
+        "--hook",
+        "/zap/wrk/evidence_hook.py",
+        "-z",
+        "-configfile /zap/wrk/scan.properties"
+      ],
+      "exit_code": 0,
+      "stdout": "Total of 7 URLs\nPASS: Vulnerable JS Library (Powered by Retire.js) [10003]\nPASS: Cookie No HttpOnly Flag [10010]\nPASS: Cookie Without Secure Flag [10011]\nPASS: Re-examine Cache-control Directives [10015]\nPASS: Cross-Domain JavaScript Source File Inclusion [10017]\nPASS: Content-Type Header Missing [10019]\nPASS: Anti-clickjacking Header [10020]\nPASS: X-Content-Type-Options Header Missing [10021]\nPASS: Information Disclosure - Debug Error Messages [10023]\nPASS: Information Disclosure - Sensitive Information in URL [10024]\nPASS: Information Disclosure - Sensitive Information in HTTP Referrer Header [10025]\nPASS: Information Disclosure - Suspicious Comments [10027]\nPASS: Off-site Redirect [10028]\nPASS: Cookie Poisoning [10029]\nPASS: User Controllable Charset [10030]\nPASS: User Controllable HTML Element Attribute (Potential XSS) [10031]\nPASS: Viewstate [10032]\nPASS: Directory Browsing [10033]\nPASS: Heartbleed OpenSSL Vulnerability (Indicative) [10034]\nPASS: Strict-Transport-Security Header [10035]\nPASS: HTTP Server Response Header [10036]\nPASS: Server Leaks Information via \"X-Powered-By\" HTTP Response Header Field(s) [10037]\nPASS: Content Security Policy (CSP) Header Not Set [10038]\nPASS: X-Backend-Server Header Information Leak [10039]\nPASS: Secure Pages Include Mixed Content [10040]\nPASS: HTTP to HTTPS Insecure Transition in Form Post [10041]\nPASS: HTTPS to HTTP Insecure Transition in Form Post [10042]\nPASS: User Controllable JavaScript Event (XSS) [10043]\nPASS: Big Redirect Detected (Potential Sensitive Information Leak) [10044]\nPASS: Retrieved from Cache [10050]\nPASS: X-ChromeLogger-Data (XCOLD) Header Information Leak [10052]\nPASS: Cookie without SameSite Attribute [10054]\nPASS: CSP [10055]\nPASS: X-Debug-Token Information Leak [10056]\nPASS: Username Hash Found [10057]\nPASS: X-AspNet-Version Response Header [10061]\nPASS: PII Disclosure [10062]\nPASS: Timestamp Disclosure [10096]\nPASS: Hash Disclosure [10097]\nPASS: Cross-Domain Misconfiguration [10098]\nPASS: Weak Authentication Method [10105]\nPASS: Reverse Tabnabbing [10108]\nPASS: Modern Web Application [10109]\nPASS: Authentication Request Identified [10111]\nPASS: Session Management Response Identified [10112]\nPASS: Verification Request Identified [10113]\nPASS: Script Served From Malicious Domain (polyfill) [10115]\nPASS: ZAP is Out of Date [10116]\nPASS: Absence of Anti-CSRF Tokens [10202]\nPASS: Private IP Disclosure [2]\nPASS: Session ID in URL Rewrite [3]\nPASS: Script Passive Scan Rules [50001]\nPASS: Insecure JSF ViewState [90001]\nPASS: Charset Mismatch [90011]\nPASS: Application Error Disclosure [90022]\nPASS: WSDL File Detection [90030]\nPASS: Loosely Scoped Cookie [90033]\nFAIL-NEW: 0\tFAIL-INPROG: 0\tWARN-NEW: 0\tWARN-INPROG: 0\tINFO: 0\tIGNORE: 0\tPASS: 57\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "rm",
+        "--force",
+        "easf-p503g-88dab8f3baf6-api-zap-authenticated-passive"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Error response from daemon: No such container: easf-p503g-88dab8f3baf6-api-zap-authenticated-passive\n"
+    },
+    {
+      "args": [
+        "rm",
+        "--force",
+        "easf-p503g-88dab8f3baf6-api-zap-unauthenticated"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Error response from daemon: No such container: easf-p503g-88dab8f3baf6-api-zap-unauthenticated\n"
+    },
+    {
+      "args": [
+        "rm",
+        "--force",
+        "easf-p503g-88dab8f3baf6-api-zap-authenticated-passive"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Error response from daemon: No such container: easf-p503g-88dab8f3baf6-api-zap-authenticated-passive\n"
+    },
+    {
+      "args": [
+        "network",
+        "disconnect",
+        "easf-p503g-88dab8f3baf6-scan",
+        "easf-p503g-88dab8f3baf6-api"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "network",
+        "rm",
+        "easf-p503g-88dab8f3baf6-scan"
+      ],
+      "exit_code": 0,
+      "stdout": "easf-p503g-88dab8f3baf6-scan\n",
+      "stderr": ""
+    }
+  ],
+  "temporary_directory_removed": true,
+  "cleanup_errors": []
+}

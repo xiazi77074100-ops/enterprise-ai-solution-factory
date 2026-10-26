@@ -1,0 +1,656 @@
+{
+  "source_commit": "5db3134abe3b7d44bf1000120820d6452ca0ddfb",
+  "image": "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+  "failure": null,
+  "checks": [
+    {
+      "check": "/health",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "/ready",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "/docs",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/redoc",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/openapi.json",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/.env",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/.git/config",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/api/v1/projects",
+      "expected": 401,
+      "actual": 401
+    },
+    {
+      "check": "診断利用者ログイン",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "診断利用者ログイン",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "認証後一覧",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "CSRFなし",
+      "expected": 403,
+      "actual": 403
+    },
+    {
+      "check": "異なるOrigin",
+      "expected": 403,
+      "actual": 403
+    },
+    {
+      "check": "案件作成",
+      "expected": 201,
+      "actual": 201
+    },
+    {
+      "check": "他案件参照拒否",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "他利用者一覧",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "PDF偽装拒否",
+      "expected": 415,
+      "actual": 415
+    },
+    {
+      "check": "dev合成PDF登録",
+      "expected": 201,
+      "actual": 201
+    },
+    {
+      "check": "認可付きダウンロード",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "他利用者の文書拒否",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "TRACE拒否",
+      "expected": 405,
+      "actual": 405
+    },
+    {
+      "check": "異なるOriginへのCORS許可なし",
+      "passed": true
+    },
+    {
+      "check": "ログアウト",
+      "expected": 204,
+      "actual": 204
+    },
+    {
+      "check": "ログアウト後拒否",
+      "expected": 401,
+      "actual": 401
+    }
+  ],
+  "startup_observations": [
+    {
+      "attempt": 0,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 1,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 2,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 3,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 4,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 5,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 6,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 7,
+      "status": 200
+    }
+  ],
+  "commands": [
+    {
+      "args": [
+        "version",
+        "--format",
+        "{{.Server.Version}}"
+      ],
+      "exit_code": 0,
+      "stdout": "28.1.1\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "ps",
+        "--format",
+        "{{.ID}} {{.Names}}"
+      ],
+      "exit_code": 0,
+      "stdout": "9bdadc6bdc38 enterprise-ai-solution-factory-db-1\nf73d229b5ba7 ocr-saas-db-1\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "image",
+        "inspect",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "--format",
+        "{{.Id}} {{.Config.User}}"
+      ],
+      "exit_code": 0,
+      "stdout": "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac easf\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "network",
+        "create",
+        "easf-p503g-88dab8f3baf6"
+      ],
+      "exit_code": 0,
+      "stdout": "88af29232de50d84b8121e6703a75900f72ff9bcde675e2dcb94d58c220f333b\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "-d",
+        "--name",
+        "easf-p503g-88dab8f3baf6-db",
+        "--network",
+        "easf-p503g-88dab8f3baf6",
+        "--memory",
+        "512m",
+        "--cpus",
+        "1",
+        "--env",
+        "POSTGRES_DB",
+        "--env",
+        "POSTGRES_USER",
+        "--env",
+        "POSTGRES_PASSWORD",
+        "--tmpfs",
+        "/var/lib/postgresql/data:size=256m",
+        "postgres:17-alpine"
+      ],
+      "exit_code": 0,
+      "stdout": "b07391a8f420ec51a27483bb3ecf65196ffeb94f98e201fede081261aad4b264\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "easf-p503g-88dab8f3baf6-db",
+        "pg_isready",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503g_test"
+      ],
+      "exit_code": 2,
+      "stdout": "/var/run/postgresql:5432 - no response\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "easf-p503g-88dab8f3baf6-db",
+        "pg_isready",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503g_test"
+      ],
+      "exit_code": 2,
+      "stdout": "/var/run/postgresql:5432 - no response\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "easf-p503g-88dab8f3baf6-db",
+        "pg_isready",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503g_test"
+      ],
+      "exit_code": 2,
+      "stdout": "/var/run/postgresql:5432 - no response\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "easf-p503g-88dab8f3baf6-db",
+        "pg_isready",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503g_test"
+      ],
+      "exit_code": 2,
+      "stdout": "/var/run/postgresql:5432 - no response\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "easf-p503g-88dab8f3baf6-db",
+        "pg_isready",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503g_test"
+      ],
+      "exit_code": 0,
+      "stdout": "/var/run/postgresql:5432 - accepting connections\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "-i",
+        "easf-p503g-88dab8f3baf6-db",
+        "psql",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503g_test"
+      ],
+      "exit_code": 0,
+      "stdout": "CREATE ROLE\nGRANT\nGRANT\nALTER DEFAULT PRIVILEGES\nALTER DEFAULT PRIVILEGES\nREVOKE\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--network",
+        "easf-p503g-88dab8f3baf6",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_MIGRATION_DATABASE_URL",
+        "--env",
+        "EASF_NEW_USER_PASSWORD",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "alembic",
+        "upgrade",
+        "head"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--network",
+        "easf-p503g-88dab8f3baf6",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_MIGRATION_DATABASE_URL",
+        "--env",
+        "EASF_NEW_USER_PASSWORD",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "python",
+        "-m",
+        "app.admin",
+        "create-user",
+        "--login-id",
+        "assess_owner_88dab8f3baf6",
+        "--display-name",
+        "診断専用 TEST ONLY",
+        "--admin"
+      ],
+      "exit_code": 0,
+      "stdout": "利用者を作成しました。\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--network",
+        "easf-p503g-88dab8f3baf6",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_MIGRATION_DATABASE_URL",
+        "--env",
+        "EASF_NEW_USER_PASSWORD",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "python",
+        "-m",
+        "app.admin",
+        "create-user",
+        "--login-id",
+        "assess_outsider_88dab8f3baf6",
+        "--display-name",
+        "診断専用 TEST ONLY"
+      ],
+      "exit_code": 0,
+      "stdout": "利用者を作成しました。\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "-d",
+        "--name",
+        "easf-p503g-88dab8f3baf6-api",
+        "--network",
+        "easf-p503g-88dab8f3baf6",
+        "--memory",
+        "512m",
+        "--cpus",
+        "1",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--tmpfs",
+        "/data/documents:size=64m,uid=10001,mode=0700",
+        "--publish",
+        "127.0.0.1:54595:8000",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_SITE_ORIGIN",
+        "--env",
+        "EASF_STORAGE_DIR",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac"
+      ],
+      "exit_code": 0,
+      "stdout": "8ac8b81ab6e0d69d8d3bfab66725999b97e3de2e0ab2b74a1162fbc74388d16c\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "port",
+        "easf-p503g-88dab8f3baf6-api",
+        "8000/tcp"
+      ],
+      "exit_code": 0,
+      "stdout": "127.0.0.1:54595\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "inspect",
+        "easf-p503g-88dab8f3baf6-api",
+        "--format",
+        "{{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}}"
+      ],
+      "exit_code": 0,
+      "stdout": "running exit=0 oom=false\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "logs",
+        "--tail",
+        "80",
+        "easf-p503g-88dab8f3baf6-api"
+      ],
+      "exit_code": 0,
+      "stdout": "INFO:     172.23.0.3:56848 - \"GET /api/v1/rule-packs?limit=50&cursor=system-property%28%27xsl%3Avendor%27%29%2F%3E HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:56848 - \"GET /api/v1/rule-packs?limit=50&cursor=%22%2F%3E%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E%3C%21-- HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:56848 - \"GET /api/v1/runs//export?format=%3C HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:50712 - \"GET /api/v1/runs/reviews HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:50712 - \"GET /api/v1/runs//export?format=%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:50712 - \"GET /api/v1/runs//export?format=system-property%28%27xsl%3Avendor%27%29%2F%3E HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:50712 - \"GET /api/v1/runs//export?format=%22%2F%3E%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E%3C%21-- HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:56848 - \"GET /api/v1/solutions HTTP/1.1\" 405 Method Not Allowed\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs//trace?limit=%3C&cursor= HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:50712 - \"GET /api/v1/runs//export?format=%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E%3C%21-- HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs//trace?limit=%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E&cursor= HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs//trace?limit=system-property%28%27xsl%3Avendor%27%29%2F%3E&cursor= HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:41010 - \"GET /api/v1/runs?project_id=%3C&status=pending&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs//export?format=%3Cxsl%3Avalue-of+select%3D%22document%28%27http%3A%2F%2Fhost.docker.internal%3A22%27%29%22%2F%3E HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs//export?format=%3Cxsl%3Avariable+name%3D%22rtobject%22+select%3D%22runtime%3AgetRuntime%28%29%22%2F%3E%0A%3Cxsl%3Avariable+name%3D%22process%22+select%3D%22runtime%3Aexec%28%24rtobject%2C%27erroneous_command%27%29%22%2F%3E%0A%3Cxsl%3Avariable+name%3D%22waiting%22+select%3D%22process%3AwaitFor%28%24process%29%22%2F%3E%0A%3Cxsl%3Avalue-of+select%3D%22%24process%22%2F%3E HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:41010 - \"GET /api/v1/runs//trace?limit=%22%2F%3E%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E%3C%21--&cursor= HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:41010 - \"GET /api/v1/runs//trace?limit=%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E%3C%21--&cursor= HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:50712 - \"GET /api/v1/runs//export?format=%3Cxsl%3Avalue-of+select%3D%22php%3Afunction%28%27exec%27%2C%27erroneous_command+2%3E%26amp%3B1%27%29%22%2F%3E HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs?project_id=%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E&status=pending&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:41010 - \"GET /api/v1/runs//trace?limit=%3Cxsl%3Avalue-of+select%3D%22document%28%27http%3A%2F%2Fhost.docker.internal%3A22%27%29%22%2F%3E&cursor= HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:41010 - \"GET /api/v1/runs//trace?limit=%3Cxsl%3Avariable+name%3D%22rtobject%22+select%3D%22runtime%3AgetRuntime%28%29%22%2F%3E%0A%3Cxsl%3Avariable+name%3D%22process%22+select%3D%22runtime%3Aexec%28%24rtobject%2C%27erroneous_command%27%29%22%2F%3E%0A%3Cxsl%3Avariable+name%3D%22waiting%22+select%3D%22process%3AwaitFor%28%24process%29%22%2F%3E%0A%3Cxsl%3Avalue-of+select%3D%22%24process%22%2F%3E&cursor= HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs?project_id=system-property%28%27xsl%3Avendor%27%29%2F%3E&status=pending&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs//trace?limit=%3Cxsl%3Avalue-of+select%3D%22php%3Afunction%28%27exec%27%2C%27erroneous_command+2%3E%26amp%3B1%27%29%22%2F%3E&cursor= HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:41010 - \"GET /api/v1/runs?project_id=%22%2F%3E%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E%3C%21--&status=pending&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs//trace?limit=50&cursor=%3C HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:41010 - \"GET /api/v1/runs//trace?limit=50&cursor=%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs?project_id=%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E%3C%21--&status=pending&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs//trace?limit=50&cursor=system-property%28%27xsl%3Avendor%27%29%2F%3E HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:41010 - \"GET /api/v1/runs//trace?limit=50&cursor=%22%2F%3E%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E%3C%21-- HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs?project_id=%3Cxsl%3Avalue-of+select%3D%22document%28%27http%3A%2F%2Fhost.docker.internal%3A22%27%29%22%2F%3E&status=pending&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs?project_id=%3Cxsl%3Avariable+name%3D%22rtobject%22+select%3D%22runtime%3AgetRuntime%28%29%22%2F%3E%0A%3Cxsl%3Avariable+name%3D%22process%22+select%3D%22runtime%3Aexec%28%24rtobject%2C%27erroneous_command%27%29%22%2F%3E%0A%3Cxsl%3Avariable+name%3D%22waiting%22+select%3D%22process%3AwaitFor%28%24process%29%22%2F%3E%0A%3Cxsl%3Avalue-of+select%3D%22%24process%22%2F%3E&status=pending&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs?project_id=%3Cxsl%3Avalue-of+select%3D%22php%3Afunction%28%27exec%27%2C%27erroneous_command+2%3E%26amp%3B1%27%29%22%2F%3E&status=pending&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs?project_id=project_id&status=%3C&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs?project_id=project_id&status=%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs?project_id=project_id&status=system-property%28%27xsl%3Avendor%27%29%2F%3E&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs?project_id=project_id&status=%22%2F%3E%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E%3C%21--&limit=50&cursor= HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET / HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1 HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/capabilities HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/capabilities/versions HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/documents HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/documents/document_id HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/evaluations HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/projects HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/requirements HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/requirements/revision_id HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/reuse HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/rule-packs HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/rule-packs/versions HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs/reviews HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/solutions HTTP/1.1\" 405 Method Not Allowed\nINFO:     172.23.0.3:40642 - \"GET / HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1 HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/capabilities HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/capabilities/versions HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/documents HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/documents/document_id HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/evaluations HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/projects HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/requirements HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/requirements/revision_id HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/reuse HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/rule-packs HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/rule-packs/versions HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/runs/reviews HTTP/1.1\" 401 Unauthorized\nINFO:     172.23.0.3:40642 - \"GET /api/v1/solutions HTTP/1.1\" 405 Method Not Allowed\nINFO:     127.0.0.1:54308 - \"GET /health HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:59586 - \"GET /health HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:45206 - \"GET /health HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:35594 - \"GET /health HTTP/1.1\" 200 OK\nINFO:     172.23.0.3:55756 - \"GET /api/v1/projects HTTP/1.1\" 200 OK\nINFO:     172.23.0.3:55756 - \"GET / HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:55762 - \"GET /robots.txt HTTP/1.1\" 404 Not Found\nINFO:     172.23.0.3:55770 - \"GET /sitemap.xml HTTP/1.1\" 404 Not Found\nINFO:     172.22.0.1:50804 - \"DELETE /api/v1/session HTTP/1.1\" 204 No Content\nINFO:     172.22.0.1:50804 - \"GET /api/v1/projects HTTP/1.1\" 401 Unauthorized\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--network",
+        "easf-p503g-88dab8f3baf6",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_MIGRATION_DATABASE_URL",
+        "--env",
+        "EASF_NEW_USER_PASSWORD",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "python",
+        "-m",
+        "app.admin",
+        "deactivate-user",
+        "--login-id",
+        "assess_outsider_88dab8f3baf6"
+      ],
+      "exit_code": 0,
+      "stdout": "利用者を無効にしました。\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--network",
+        "easf-p503g-88dab8f3baf6",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_MIGRATION_DATABASE_URL",
+        "--env",
+        "EASF_NEW_USER_PASSWORD",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "python",
+        "-m",
+        "app.admin",
+        "deactivate-user",
+        "--login-id",
+        "assess_owner_88dab8f3baf6"
+      ],
+      "exit_code": 0,
+      "stdout": "利用者を無効にしました。\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "rm",
+        "--force",
+        "--volumes",
+        "easf-p503g-88dab8f3baf6-api"
+      ],
+      "exit_code": 0,
+      "stdout": "easf-p503g-88dab8f3baf6-api\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "rm",
+        "--force",
+        "--volumes",
+        "easf-p503g-88dab8f3baf6-db"
+      ],
+      "exit_code": 0,
+      "stdout": "easf-p503g-88dab8f3baf6-db\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "network",
+        "rm",
+        "easf-p503g-88dab8f3baf6"
+      ],
+      "exit_code": 0,
+      "stdout": "easf-p503g-88dab8f3baf6\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "ps",
+        "--format",
+        "{{.ID}} {{.Names}}"
+      ],
+      "exit_code": 0,
+      "stdout": "9bdadc6bdc38 enterprise-ai-solution-factory-db-1\nf73d229b5ba7 ocr-saas-db-1\n",
+      "stderr": "",
+      "stdin_recorded": false
+    }
+  ],
+  "cleanup": [
+    {
+      "user": "assess_outsider_88dab8f3baf6",
+      "deactivated": true
+    },
+    {
+      "user": "assess_owner_88dab8f3baf6",
+      "deactivated": true
+    },
+    {
+      "container": "easf-p503g-88dab8f3baf6-api",
+      "removed": true
+    },
+    {
+      "container": "easf-p503g-88dab8f3baf6-db",
+      "removed": true
+    },
+    {
+      "network": "easf-p503g-88dab8f3baf6",
+      "removed": true
+    },
+    {
+      "existing_container_ids_unchanged": true
+    }
+  ]
+}
