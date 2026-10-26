@@ -2,6 +2,8 @@
 
 ゲートごとに、利用者に見える変化と契約の変化をまとめる。
 
+- 2026-10-26（P5-03h）：版管理変更要求をCodexで再検討し、現行ソースの逸脱検出と将来の新版並行実行を分けた受入テスト計画を追加。Claude Code起動は利用上限exit 1、CCレビュー未実行を記録。製品・契約・D-047は未変更、適用未承認。
+
 ## Phase 0（G0 前）
 
 - 追加：Claude Code / Codex 共通の規則（`AGENTS.md`・`CLAUDE.md`）と skill 14 個（`.claude/skills/` → `.agents/skills/`）、同期スクリプト `scripts/sync_skills.py`。
