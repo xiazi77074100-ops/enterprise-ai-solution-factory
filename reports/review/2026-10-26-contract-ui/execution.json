@@ -1,0 +1,149 @@
+{
+  "database": "easf_p503l_test",
+  "container": "easf-p503l-f1a43f93a844",
+  "failure": "RuntimeError: browser_test_failed",
+  "playwright_exit_code": 1,
+  "container_removed": true,
+  "existing_containers_unchanged": true,
+  "temporary_storage_removed": true,
+  "cleanup_errors": [],
+  "stop_results": [],
+  "commands": [
+    {
+      "args": [
+        "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.EXE",
+        "ps",
+        "--format",
+        "{{.ID}} {{.Names}}"
+      ],
+      "exit_code": 0,
+      "output": "9bdadc6bdc38 enterprise-ai-solution-factory-db-1\nf73d229b5ba7 ocr-saas-db-1\n"
+    },
+    {
+      "args": [
+        "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.EXE",
+        "ps",
+        "-aq",
+        "--filter",
+        "name=^/easf-p503l-f1a43f93a844$"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "args": [
+        "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.EXE",
+        "run",
+        "-d",
+        "--name",
+        "easf-p503l-f1a43f93a844",
+        "--memory",
+        "512m",
+        "--cpus",
+        "1",
+        "--publish",
+        "127.0.0.1:51672:5432",
+        "--env",
+        "POSTGRES_USER",
+        "--env",
+        "POSTGRES_PASSWORD",
+        "--env",
+        "POSTGRES_DB",
+        "--tmpfs",
+        "/var/lib/postgresql/data:size=256m",
+        "postgres:17-alpine"
+      ],
+      "exit_code": 0,
+      "output": "1c3f625f876169957d95838c070f29dd4d5e282c31480962973332f843be59dd\n"
+    },
+    {
+      "args": [
+        "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.EXE",
+        "exec",
+        "-i",
+        "easf-p503l-f1a43f93a844",
+        "psql",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503l_test"
+      ],
+      "exit_code": 0,
+      "output": "CREATE ROLE\nGRANT\nGRANT\nALTER DEFAULT PRIVILEGES\nALTER DEFAULT PRIVILEGES\nREVOKE\n"
+    },
+    {
+      "args": [
+        "C:\\work\\aidd\\enterprise-ai-solution-factory\\backend\\.venv\\Scripts\\python.exe",
+        "-m",
+        "alembic",
+        "upgrade",
+        "head"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "args": [
+        "C:\\work\\aidd\\enterprise-ai-solution-factory\\backend\\.venv\\Scripts\\python.exe",
+        "-m",
+        "app.admin",
+        "create-user",
+        "--login-id",
+        "p503l_admin",
+        "--display-name",
+        "試験設計者",
+        "--admin"
+      ],
+      "exit_code": 0,
+      "output": "利用者を作成しました。\n"
+    },
+    {
+      "args": [
+        "C:\\work\\aidd\\enterprise-ai-solution-factory\\backend\\.venv\\Scripts\\python.exe",
+        "-m",
+        "app.admin",
+        "create-user",
+        "--login-id",
+        "p503l_reviewer",
+        "--display-name",
+        "試験確認者"
+      ],
+      "exit_code": 0,
+      "output": "利用者を作成しました。\n"
+    },
+    {
+      "args": [
+        "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.EXE",
+        "rm",
+        "--force",
+        "--volumes",
+        "easf-p503l-f1a43f93a844"
+      ],
+      "exit_code": 0,
+      "output": "easf-p503l-f1a43f93a844\n"
+    },
+    {
+      "args": [
+        "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.EXE",
+        "ps",
+        "-aq",
+        "--filter",
+        "name=^/easf-p503l-f1a43f93a844$"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "args": [
+        "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.EXE",
+        "ps",
+        "--format",
+        "{{.ID}} {{.Names}}"
+      ],
+      "exit_code": 0,
+      "output": "9bdadc6bdc38 enterprise-ai-solution-factory-db-1\nf73d229b5ba7 ocr-saas-db-1\n"
+    }
+  ]
+}

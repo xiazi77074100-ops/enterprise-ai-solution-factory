@@ -1,0 +1,35 @@
+
+Running 1 test using 1 worker
+
+(node:15132) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node.EXE --trace-warnings ...` to show where the warning was created)
+  x  1 e2e\contract-real.spec.ts:35:1 › 契約書dev：登録から確認値修正・根拠表示・実ファイル出力まで (24.9s)
+
+
+  1) e2e\contract-real.spec.ts:35:1 › 契約書dev：登録から確認値修正・根拠表示・実ファイル出力まで ──────────────────────────────
+
+    Error: expect(page).not.toHaveURL(expected) failed
+
+    Expected pattern: not /\/login$/
+    Received string: "http://127.0.0.1:58933/login"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "not toHaveURL" with timeout 5000ms
+        10 × locator resolved to <html lang="ja">…</html>
+           - unexpected value "http://127.0.0.1:58933/login"
+
+
+      59 |   await page.getByLabel(/パスワード/).fill(PASSWORD);
+      60 |   await login.click();
+    > 61 |   await expect(page).not.toHaveURL(/\/login$/);
+         |                          ^
+      62 |   await page.goto(`/projects/${PROJECT}`);
+      63 |   await expect(page.getByRole("region", { name: "文書", exact: true })).toBeVisible();
+      64 |
+        at C:\work\aidd\enterprise-ai-solution-factory\frontend\e2e\contract-real.spec.ts:61:26
+
+    Error Context: ..\..\..\..\Users\chengwei\AppData\Local\Temp\easf-p503l-8j3229el\playwright\contract-real-契約書dev：登録から確認値修正・根拠表示・実ファイル出力まで\error-context.md
+
+  1 failed
+    e2e\contract-real.spec.ts:35:1 › 契約書dev：登録から確認値修正・根拠表示・実ファイル出力まで ───────────────────────────────

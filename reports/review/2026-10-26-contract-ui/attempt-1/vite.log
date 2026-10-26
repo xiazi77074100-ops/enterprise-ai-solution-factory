@@ -1,0 +1,18 @@
+failed to load config from C:\work\aidd\enterprise-ai-solution-factory\reports\review\2026-10-26-contract-ui\vite.config.ts
+error when starting dev server:
+Error: Build failed with 1 error:
+
+[31m[UNRESOLVED_IMPORT] [0mCould not resolve '../../../../frontend/vite.config' in ../reports/review/2026-10-26-contract-ui/vite.config.ts
+ - Module not found. in ../reports/review/2026-10-26-contract-ui/vite.config.ts at 452..486
+
+    at aggregateBindingErrorsIntoJsError (file:///C:/work/aidd/enterprise-ai-solution-factory/frontend/node_modules/rolldown/dist/shared/error-CBG33oNV.mjs:49:18)
+    at unwrapBindingResult (file:///C:/work/aidd/enterprise-ai-solution-factory/frontend/node_modules/rolldown/dist/shared/error-CBG33oNV.mjs:19:128)
+    at #build (file:///C:/work/aidd/enterprise-ai-solution-factory/frontend/node_modules/rolldown/dist/shared/rolldown-BYX6bV3R.mjs:146:34)
+    at async bundleConfigFile (file:///C:/work/aidd/enterprise-ai-solution-factory/frontend/node_modules/vite/dist/node/chunks/node.js:38081:12)
+    at async bundleAndLoadConfigFile (file:///C:/work/aidd/enterprise-ai-solution-factory/frontend/node_modules/vite/dist/node/chunks/node.js:37977:18)
+    at async loadConfigFromFile (file:///C:/work/aidd/enterprise-ai-solution-factory/frontend/node_modules/vite/dist/node/chunks/node.js:37938:42)
+    at async resolveConfig (file:///C:/work/aidd/enterprise-ai-solution-factory/frontend/node_modules/vite/dist/node/chunks/node.js:37540:22)
+    at async _createServer (file:///C:/work/aidd/enterprise-ai-solution-factory/frontend/node_modules/vite/dist/node/chunks/node.js:24830:65)
+    at async CAC.<anonymous> (file:///C:/work/aidd/enterprise-ai-solution-factory/frontend/node_modules/vite/dist/node/cli.js:712:18) {
+  errors: [Getter/Setter]
+}

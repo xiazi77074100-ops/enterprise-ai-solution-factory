@@ -1,0 +1,35 @@
+
+Running 1 test using 1 worker
+
+(node:48464) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node.EXE --trace-warnings ...` to show where the warning was created)
+  x  1 e2e\contract-real.spec.ts:35:1 › 契約書dev：登録から確認値修正・根拠表示・実ファイル出力まで (3.5m)
+
+
+  1) e2e\contract-real.spec.ts:35:1 › 契約書dev：登録から確認値修正・根拠表示・実ファイル出力まで ──────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('link', { name: '確認を開く' })
+    Expected: visible
+    Timeout: 180000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('link', { name: '確認を開く' }) with timeout 180000ms
+      - waiting for getByRole('link', { name: '確認を開く' })
+
+
+      135 |   const run = await started.json() as Schemas["Run"];
+      136 |   await expect(page).toHaveURL(new RegExp(`/runs/${run.id}$`));
+    > 137 |   await expect(page.getByRole("link", { name: "確認を開く" })).toBeVisible({ timeout: 180_000 });
+          |                                                           ^
+      138 |   await shoot(page, "02-waiting-review.png");
+      139 |   await page.getByRole("link", { name: "確認を開く" }).click();
+      140 |   await expect(page).toHaveURL(new RegExp(`/runs/${run.id}/reviews/[0-9a-f-]{36}$`));
+        at C:\work\aidd\enterprise-ai-solution-factory\frontend\e2e\contract-real.spec.ts:137:59
+
+    Error Context: ..\..\..\..\Users\chengwei\AppData\Local\Temp\easf-p503l-rgi0v2vr\playwright\contract-real-契約書dev：登録から確認値修正・根拠表示・実ファイル出力まで\error-context.md
+
+  1 failed
+    e2e\contract-real.spec.ts:35:1 › 契約書dev：登録から確認値修正・根拠表示・実ファイル出力まで ───────────────────────────────

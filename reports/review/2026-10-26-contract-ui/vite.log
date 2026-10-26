@@ -1,0 +1,7 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "../../../frontend/vite.config" without a file extension (../reports/review/2026-10-26-contract-ui/vite.config.mts:1:18). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+  VITE v8.3.4  ready in 1694 ms
+
+  ➜  Local:   http://127.0.0.1:51674/

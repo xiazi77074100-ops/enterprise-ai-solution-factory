@@ -1,0 +1,22 @@
+{
+  "standalone_worker_missing_foreign_keys": [
+    "capability_version.registered_by -> app_user.id",
+    "document.uploaded_by -> app_user.id",
+    "project.owner_id -> app_user.id",
+    "project_member.user_id -> app_user.id",
+    "requirement_revision.approved_by -> app_user.id",
+    "requirement_revision.created_by -> app_user.id",
+    "review_task.assigned_to -> app_user.id",
+    "review_task.decided_by -> app_user.id",
+    "rule_pack_version.registered_by -> app_user.id",
+    "run.created_by -> app_user.id",
+    "solution.approved_by -> app_user.id",
+    "solution.created_by -> app_user.id"
+  ],
+  "diagnostic_only_added_imports": [
+    "app.auth.models"
+  ],
+  "after_diagnostic_imports_missing_foreign_keys": [],
+  "database_connected": false,
+  "product_modified": false
+}

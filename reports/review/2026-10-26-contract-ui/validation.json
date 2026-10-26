@@ -1,0 +1,53 @@
+{
+  "base": "65e0a2124486b0a3f0d50b63e8a7205a99528b88",
+  "checks": [
+    {
+      "name": "ruff",
+      "args": [
+        "C:\\work\\aidd\\enterprise-ai-solution-factory\\backend\\.venv\\Scripts\\ruff.exe",
+        "check",
+        "C:\\work\\aidd\\enterprise-ai-solution-factory\\reports\\review\\2026-10-26-contract-ui\\run.py",
+        "C:\\work\\aidd\\enterprise-ai-solution-factory\\reports\\review\\2026-10-26-contract-ui\\model_repro.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "bandit",
+      "args": [
+        "C:\\work\\aidd\\enterprise-ai-solution-factory\\backend\\.venv\\Scripts\\bandit.exe",
+        "-q",
+        "C:\\work\\aidd\\enterprise-ai-solution-factory\\reports\\review\\2026-10-26-contract-ui",
+        "-r",
+        "-s",
+        "B404,B603"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "model-repro",
+      "args": [
+        "C:\\work\\aidd\\enterprise-ai-solution-factory\\backend\\.venv\\Scripts\\python.exe",
+        "C:\\work\\aidd\\enterprise-ai-solution-factory\\reports\\review\\2026-10-26-contract-ui\\model_repro.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "typecheck",
+      "args": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "C:\\work\\aidd\\enterprise-ai-solution-factory\\frontend\\node_modules\\typescript\\bin\\tsc",
+        "--noEmit"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "sha256": {
+    "frontend/e2e/contract-real.spec.ts": "6b8918a71f182ebbd865bc8cfd855861aac4113cc99db161c19f53a899151bb8",
+    "frontend/e2e/contract-real.config.ts": "233ac1ed73a5406508478c6a383ac3960c70cb5ca962efb47d41dde8627b53be",
+    "backend/app/executor/worker.py": "33ce112f7d09b2510f5206585bc25b5a77c240a276dca5707de475dc2346e637",
+    "backend/app/catalog/implementation_manifest.json": "bb92511ff903a34517b82264e850e0b2ec50bff29adcdac39fb75e58aa53d038",
+    "fixtures/workflows/contract-v3.json": "f977acae7e0c4b9d329b83b8306346ab3431c069130facd3666a185066a3f3e4",
+    "fixtures/rule_packs/contract-1.1.0.json": "0a316c3a121f501eb9daa8d12d8df2edb72af9e8966bc4814cb8cfbd945858ab",
+    "fixtures/contract/dev/documents/con-0001.pdf": "910bd20314b1fb5ba290824829e77aeb0904fd958e8c96c90a18727ef4c16872"
+  }
+}

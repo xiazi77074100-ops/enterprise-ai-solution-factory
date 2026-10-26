@@ -4,7 +4,7 @@
 |---|---|
 | 更新日 | 2026-10-26 |
 | 書いた人 | Claude Code（初稿）、Codex（人の指示でG3承認・現在地を更新） |
-| main の最新 | P5-03jまで統合済み（012e996）、全件CI成功。P5-03kの別案件再利用証拠は本変更 |
+| main の最新 | P5-03kまで統合済み（65e0a21）、全件CI成功。P5-03lは本変更、独立workerの不具合により実画面フロー失敗 |
 
 新しいセッションは、まずこの文書、`AGENTS.md`、`TASK_STATUS.md`、`DECISIONS.md` の最後の数行を読む。
 
@@ -44,6 +44,8 @@
 - **P5-03k**：別2案件のinvoice-v3/contract-v3を既存dev PDFで実行し、確認承認後のexporterまで各6ノード成功。共通5ノードの版ID、DB再読出しのtrace各15イベント、export_idを照合。TestClient経由であり実画面ではない。専用DB・文書領域を回収し、証拠JSONを保持。`reports/review/2026-10-26-reuse/report.md`。RV-G3-003の該当不足は限定補完、AC-12/他のG4不足は維持。
 
 ## 2. できているもの
+
+- **P5-03l**：専用DB・Uvicorn・独立worker・Vite・新規Chromeで契約書の実画面を試験。4回目はログイン→SVG拒否→dev PDF登録→実行開始まで成功したが、workerの認証モデル登録不足（RV-G4-UI-001）で確認待ちに未到達、E2E exit 1。DBでは6ノードpending・確認0件。DB未接続の切分けで未解決FK12件→診断import後0件。製品は未修正。`reports/review/2026-10-26-contract-ui/report.md` と限定変更要求を参照。AC-07/12/13の完了、G4合格には数えない。次はCC所有workerの別範囲での修正・独立プロセス回帰・UI再実行。
 
 | 部分 | 中身 | 主なパス |
 |---|---|---|

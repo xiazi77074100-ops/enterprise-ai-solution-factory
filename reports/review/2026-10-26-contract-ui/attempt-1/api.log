@@ -1,0 +1,23 @@
+INFO:     Started server process [46440]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:49389 (Press CTRL+C to quit)
+INFO:     127.0.0.1:62233 - "GET /api/v1/session HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:54988 - "POST /api/v1/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57716 - "POST /api/v1/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54988 - "POST /api/v1/projects HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54988 - "PUT /api/v1/projects/5171bf3b-3f6a-48a9-963e-80561925bd22/members HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54988 - "POST /api/v1/capabilities HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54988 - "POST /api/v1/capabilities HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54988 - "POST /api/v1/capabilities HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54988 - "POST /api/v1/capabilities HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54988 - "POST /api/v1/capabilities HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54988 - "POST /api/v1/capabilities HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54988 - "POST /api/v1/capabilities HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54988 - "POST /api/v1/capabilities HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54988 - "POST /api/v1/rule-packs HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54988 - "POST /api/v1/projects/5171bf3b-3f6a-48a9-963e-80561925bd22/requirements HTTP/1.1" 201 Created
+INFO:     127.0.0.1:57716 - "POST /api/v1/requirements/d2a9f10e-0682-4a50-b2df-64bcbf523d79/approve HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54988 - "POST /api/v1/solutions HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54988 - "POST /api/v1/solutions/3f4c630f-afaa-4569-837e-03a10a02c93e/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57716 - "POST /api/v1/solutions/3f4c630f-afaa-4569-837e-03a10a02c93e/approve HTTP/1.1" 200 OK

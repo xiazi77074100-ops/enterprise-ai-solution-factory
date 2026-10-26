@@ -1,0 +1,75 @@
+INFO:easf.worker:worker started
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\app\executor\worker.py", line 26, in <module>
+    main()
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\app\executor\worker.py", line 21, in main
+    if not executor.run_once():
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\app\executor\engine.py", line 267, in run_once
+    run_id = self._claim()
+             ^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\app\executor\engine.py", line 295, in _claim
+    db.commit()
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2095, in commit
+    trans.commit(_to_root=True)
+  File "<sqlalchemy generated _go() wrapper for sqlalchemy.orm.session.SessionTransaction.commit>", line 2, in commit
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1330, in commit
+    self._prepare_impl()
+  File "<sqlalchemy generated _go() wrapper for sqlalchemy.orm.session.SessionTransaction._prepare_impl>", line 2, in _prepare_impl
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1304, in _prepare_impl
+    self.session.flush()
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4536, in flush
+    self._flush(objects)
+  File "<sqlalchemy generated warned() wrapper for sqlalchemy.orm.session.Session._flush>", line 2, in _flush
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\util\deprecations.py", line 281, in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4679, in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 166, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4640, in _flush
+    flush_context.execute()
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 467, in execute
+    rec.execute(self)
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 643, in execute
+    util.preloaded.orm_persistence._save_obj(
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 75, in _save_obj
+    for table, mapper in base_mapper._sorted_tables.items():
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1449, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4107, in _sorted_tables
+    sorted_ = sql_util.sort_tables(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 1818, in sort_tables
+    for (t, fkcs) in sort_tables_and_constraints(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 1890, in sort_tables_and_constraints
+    filtered = filter_fn(fkc)
+               ^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 1808, in _skip_fn
+    if fixed_skip_fn(fk):
+       ^^^^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4090, in skip
+    dep = table_to_mapper.get(fk.column.table)
+                              ^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1337, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\sql\schema.py", line 3864, in column
+    return self._resolve_column()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\aidd\enterprise-ai-solution-factory\backend\.venv\Lib\site-packages\sqlalchemy\sql\schema.py", line 3887, in _resolve_column
+    raise exc.NoReferencedTableError(
+sqlalchemy.exc.NoReferencedTableError: Foreign key associated with column 'run.created_by' could not find table 'app_user' with which to generate a foreign key to target column 'id'
