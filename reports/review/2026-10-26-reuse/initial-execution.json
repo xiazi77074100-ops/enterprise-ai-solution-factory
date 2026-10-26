@@ -1,0 +1,115 @@
+{
+  "database_name": "easf_p503k_test",
+  "container": "easf-p503k-1699a45bc9cd",
+  "failure": null,
+  "cleanup_success": true,
+  "pytest_exit_code": 0,
+  "pytest_args": [
+    "-m",
+    "pytest",
+    "-q",
+    "tests/integration/test_reuse_evidence.py"
+  ],
+  "existing_containers_unchanged": true,
+  "commands": [
+    {
+      "args": [
+        "ps",
+        "--format",
+        "{{.ID}} {{.Names}}"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "ps",
+        "-aq",
+        "--filter",
+        "name=^/easf-p503k-1699a45bc9cd$"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "run",
+        "-d",
+        "--name",
+        "easf-p503k-1699a45bc9cd",
+        "--memory",
+        "512m",
+        "--cpus",
+        "1",
+        "--publish",
+        "127.0.0.1:50339:5432",
+        "--env",
+        "POSTGRES_USER",
+        "--env",
+        "POSTGRES_PASSWORD",
+        "--env",
+        "POSTGRES_DB",
+        "--tmpfs",
+        "/var/lib/postgresql/data:size=256m",
+        "postgres:17-alpine"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "exec",
+        "-i",
+        "easf-p503k-1699a45bc9cd",
+        "psql",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503k_test"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "ps",
+        "-aq",
+        "--filter",
+        "name=^/easf-p503k-1699a45bc9cd$"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "rm",
+        "--force",
+        "--volumes",
+        "easf-p503k-1699a45bc9cd"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "ps",
+        "-aq",
+        "--filter",
+        "name=^/easf-p503k-1699a45bc9cd$"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "ps",
+        "--format",
+        "{{.ID}} {{.Names}}"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ]
+}

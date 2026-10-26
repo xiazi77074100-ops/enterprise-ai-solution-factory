@@ -1,0 +1,9 @@
+{
+  "initial_storage_directory": "easf-test-documents-774285h4",
+  "known_dev_pdf_sha256": [
+    "762166ea6bba5b96007c3cce8563d21ef00d8b7200c5e18397d5fc70017f9f87",
+    "910bd20314b1fb5ba290824829e77aeb0904fd958e8c96c90a18727ef4c16872"
+  ],
+  "verified_files": 2,
+  "removed": true
+}

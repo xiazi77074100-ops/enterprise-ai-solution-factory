@@ -1,0 +1,25 @@
+{
+  "runs": 2,
+  "projects": 2,
+  "nodes_per_run": [
+    6,
+    6
+  ],
+  "events_per_run": [
+    15,
+    15
+  ],
+  "shared_nodes": [
+    "parse",
+    "validate",
+    "locate",
+    "review",
+    "export"
+  ],
+  "trace_chain_recomputed": true,
+  "test_and_manifest_sha_match": true,
+  "export_ids": [
+    "0ccd48e8-2846-53aa-a4b5-8416306bf5d7",
+    "5d2548f2-93ce-5099-8070-b6cab0cc27ca"
+  ]
+}

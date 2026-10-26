@@ -1,0 +1,120 @@
+{
+  "database_name": "easf_p503k_test",
+  "container": "easf-p503k-6c9a1478d8ed",
+  "failure": null,
+  "cleanup_success": true,
+  "pytest_exit_code": 0,
+  "pytest_args": [
+    "-m",
+    "pytest",
+    "-q",
+    "tests/integration/test_reuse_evidence.py"
+  ],
+  "storage_cleanup": {
+    "uploaded_files_removed": 2,
+    "storage_removed": true,
+    "unused_default_removed": true
+  },
+  "existing_containers_unchanged": true,
+  "commands": [
+    {
+      "args": [
+        "ps",
+        "--format",
+        "{{.ID}} {{.Names}}"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "ps",
+        "-aq",
+        "--filter",
+        "name=^/easf-p503k-6c9a1478d8ed$"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "run",
+        "-d",
+        "--name",
+        "easf-p503k-6c9a1478d8ed",
+        "--memory",
+        "512m",
+        "--cpus",
+        "1",
+        "--publish",
+        "127.0.0.1:49393:5432",
+        "--env",
+        "POSTGRES_USER",
+        "--env",
+        "POSTGRES_PASSWORD",
+        "--env",
+        "POSTGRES_DB",
+        "--tmpfs",
+        "/var/lib/postgresql/data:size=256m",
+        "postgres:17-alpine"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "exec",
+        "-i",
+        "easf-p503k-6c9a1478d8ed",
+        "psql",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503k_test"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "ps",
+        "-aq",
+        "--filter",
+        "name=^/easf-p503k-6c9a1478d8ed$"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "rm",
+        "--force",
+        "--volumes",
+        "easf-p503k-6c9a1478d8ed"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "ps",
+        "-aq",
+        "--filter",
+        "name=^/easf-p503k-6c9a1478d8ed$"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "ps",
+        "--format",
+        "{{.ID}} {{.Names}}"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ]
+}

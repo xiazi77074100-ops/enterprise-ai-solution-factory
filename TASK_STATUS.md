@@ -54,3 +54,4 @@
 | P5-03h 版管理案のCodexレビュー | Codex・読み取り専用の並行エージェント | レビュー・段階別試験計画作成。CC起動は利用上限exit 1、設計レビュー未実行。適用未承認・RV-G3-001未解消 | `codex/P5-03h-version-review` | `handoffs/P5-03h.md`、`reports/review/2026-10-26-codex-version-review.md`。製品・凍結対象は未変更 | 2026-10-26 |
 | P5-03i 版固定の実装判断用設計案 | Codex | 固定範囲・共通起動入口・更新権限・配布前提を具体化。製品未変更・適用未承認 | `codex/P5-03i-version-design` | `handoffs/P5-03i.md`、`reports/review/2026-10-26-version-design-proposal.md`。部分保証と未実行を明記 | 2026-10-26 |
 | P5-03j 現行ソース固定・逸脱検出 | Codex（CC所有箇所の限定代行、D-053） | 6ハンドラ/24ファイルの起動照合と旧行CI比較を実装。部分保証、RV-G3-001全体は未解消 | `codex/P5-03j-implementation-integrity` | `handoffs/P5-03j.md`、`reports/review/2026-10-26-implementation-integrity.md`。業務実装・契約・DB・D-047は未変更 | 2026-10-26 |
+| P5-03k 別案件・exporterの再利用証拠 | Codex | 専用DBで2案件・各6ノード成功、5共通版ID/trace/export照合、専用文書とDB回収。画面は未実行 | `codex/P5-03k-reuse-evidence` | `handoffs/P5-03k.md`、`reports/review/2026-10-26-reuse/report.md`。製品・凍結構成は未変更 | 2026-10-26 |
