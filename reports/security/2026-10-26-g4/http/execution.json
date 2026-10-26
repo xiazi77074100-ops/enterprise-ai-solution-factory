@@ -1,0 +1,739 @@
+{
+  "source_commit": "a0fe780dff1b63f9a1a6b128cdda9124421e8410",
+  "image": "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+  "failure": null,
+  "checks": [
+    {
+      "check": "/health",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "/ready",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "/docs",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/redoc",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/openapi.json",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/.env",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/.git/config",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/api/v1/projects",
+      "expected": 401,
+      "actual": 401
+    },
+    {
+      "check": "診断利用者ログイン",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "診断利用者ログイン",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "認証後一覧",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "CSRFなし",
+      "expected": 403,
+      "actual": 403
+    },
+    {
+      "check": "異なるOrigin",
+      "expected": 403,
+      "actual": 403
+    },
+    {
+      "check": "案件作成",
+      "expected": 201,
+      "actual": 201
+    },
+    {
+      "check": "他案件参照拒否",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "他利用者一覧",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "PDF偽装拒否",
+      "expected": 415,
+      "actual": 415
+    },
+    {
+      "check": "dev合成PDF登録",
+      "expected": 201,
+      "actual": 201
+    },
+    {
+      "check": "認可付きダウンロード",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "他利用者の文書拒否",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "TRACE拒否",
+      "expected": 405,
+      "actual": 405
+    },
+    {
+      "check": "異なるOriginへのCORS許可なし",
+      "passed": true
+    },
+    {
+      "check": "ログアウト",
+      "expected": 204,
+      "actual": 204
+    },
+    {
+      "check": "ログアウト後拒否",
+      "expected": 401,
+      "actual": 401
+    }
+  ],
+  "startup_observations": [
+    {
+      "attempt": 0,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 1,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 2,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 3,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 4,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 5,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 6,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 7,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 8,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 9,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 10,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 11,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 12,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 13,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 14,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 15,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 16,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 17,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 18,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 19,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 20,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 21,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 22,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 23,
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "attempt": 24,
+      "status": 200
+    }
+  ],
+  "commands": [
+    {
+      "args": [
+        "version",
+        "--format",
+        "{{.Server.Version}}"
+      ],
+      "exit_code": 0,
+      "stdout": "28.1.1\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "ps",
+        "--format",
+        "{{.ID}} {{.Names}}"
+      ],
+      "exit_code": 0,
+      "stdout": "9bdadc6bdc38 enterprise-ai-solution-factory-db-1\nf73d229b5ba7 ocr-saas-db-1\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "image",
+        "inspect",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "--format",
+        "{{.Id}} {{.Config.User}}"
+      ],
+      "exit_code": 0,
+      "stdout": "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac easf\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "network",
+        "create",
+        "easf-p503f-e161408bee58"
+      ],
+      "exit_code": 0,
+      "stdout": "aad674f73c8211ee673345bbdfa01e249a1f5f73d62e9da9b6d349c4c4b51039\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "-d",
+        "--name",
+        "easf-p503f-e161408bee58-db",
+        "--network",
+        "easf-p503f-e161408bee58",
+        "--memory",
+        "512m",
+        "--cpus",
+        "1",
+        "--env",
+        "POSTGRES_DB",
+        "--env",
+        "POSTGRES_USER",
+        "--env",
+        "POSTGRES_PASSWORD",
+        "--tmpfs",
+        "/var/lib/postgresql/data:size=256m",
+        "postgres:17-alpine"
+      ],
+      "exit_code": 0,
+      "stdout": "2a358cee40fab296e696e98e5a675bd3164576e1b7512bb61ce5ff7efb59c3a7\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "easf-p503f-e161408bee58-db",
+        "pg_isready",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503f_test"
+      ],
+      "exit_code": 2,
+      "stdout": "/var/run/postgresql:5432 - no response\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "easf-p503f-e161408bee58-db",
+        "pg_isready",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503f_test"
+      ],
+      "exit_code": 2,
+      "stdout": "/var/run/postgresql:5432 - no response\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "easf-p503f-e161408bee58-db",
+        "pg_isready",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503f_test"
+      ],
+      "exit_code": 2,
+      "stdout": "/var/run/postgresql:5432 - no response\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "easf-p503f-e161408bee58-db",
+        "pg_isready",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503f_test"
+      ],
+      "exit_code": 2,
+      "stdout": "/var/run/postgresql:5432 - no response\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "easf-p503f-e161408bee58-db",
+        "pg_isready",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503f_test"
+      ],
+      "exit_code": 2,
+      "stdout": "/var/run/postgresql:5432 - no response\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "easf-p503f-e161408bee58-db",
+        "pg_isready",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503f_test"
+      ],
+      "exit_code": 0,
+      "stdout": "/var/run/postgresql:5432 - accepting connections\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "exec",
+        "-i",
+        "easf-p503f-e161408bee58-db",
+        "psql",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-U",
+        "easf_owner",
+        "-d",
+        "easf_p503f_test"
+      ],
+      "exit_code": 0,
+      "stdout": "CREATE ROLE\nGRANT\nGRANT\nALTER DEFAULT PRIVILEGES\nALTER DEFAULT PRIVILEGES\nREVOKE\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--network",
+        "easf-p503f-e161408bee58",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_MIGRATION_DATABASE_URL",
+        "--env",
+        "EASF_NEW_USER_PASSWORD",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "alembic",
+        "upgrade",
+        "head"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--network",
+        "easf-p503f-e161408bee58",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_MIGRATION_DATABASE_URL",
+        "--env",
+        "EASF_NEW_USER_PASSWORD",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "python",
+        "-m",
+        "app.admin",
+        "create-user",
+        "--login-id",
+        "assess_owner_e161408bee58",
+        "--display-name",
+        "診断専用 TEST ONLY",
+        "--admin"
+      ],
+      "exit_code": 0,
+      "stdout": "利用者を作成しました。\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--network",
+        "easf-p503f-e161408bee58",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_MIGRATION_DATABASE_URL",
+        "--env",
+        "EASF_NEW_USER_PASSWORD",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "python",
+        "-m",
+        "app.admin",
+        "create-user",
+        "--login-id",
+        "assess_outsider_e161408bee58",
+        "--display-name",
+        "診断専用 TEST ONLY"
+      ],
+      "exit_code": 0,
+      "stdout": "利用者を作成しました。\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "-d",
+        "--name",
+        "easf-p503f-e161408bee58-api",
+        "--network",
+        "easf-p503f-e161408bee58",
+        "--memory",
+        "512m",
+        "--cpus",
+        "1",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--tmpfs",
+        "/data/documents:size=64m,uid=10001,mode=0700",
+        "--publish",
+        "127.0.0.1:56637:8000",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_SITE_ORIGIN",
+        "--env",
+        "EASF_STORAGE_DIR",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac"
+      ],
+      "exit_code": 0,
+      "stdout": "3b43d2bc888b1066cb7a3b8178594cd51ad3f7e8220bbb1f5e5b9867cc232a41\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "port",
+        "easf-p503f-e161408bee58-api",
+        "8000/tcp"
+      ],
+      "exit_code": 0,
+      "stdout": "127.0.0.1:56637\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "inspect",
+        "easf-p503f-e161408bee58-api",
+        "--format",
+        "{{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}}"
+      ],
+      "exit_code": 0,
+      "stdout": "running exit=0 oom=false\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "logs",
+        "--tail",
+        "80",
+        "easf-p503f-e161408bee58-api"
+      ],
+      "exit_code": 0,
+      "stdout": "INFO:     127.0.0.1:55466 - \"GET /health HTTP/1.1\" 200 OK\nINFO:     172.22.0.1:39016 - \"GET /health HTTP/1.1\" 200 OK\nINFO:     172.22.0.1:39016 - \"GET /health HTTP/1.1\" 200 OK\nINFO:     172.22.0.1:39016 - \"GET /ready HTTP/1.1\" 200 OK\nINFO:     172.22.0.1:39016 - \"GET /docs HTTP/1.1\" 404 Not Found\nINFO:     172.22.0.1:39016 - \"GET /redoc HTTP/1.1\" 404 Not Found\nINFO:     172.22.0.1:39016 - \"GET /openapi.json HTTP/1.1\" 404 Not Found\nINFO:     172.22.0.1:39016 - \"GET /.env HTTP/1.1\" 404 Not Found\nINFO:     172.22.0.1:39016 - \"GET /.git/config HTTP/1.1\" 404 Not Found\nINFO:     172.22.0.1:39016 - \"GET /api/v1/projects HTTP/1.1\" 401 Unauthorized\nINFO:     172.22.0.1:39016 - \"POST /api/v1/session HTTP/1.1\" 200 OK\nINFO:     172.22.0.1:55648 - \"POST /api/v1/session HTTP/1.1\" 200 OK\nINFO:     172.22.0.1:55660 - \"GET /api/v1/projects HTTP/1.1\" 200 OK\nINFO:     172.22.0.1:55660 - \"POST /api/v1/projects HTTP/1.1\" 403 Forbidden\nINFO:     172.22.0.1:55660 - \"POST /api/v1/projects HTTP/1.1\" 403 Forbidden\nINFO:     172.22.0.1:55660 - \"POST /api/v1/projects HTTP/1.1\" 201 Created\nINFO:     172.22.0.1:55648 - \"GET /api/v1/projects/04e4f9fc-672e-494d-aa21-5c61c28bc3c4 HTTP/1.1\" 404 Not Found\nINFO:     172.22.0.1:55648 - \"GET /api/v1/projects HTTP/1.1\" 200 OK\nINFO:     172.22.0.1:55660 - \"POST /api/v1/projects/04e4f9fc-672e-494d-aa21-5c61c28bc3c4/documents HTTP/1.1\" 415 Unsupported Media Type\nINFO:     172.22.0.1:55660 - \"POST /api/v1/projects/04e4f9fc-672e-494d-aa21-5c61c28bc3c4/documents HTTP/1.1\" 201 Created\nINFO:     172.22.0.1:55660 - \"GET /api/v1/documents/e410bcaa-9c41-41e9-a3f8-87c0ce355c7a/content HTTP/1.1\" 200 OK\nINFO:     172.22.0.1:48014 - \"GET /api/v1/documents/e410bcaa-9c41-41e9-a3f8-87c0ce355c7a/content HTTP/1.1\" 404 Not Found\nINFO:     172.22.0.1:55660 - \"TRACE /health HTTP/1.1\" 405 Method Not Allowed\nINFO:     172.22.0.1:55660 - \"GET /health HTTP/1.1\" 200 OK\nINFO:     172.22.0.1:55660 - \"DELETE /api/v1/session HTTP/1.1\" 204 No Content\nINFO:     172.22.0.1:55660 - \"GET /api/v1/projects HTTP/1.1\" 401 Unauthorized\n",
+      "stderr": "INFO:     Started server process [1]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)\n",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--network",
+        "easf-p503f-e161408bee58",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_MIGRATION_DATABASE_URL",
+        "--env",
+        "EASF_NEW_USER_PASSWORD",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "python",
+        "-m",
+        "app.admin",
+        "deactivate-user",
+        "--login-id",
+        "assess_outsider_e161408bee58"
+      ],
+      "exit_code": 0,
+      "stdout": "利用者を無効にしました。\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "run",
+        "--rm",
+        "--network",
+        "easf-p503f-e161408bee58",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:size=64m",
+        "--env",
+        "EASF_ENV",
+        "--env",
+        "EASF_SECRET_KEY",
+        "--env",
+        "EASF_DATABASE_URL",
+        "--env",
+        "EASF_MIGRATION_DATABASE_URL",
+        "--env",
+        "EASF_NEW_USER_PASSWORD",
+        "sha256:776a46f480342fe9f07347471e8ee3a96b4a9a779ba02166cc39808b0681deac",
+        "python",
+        "-m",
+        "app.admin",
+        "deactivate-user",
+        "--login-id",
+        "assess_owner_e161408bee58"
+      ],
+      "exit_code": 0,
+      "stdout": "利用者を無効にしました。\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "rm",
+        "--force",
+        "--volumes",
+        "easf-p503f-e161408bee58-api"
+      ],
+      "exit_code": 0,
+      "stdout": "easf-p503f-e161408bee58-api\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "rm",
+        "--force",
+        "--volumes",
+        "easf-p503f-e161408bee58-db"
+      ],
+      "exit_code": 0,
+      "stdout": "easf-p503f-e161408bee58-db\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "network",
+        "rm",
+        "easf-p503f-e161408bee58"
+      ],
+      "exit_code": 0,
+      "stdout": "easf-p503f-e161408bee58\n",
+      "stderr": "",
+      "stdin_recorded": false
+    },
+    {
+      "args": [
+        "ps",
+        "--format",
+        "{{.ID}} {{.Names}}"
+      ],
+      "exit_code": 0,
+      "stdout": "9bdadc6bdc38 enterprise-ai-solution-factory-db-1\nf73d229b5ba7 ocr-saas-db-1\n",
+      "stderr": "",
+      "stdin_recorded": false
+    }
+  ],
+  "cleanup": [
+    {
+      "user": "assess_outsider_e161408bee58",
+      "deactivated": true
+    },
+    {
+      "user": "assess_owner_e161408bee58",
+      "deactivated": true
+    },
+    {
+      "container": "easf-p503f-e161408bee58-api",
+      "removed": true
+    },
+    {
+      "container": "easf-p503f-e161408bee58-db",
+      "removed": true
+    },
+    {
+      "network": "easf-p503f-e161408bee58",
+      "removed": true
+    },
+    {
+      "existing_container_ids_unchanged": true
+    }
+  ]
+}

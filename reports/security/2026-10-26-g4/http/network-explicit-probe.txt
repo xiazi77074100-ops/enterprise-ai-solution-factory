@@ -1,0 +1,12 @@
+2026-10-26、独立した再現用コンテナでの観測（秘密・DBなし）。
+network: easf-p503f-probe-116a05ba33 (bridge)
+container: easf-p503f-probe-116a05ba33-api
+image: easf-backend:p503e-refresh
+command: python -m http.server 8000
+publish: 127.0.0.1:62153:8000（事前にOSへbindして空きを確認し、解放後にDockerへ指定）
+docker inspect --format '{{.State.Status}} {{json .HostConfig.PortBindings}} {{json .NetworkSettings.Ports}}':
+running {"8000/tcp":[{"HostIp":"127.0.0.1","HostPort":"62153"}]} {"8000/tcp":[{"HostIp":"127.0.0.1","HostPort":"62153"}]}
+docker port <container> 8000/tcp:
+127.0.0.1:62153
+Invoke-WebRequest http://127.0.0.1:62153: HTTP=200
+finallyで当該コンテナとネットワークを削除（両方exit 0）。

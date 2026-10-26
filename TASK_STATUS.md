@@ -49,3 +49,4 @@
 | P5-03d VA-G4-001の本体修正・再診断 | Codex | D-052により個別適用。修正・本体3ケース再診断済み | `codex/P5-03d-error-log-fix` | `handoffs/P5-03d.md`、`reports/security/2026-10-23-g4/error-log-fix/`。3失敗→3成功、型・trace_idと500応答を保持。全件CIはコミット履歴で確認 | 2026-10-23 |
 | P5-02a 既存評価の独立照合・証拠索引 | Codex | 7集計・比較表16セルを照合。G4の証拠不足を整理。再評価は未実行 | `codex/P5-02a-evaluation-index` | `handoffs/P5-02a.md`、`reports/evaluation_index.md`、`reports/eval/2026-10-23-index/`、`reports/review/2026-10-23-g4-readiness.md` | 2026-10-23 |
 | P5-03e 修正後イメージの自己診断 | Codex | コードSHA一致・例外3ケース・認証前ASGI7経路成功。初回musl系2検出→キャッシュなしビルド後0件。HTTP/認証後DAST未実行 | `codex/P5-03e-runtime-reassessment` | `handoffs/P5-03e.md`、`reports/security/2026-10-23-g4/runtime/report.md`。製品・既存DB・旧タグは変更なし | 2026-10-23 |
+| P5-03f 専用環境でのHTTP API自己診断 | Codex | HTTP24項目成功、exit 0、後始末成功。起動・ポートの初回3失敗を保持。全面ZAP・実画面は未実行 | `codex/P5-03f-http-assessment` | `handoffs/P5-03f.md`、`reports/security/2026-10-26-g4/http/report.md`。製品・凍結構成・既存DBは変更なし | 2026-10-26 |

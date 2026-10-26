@@ -1,0 +1,127 @@
+{
+  "base_url": "http://127.0.0.1:56637",
+  "project_id": "04e4f9fc-672e-494d-aa21-5c61c28bc3c4",
+  "document_id": "e410bcaa-9c41-41e9-a3f8-87c0ce355c7a",
+  "dev_pdf_sha256": "910bd20314b1fb5ba290824829e77aeb0904fd958e8c96c90a18727ef4c16872",
+  "checks": [
+    {
+      "check": "/health",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "/ready",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "/docs",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/redoc",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/openapi.json",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/.env",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/.git/config",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "/api/v1/projects",
+      "expected": 401,
+      "actual": 401
+    },
+    {
+      "check": "診断利用者ログイン",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "診断利用者ログイン",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "認証後一覧",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "CSRFなし",
+      "expected": 403,
+      "actual": 403
+    },
+    {
+      "check": "異なるOrigin",
+      "expected": 403,
+      "actual": 403
+    },
+    {
+      "check": "案件作成",
+      "expected": 201,
+      "actual": 201
+    },
+    {
+      "check": "他案件参照拒否",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "他利用者一覧",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "PDF偽装拒否",
+      "expected": 415,
+      "actual": 415
+    },
+    {
+      "check": "dev合成PDF登録",
+      "expected": 201,
+      "actual": 201
+    },
+    {
+      "check": "認可付きダウンロード",
+      "expected": 200,
+      "actual": 200
+    },
+    {
+      "check": "他利用者の文書拒否",
+      "expected": 404,
+      "actual": 404
+    },
+    {
+      "check": "TRACE拒否",
+      "expected": 405,
+      "actual": 405
+    },
+    {
+      "check": "異なるOriginへのCORS許可なし",
+      "passed": true
+    },
+    {
+      "check": "ログアウト",
+      "expected": 204,
+      "actual": 204
+    },
+    {
+      "check": "ログアウト後拒否",
+      "expected": 401,
+      "actual": 401
+    }
+  ]
+}

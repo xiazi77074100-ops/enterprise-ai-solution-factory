@@ -1,0 +1,11 @@
+2026-10-26、独立した再現用コンテナでの観測（秘密・DBなし）。
+network: easf-p503f-probe-db5dfbd605 (--internal)
+container: easf-p503f-probe-db5dfbd605-api
+image: easf-backend:p503e-refresh
+command: python -m http.server 8000
+publish: 127.0.0.1::8000
+docker inspect --format '{{.State.Status}} {{json .HostConfig.PortBindings}} {{json .NetworkSettings.Ports}}':
+running {"8000/tcp":[{"HostIp":"127.0.0.1","HostPort":"0"}]} {}
+docker port <container> 8000/tcp:
+Error: No public port '8000/tcp' published for easf-p503f-probe-db5dfbd605-api
+finallyで当該コンテナとネットワークを削除（両方exit 0）。
