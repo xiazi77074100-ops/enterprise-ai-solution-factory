@@ -44,6 +44,8 @@ jobs:
         working-directory: backend
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: astral-sh/setup-uv@v5
       - name: Create application role (same as docker/postgres/01-app-role.sh)
         run: |
@@ -53,6 +55,21 @@ jobs:
       - name: Tesseract with Japanese data (OCR tests, D-033)
         run: sudo apt-get install -y -q tesseract-ocr tesseract-ocr-jpn >/dev/null
       - run: uv sync --locked --python 3.12
+      - name: Check immutable implementation manifest
+        env:
+          INTEGRITY_EVENT: ${{ github.event_name }}
+          INTEGRITY_BEFORE: ${{ github.event.before }}
+          INTEGRITY_PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --no-tags origin main
+          if [ "$INTEGRITY_EVENT" = "pull_request" ]; then
+            base="$INTEGRITY_PR_BASE"
+          elif [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            base="$INTEGRITY_BEFORE"
+          else
+            base="$(git rev-parse refs/remotes/origin/main)"
+          fi
+          uv run python ../scripts/check_implementation_manifest.py --base-ref "$base"
       - run: uv run ruff check . ../fixtures
       - run: uv run ruff format --check . ../fixtures
       - run: uv run mypy app tests

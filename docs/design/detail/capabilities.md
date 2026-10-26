@@ -102,3 +102,13 @@ Rule pack（`contracts/rule_pack.schema.json`）の式を、決まった演算�
 - `exportRunResult` は、成功した実行で出力のノードが成功しているものだけ（それ以外は 409 `run_not_exportable`）。保存したノードの出力から出力のノードの入力を組み立て直し、同じ関数で内容を作り、`export_id` が一致するときだけ返す（一致しなければ 409 `export_mismatch`）。
 - 列と書式は `exports_and_events.md`。
 
+## 9. 現行業務ソースの固定（P5-03j、D-053）
+
+`catalog/implementation_manifest.json`は6通常ハンドラのkind/ref、ハンドラ種別、入口の識別名、固定ファイルのSHA-256を記録する。相対パスだけを許し、重複キー・不明な形式・未知/欠落ref・不正パス・symlink・SHA不一致は拒否する。表自身はハッシュ対象外。初回は照合呼び出しを含むソース確定後に表を生成する。
+
+固定対象はcapabilities全10Pythonファイル（初期化を含む）、MCPサーバ/ツールJSON、共通adapter、handlers、registry、照合処理とpackage初期化（合計24ファイル）。`human_review.v1`はengine内の処理であり対象外。DBモデル・文書保存・engine・Python/ライブラリ・OCR本体/言語データも保証外で、指定ソースと束縛の一致だけを確認する。環境を含む完全再現や過去の同一版の曖昧さを解消したとは扱わない。
+
+`production_handlers()`がファイル照合後に従来のハンドラを組み立て、既知の関数オブジェクト・クラス・mock指示/応答/schema・MCPの固定command/args/cwd/envを確認してから返す。文字列を動的import・URL・コマンドへ変換しない。失敗は`ImplementationIntegrityError`の固定コードで起動を停止し、代替実装へ戻らない。API・DB・Capabilityの契約と業務出力は変更しない。
+
+CIは信頼する基準の旧行の変更・削除を拒否する。初回表不存在を許す基点は承認された `b513ec46d807a8b397461d5078b992b8a9a98fe5` だけ。比較元commitが存在しないと失敗する。新しいrefの追加でも固定したhandlers/adapterを変更すれば旧SHAが変わるため、旧束縛を保存する分離設計が別途必要。初期表の再生成で旧値を更新する運用は禁止する。
+

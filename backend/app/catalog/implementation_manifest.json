@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "implementations": [
+    {
+      "kind": "local",
+      "ref": "document_parser.v1",
+      "binding": {
+        "handler": "StoredDocumentHandler",
+        "entry": "app.capabilities.document_parser.parse_document"
+      },
+      "files": {
+        "backend/app/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/base.py": "7df23c122437c973aa03292e41d903f13ccf9752421dff57a1ace057adb0a6ba",
+        "backend/app/adapters/llm.py": "b42c8f4a2f1b2db9df6589ce5da277a8153d45b7628a359136aa2c8f3ab39472",
+        "backend/app/adapters/local.py": "eb149f2149639bc0bf99532a637d5c45c28621af34a1e9375a56b1ee6f1839ca",
+        "backend/app/adapters/mcp.py": "29d1bedc6295209892c63a834d35fec2e14b8f7826a9ec3d899c6f86d704726b",
+        "backend/app/adapters/resources.py": "1d04299d3e3bf22cc85172e5b3516ccd56fb8c891b1cde3a6a8a79c3c93f11b8",
+        "backend/app/capabilities/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/capabilities/document_parser.py": "8ae534aaeb9a27ccc55415ff0aacb9001633475f69c219fdb22b3ec7ac36e99a",
+        "backend/app/capabilities/ocr.py": "4c9352ffa4eeb18653860df13387d03dcee2d42b3a8d6349dd0108590569ba2f",
+        "backend/app/capabilities/pdf_text.py": "37b4290912f4de5bbcd27c60eb3f9dfdff111ffb56454d605dd47202c3494f1d",
+        "backend/app/catalog/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/catalog/implementation_integrity.py": "976160914558a3b1dce131e5fe4287074a80b736b46a0fec0aef62c689b0993d",
+        "backend/app/catalog/registry.py": "b98eaf39a75f29cfda1d81f6ff022c2c14128560f695d232033c442cb4b49c75",
+        "backend/app/executor/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/executor/handlers.py": "3b34d29461c1c34b5a9b42a439b2150451fa1272b864c0090088b6bbded81234"
+      }
+    },
+    {
+      "kind": "local",
+      "ref": "rule_based_extractor.v1",
+      "binding": {
+        "handler": "LocalHandler",
+        "entry": "app.capabilities.rule_extractor.extract_by_labels"
+      },
+      "files": {
+        "backend/app/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/base.py": "7df23c122437c973aa03292e41d903f13ccf9752421dff57a1ace057adb0a6ba",
+        "backend/app/adapters/llm.py": "b42c8f4a2f1b2db9df6589ce5da277a8153d45b7628a359136aa2c8f3ab39472",
+        "backend/app/adapters/local.py": "eb149f2149639bc0bf99532a637d5c45c28621af34a1e9375a56b1ee6f1839ca",
+        "backend/app/adapters/mcp.py": "29d1bedc6295209892c63a834d35fec2e14b8f7826a9ec3d899c6f86d704726b",
+        "backend/app/adapters/resources.py": "1d04299d3e3bf22cc85172e5b3516ccd56fb8c891b1cde3a6a8a79c3c93f11b8",
+        "backend/app/capabilities/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/capabilities/rule_extractor.py": "a8bb9f97011abbbee29c70247e7bca99821d0fe223fb41c023a4a696bd714571",
+        "backend/app/capabilities/values.py": "ebeecad3d902678bf75ffa96d4f6da8c9dd3f4f149327aa672c4a6054246ff5e",
+        "backend/app/catalog/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/catalog/implementation_integrity.py": "976160914558a3b1dce131e5fe4287074a80b736b46a0fec0aef62c689b0993d",
+        "backend/app/catalog/registry.py": "b98eaf39a75f29cfda1d81f6ff022c2c14128560f695d232033c442cb4b49c75",
+        "backend/app/executor/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/executor/handlers.py": "3b34d29461c1c34b5a9b42a439b2150451fa1272b864c0090088b6bbded81234"
+      }
+    },
+    {
+      "kind": "llm",
+      "ref": "structured_extractor.v1",
+      "binding": {
+        "handler": "LlmHandler",
+        "entry": "app.capabilities.mock_extractor.mock_response"
+      },
+      "files": {
+        "backend/app/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/base.py": "7df23c122437c973aa03292e41d903f13ccf9752421dff57a1ace057adb0a6ba",
+        "backend/app/adapters/llm.py": "b42c8f4a2f1b2db9df6589ce5da277a8153d45b7628a359136aa2c8f3ab39472",
+        "backend/app/adapters/local.py": "eb149f2149639bc0bf99532a637d5c45c28621af34a1e9375a56b1ee6f1839ca",
+        "backend/app/adapters/mcp.py": "29d1bedc6295209892c63a834d35fec2e14b8f7826a9ec3d899c6f86d704726b",
+        "backend/app/adapters/resources.py": "1d04299d3e3bf22cc85172e5b3516ccd56fb8c891b1cde3a6a8a79c3c93f11b8",
+        "backend/app/capabilities/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/capabilities/mock_extractor.py": "44889321b16c38c245291f57869d13ddad45ef6e1c8d5cd6c3b1c4caf9989a50",
+        "backend/app/catalog/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/catalog/implementation_integrity.py": "976160914558a3b1dce131e5fe4287074a80b736b46a0fec0aef62c689b0993d",
+        "backend/app/catalog/registry.py": "b98eaf39a75f29cfda1d81f6ff022c2c14128560f695d232033c442cb4b49c75",
+        "backend/app/executor/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/executor/handlers.py": "3b34d29461c1c34b5a9b42a439b2150451fa1272b864c0090088b6bbded81234"
+      }
+    },
+    {
+      "kind": "local",
+      "ref": "rule_validator.v1",
+      "binding": {
+        "handler": "RulePackHandler",
+        "entry": "app.capabilities.rule_validator.validate_rules"
+      },
+      "files": {
+        "backend/app/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/base.py": "7df23c122437c973aa03292e41d903f13ccf9752421dff57a1ace057adb0a6ba",
+        "backend/app/adapters/llm.py": "b42c8f4a2f1b2db9df6589ce5da277a8153d45b7628a359136aa2c8f3ab39472",
+        "backend/app/adapters/local.py": "eb149f2149639bc0bf99532a637d5c45c28621af34a1e9375a56b1ee6f1839ca",
+        "backend/app/adapters/mcp.py": "29d1bedc6295209892c63a834d35fec2e14b8f7826a9ec3d899c6f86d704726b",
+        "backend/app/adapters/resources.py": "1d04299d3e3bf22cc85172e5b3516ccd56fb8c891b1cde3a6a8a79c3c93f11b8",
+        "backend/app/capabilities/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/capabilities/rule_validator.py": "ab32d323966431857eb90f6b4654a79f31a80cca91606a40de75563fa886d8de",
+        "backend/app/catalog/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/catalog/implementation_integrity.py": "976160914558a3b1dce131e5fe4287074a80b736b46a0fec0aef62c689b0993d",
+        "backend/app/catalog/registry.py": "b98eaf39a75f29cfda1d81f6ff022c2c14128560f695d232033c442cb4b49c75",
+        "backend/app/executor/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/executor/handlers.py": "3b34d29461c1c34b5a9b42a439b2150451fa1272b864c0090088b6bbded81234"
+      }
+    },
+    {
+      "kind": "mcp_tool",
+      "ref": "easf_local_mcp:locate_evidence",
+      "binding": {
+        "handler": "McpToolHandler",
+        "entry": "app.mcp_server.locate_evidence"
+      },
+      "files": {
+        "backend/app/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/base.py": "7df23c122437c973aa03292e41d903f13ccf9752421dff57a1ace057adb0a6ba",
+        "backend/app/adapters/llm.py": "b42c8f4a2f1b2db9df6589ce5da277a8153d45b7628a359136aa2c8f3ab39472",
+        "backend/app/adapters/local.py": "eb149f2149639bc0bf99532a637d5c45c28621af34a1e9375a56b1ee6f1839ca",
+        "backend/app/adapters/mcp.py": "29d1bedc6295209892c63a834d35fec2e14b8f7826a9ec3d899c6f86d704726b",
+        "backend/app/adapters/resources.py": "1d04299d3e3bf22cc85172e5b3516ccd56fb8c891b1cde3a6a8a79c3c93f11b8",
+        "backend/app/capabilities/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/capabilities/evidence.py": "69da946958e147cb81d7e48daf1acc3def0211acfddd2991066b9832c14a0905",
+        "backend/app/capabilities/pdf_text.py": "37b4290912f4de5bbcd27c60eb3f9dfdff111ffb56454d605dd47202c3494f1d",
+        "backend/app/capabilities/values.py": "ebeecad3d902678bf75ffa96d4f6da8c9dd3f4f149327aa672c4a6054246ff5e",
+        "backend/app/catalog/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/catalog/implementation_integrity.py": "976160914558a3b1dce131e5fe4287074a80b736b46a0fec0aef62c689b0993d",
+        "backend/app/catalog/registry.py": "b98eaf39a75f29cfda1d81f6ff022c2c14128560f695d232033c442cb4b49c75",
+        "backend/app/executor/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/executor/handlers.py": "3b34d29461c1c34b5a9b42a439b2150451fa1272b864c0090088b6bbded81234",
+        "backend/app/mcp_server.py": "fbc546ce6bbc3561654529b8fe3b3b8960af7567670331a385bc3f533f497cce",
+        "backend/app/mcp_tools/locate_evidence.json": "ceddd270147e5b5bade1f61eb84964b7007754933e2db7170cbd309bb0fac6b5"
+      }
+    },
+    {
+      "kind": "local",
+      "ref": "result_exporter.v1",
+      "binding": {
+        "handler": "LocalHandler",
+        "entry": "app.capabilities.result_exporter.export_result"
+      },
+      "files": {
+        "backend/app/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/adapters/base.py": "7df23c122437c973aa03292e41d903f13ccf9752421dff57a1ace057adb0a6ba",
+        "backend/app/adapters/llm.py": "b42c8f4a2f1b2db9df6589ce5da277a8153d45b7628a359136aa2c8f3ab39472",
+        "backend/app/adapters/local.py": "eb149f2149639bc0bf99532a637d5c45c28621af34a1e9375a56b1ee6f1839ca",
+        "backend/app/adapters/mcp.py": "29d1bedc6295209892c63a834d35fec2e14b8f7826a9ec3d899c6f86d704726b",
+        "backend/app/adapters/resources.py": "1d04299d3e3bf22cc85172e5b3516ccd56fb8c891b1cde3a6a8a79c3c93f11b8",
+        "backend/app/capabilities/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/capabilities/result_exporter.py": "3be0efd2df27b6497687aec5688ea6db4fd60a0015f2f10ad49ca11016241061",
+        "backend/app/catalog/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/catalog/implementation_integrity.py": "976160914558a3b1dce131e5fe4287074a80b736b46a0fec0aef62c689b0993d",
+        "backend/app/catalog/registry.py": "b98eaf39a75f29cfda1d81f6ff022c2c14128560f695d232033c442cb4b49c75",
+        "backend/app/executor/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "backend/app/executor/handlers.py": "3b34d29461c1c34b5a9b42a439b2150451fa1272b864c0090088b6bbded81234"
+      }
+    }
+  ]
+}

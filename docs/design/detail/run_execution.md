@@ -131,3 +131,11 @@ NodeRun: pending ─▶ running ─▶ succeeded
 | `run_events` | id、run_id、seq、event（jsonb）、event_hash |
 
 承認済みの `solutions` の `workflow`・`workflow_hash` の変更と、`run_events` の更新・削除は DB トリガーで拒否する（Catalog と同じ方式）。
+
+## 9. 起動時の業務実装照合（P5-03j）
+
+APIの`create_app()`とworkerの`main()`は共通の`production_handlers()`でソース・束縛を照合し、失敗時は起動しない。ハンドラを明示注入する既存のテスト経路は対象外。照合時にモジュールは既にimportされているため、不正なコードのimport実行を防ぐ仕組みではない。
+
+配布は信頼したビルドとし、コード/manifest/依存を読み取り専用にする。書き込み可能なソースmount・hot reload・実行中の依存更新を行わない。既存APIのcomposeはread_onlyだが、workerの固定配布は未実装。可変ソースのローカルworkerは起動時の一致のみで、spawn/MCP再起動後を含む実行中の不変性を保証しない。Git SHAと配布イメージdigestは環境識別の補助証拠とする。
+
+CI比較元はPRならbase SHA、main pushならpush前SHA、作業ブランチなら取得したorigin/main。main自身との自己比較で旧行変更を成功にしない。基準が取得できないと検査失敗。ブランチ保護や管理者の変更権限をこの検査だけで強制したとは扱わない。traceへの新しい実装識別子の永続化・新旧並行実行は今回未実装。
